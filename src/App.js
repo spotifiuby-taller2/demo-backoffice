@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { signUpUrl } from "./others/constants";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { SignIn } from './components/signin/SignIn';
-import { SignUp } from './components/signin/SignUp';
+const { SignIn } = require('./components/login/SignIn');
+const { SignUp } = require('./components/login/SignUp');
+const { SIGN_UP_URL } = require("./others/constants");
 
 class App extends Component {
   render() {
@@ -10,7 +10,7 @@ class App extends Component {
       <BrowserRouter>
          <Routes>
            <Route exact path="/" element={<SignIn/>}> </Route>
-           <Route exact path={ signUpUrl } element={<SignUp/>}> </Route>
+           <Route exact path={ SIGN_UP_URL } element={<SignUp/>}> </Route>
          </Routes>
       </BrowserRouter>
     );

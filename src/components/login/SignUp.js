@@ -2,43 +2,54 @@ import {
   Box,
   Button,
   Container,
-  createTheme,
   CssBaseline,
   TextField,
   Typography
 } from "@mui/material";
-import { createRef, Component } from "react";
-import { auth } from "../firebase/Firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { ThemeProvider } from "@emotion/react";
 import { loginStyles } from "../../style/signin/SignIn";
+import { getHashOf } from "../../others/utils";
+import { SignComponent } from "./SignComponent";
+import Constants from "../../others/constants";
 
-class SignUp extends Component {
+class SignUp extends SignComponent {
   constructor(props) {
     super(props);
 
-    this.theme = createTheme();
-
-    this.emailReference = createRef();
-
-    this.passwordReference = createRef();
-
     this.handleSignUp = this.handleSignUp
                             .bind(this);
+
+    this.handleSignUpError = this.handleSignUpError
+                                 .bind(this);
+  }
+
+  handleSignUpError(error) {
+    alert(error);
   }
 
   handleSignUp() {
-    createUserWithEmailAndPassword(
-        auth,
-        this.emailReference.current.toString(),
-        this.passwordReference.current.toString()
-    ).then(response => {
-        console.log(response);
+    const requestBody = {
+      email: this.emailReference
+        .current,
+
+      password: getHashOf(getHashOf(
+        this.passwordReference
+          .current))
     }
-    ).catch(err => {
-      console.log("*********");
-      console.log(err);
-    } );
+
+    // response.json() is a promise
+    fetch(Constants.USERS_HOST + Constants.SIGN_UP_URL, {
+        method: "POST",
+        headers: Constants.JSON_HEADER,
+        body: JSON.stringify(requestBody)
+      }
+    ).then(response => response.json())
+      .then(response => {
+          if (response.error !== undefined) {
+            this.handleSignUpError(response.error);
+          }
+        }
+      );
   }
 
   render() {
@@ -55,6 +66,7 @@ class SignUp extends Component {
 
             <Box component="form" noValidate sx={{ mt: 1 }}>
               <TextField
+                onChange = { this.handleEmailChange.bind(this) }
                 ref = { this.emailReference }
                 margin="normal"
                 required
@@ -66,6 +78,7 @@ class SignUp extends Component {
               />
 
               <TextField
+                onChange = { this.handlePasswordChange.bind(this) }
                 ref = { this.passwordReference }
                 margin="normal"
                 required
@@ -91,6 +104,4 @@ class SignUp extends Component {
   }
 }
 
-export {
-  SignUp
-}
+export { SignUp }

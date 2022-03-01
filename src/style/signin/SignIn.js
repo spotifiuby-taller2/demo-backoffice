@@ -1,4 +1,4 @@
-export const loginStyles = {
+const loginStyles = {
     boxStyle: {
         marginTop: 8,
         display: "flex",
@@ -6,3 +6,7 @@ export const loginStyles = {
         alignItems: "center"
     }
 }
+
+export {
+    loginStyles
+};

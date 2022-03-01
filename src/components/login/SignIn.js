@@ -1,50 +1,48 @@
-import { Component, createRef } from 'react'
 import {
   Grid,
   TextField,
   Button,
   Typography,
   Link,
-  createTheme,
   Container,
   CssBaseline,
   Box,
   Paper
 } from '@mui/material';
-import { signUpUrl } from "../../others/constants";
-import { auth }  from "../firebase/Firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { SIGN_UP_URL } from "../../others/constants";
 import { loginStyles } from "../../style/signin/SignIn";
 import { ThemeProvider } from "@emotion/react";
 import logo from "../../media/hexagon.png";
+import Constants from "../../others/constants";
+import { SignComponent } from "./SignComponent";
 
-class SignIn extends Component {
+class SignIn extends SignComponent {
   constructor(props) {
     super(props);
-
-    this.theme = createTheme();
-
-    this.emailReference = createRef();
-
-    this.passwordReference = createRef();
 
     this.handleSignIn = this.handleSignIn
                             .bind(this);
   }
 
   handleSignIn() {
-    signInWithEmailAndPassword(
-      auth,
-      this.emailReference.current.toString(),
-      this.passwordReference.current.toString()
-    )
-      .then(response => {
+    fetch(Constants.USERS_HOST + Constants.SIGN_IN_URL, {
+        method: "POST",
+        headers: Constants.JSON_HEADER,
+        body: {
+          email: this.emailReference
+            .current,
+          password: this.passwordReference
+            .current
+        }
+      }
+    ).then(response => {
         console.log(response);
       }
-    ).catch(err => {
-      console.log("*********");
-      console.log(err);
-    } );
+    ).catch(error => {
+        console.log("==========");
+        console.log(error);
+      }
+    );
   }
 
   render() {
@@ -65,25 +63,23 @@ class SignIn extends Component {
 
               <Box component="form" noValidate sx={{ mt: 1 }}>
               <TextField
-                ref = { this.emailReference }
+                onChange = { this.handleEmailChange.bind(this) }
                 margin="normal"
                 required
                 fullWidth
                 label="Correo"
                 name="email"
-                autoComplete="email"
                 autoFocus
               />
 
               <TextField
-                ref = { this.passwordReference }
+                onChange = { this.handlePasswordChange.bind(this) }
                 margin="normal"
                 required
                 fullWidth
                 name="password-field"
                 label="Contraseña"
                 type="password"
-                autoComplete="current-password"
               />
 
               {/* <FormControlLabel
@@ -107,7 +103,7 @@ class SignIn extends Component {
                 </Grid>
 
                 <Grid item>
-                  <Link href={signUpUrl} variant="body2">
+                  <Link href={SIGN_UP_URL} variant="body2">
                     {"Registrarse"}
                   </Link>
                 </Grid>
@@ -120,6 +116,4 @@ class SignIn extends Component {
   }
 }
 
-export {
-  SignIn
-}
+export { SignIn };
