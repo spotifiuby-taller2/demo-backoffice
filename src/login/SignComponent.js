@@ -25,4 +25,6 @@ class SignComponent extends Component {
   }
 }
 
-export { SignComponent }
+export {
+  SignComponent
+};

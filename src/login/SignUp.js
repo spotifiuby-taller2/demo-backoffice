@@ -7,10 +7,12 @@ import {
   Typography
 } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
-import { loginStyles } from "../../style/signin/SignIn";
-import { getHashOf } from "../../others/utils";
+import { loginStyles } from "../style/signin/SignIn";
+import { getSHAOf } from "../others/utils";
 import { SignComponent } from "./SignComponent";
-import Constants from "../../others/constants";
+import constants from "../others/constants";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 class SignUp extends SignComponent {
   constructor(props) {
@@ -30,23 +32,32 @@ class SignUp extends SignComponent {
   handleSignUp() {
     const requestBody = {
       email: this.emailReference
-        .current,
+                 .current,
 
-      password: getHashOf(getHashOf(
-        this.passwordReference
-          .current))
+      password: getSHAOf( getSHAOf( this.passwordReference
+                                         .current) )
     }
 
     // response.json() is a promise
-    fetch(Constants.USERS_HOST + Constants.SIGN_UP_URL, {
+    fetch(constants.USERS_HOST + constants.SIGN_UP_URL, {
         method: "POST",
-        headers: Constants.JSON_HEADER,
+        headers: constants.JSON_HEADER,
         body: JSON.stringify(requestBody)
       }
     ).then(response => response.json())
       .then(response => {
           if (response.error !== undefined) {
             this.handleSignUpError(response.error);
+          } else {
+            alert("Mail enviado a tu cuenta.");
+
+            this.emailReference
+                .current = "";
+
+            this.passwordReference
+                .current = "";
+
+            useNavigate()(constants.SIGN_IN_URL, { replace: true });
           }
         }
       );
@@ -104,4 +115,6 @@ class SignUp extends SignComponent {
   }
 }
 
-export { SignUp }
+export {
+  SignUp
+};

@@ -9,11 +9,11 @@ import {
   Box,
   Paper
 } from '@mui/material';
-import { SIGN_UP_URL } from "../../others/constants";
-import { loginStyles } from "../../style/signin/SignIn";
+import { SIGN_UP_URL } from "../others/constants";
+import { loginStyles } from "../style/signin/SignIn";
 import { ThemeProvider } from "@emotion/react";
-import logo from "../../media/hexagon.png";
-import Constants from "../../others/constants";
+import logo from "../media/hexagon.png";
+import Constants from "../others/constants";
 import { SignComponent } from "./SignComponent";
 
 class SignIn extends SignComponent {
@@ -31,6 +31,7 @@ class SignIn extends SignComponent {
         body: {
           email: this.emailReference
             .current,
+
           password: this.passwordReference
             .current
         }
@@ -116,4 +117,6 @@ class SignIn extends SignComponent {
   }
 }
 
-export { SignIn };
+export {
+  SignIn
+};
