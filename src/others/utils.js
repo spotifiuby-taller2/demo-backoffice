@@ -7,6 +7,7 @@ function getSHAOf(toHash) {
                .digest('hex');
 }
 
+/*
 const postTo = (url, body, f) => {
   // response.json() is a promise
   fetch(url, {
@@ -16,7 +17,7 @@ const postTo = (url, body, f) => {
       }
   ).then(response => response.json()
   ).then(f);
-}
+} */
 
 const getTo = (url, f) => {
   fetch(url, {
