@@ -35,7 +35,7 @@ class SignUp extends SignComponent {
                  .current,
 
       password: getSHAOf( getSHAOf( this.passwordReference
-                                         .current) )
+                                        .current) )
     }
 
     // response.json() is a promise
@@ -57,7 +57,8 @@ class SignUp extends SignComponent {
             this.passwordReference
                 .current = "";
 
-            useNavigate()(constants.SIGN_IN_URL, { replace: true });
+            const navigate = useNavigate();
+            navigate(constants.SIGN_IN_URL, { replace: true });
           }
         }
       );
@@ -77,7 +78,8 @@ class SignUp extends SignComponent {
 
             <Box component="form" noValidate sx={{ mt: 1 }}>
               <TextField
-                onChange = { this.handleEmailChange.bind(this) }
+                onChange = { this.handleEmailChange
+                                 .bind(this) }
                 ref = { this.emailReference }
                 margin="normal"
                 required
@@ -89,7 +91,8 @@ class SignUp extends SignComponent {
               />
 
               <TextField
-                onChange = { this.handlePasswordChange.bind(this) }
+                onChange = { this.handlePasswordChange
+                                 .bind(this) }
                 ref = { this.passwordReference }
                 margin="normal"
                 required
