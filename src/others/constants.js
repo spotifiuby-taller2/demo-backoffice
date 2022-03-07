@@ -1,7 +1,4 @@
-require('dotenv').config( {
-  path: `.env${process.env
-                      .REACT_APP_MY_ENV}`
-} );
+require('dotenv').config();
 
 console.log(process.env
     .REACT_APP_USERS_HOST);
