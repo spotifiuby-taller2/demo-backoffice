@@ -1,6 +1,6 @@
 require('dotenv').config( {
   path: `.env${process.env
-                      .MY_ENV}`
+                      .REACT_APP_MY_ENV}`
 } );
 
 /* Frontend paths */
