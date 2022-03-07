@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "REACT_APP_MY_ENV=.production react-scripts start",
+    "start": "REACT_APP_MY_ENV=.local react-scripts start",
     "startdocker": "PORT=4480 REACT_APP_MY_ENV= react-scripts start",
-    "startdev": "PORT=4480 REACT_APP_MY_ENV=dev react-scripts start",
+    "startdev": "PORT=4480 REACT_APP_MY_ENV=.environment.local react-scripts start",
     "test": "react-scripts test"
   },
   "dependencies": {
