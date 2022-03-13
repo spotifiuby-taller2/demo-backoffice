@@ -1,8 +1,5 @@
 require('dotenv').config();
 
-console.log(process.env
-    .REACT_APP_USERS_HOST);
-
 /* Frontend paths */
 
 /* Backend hosts */

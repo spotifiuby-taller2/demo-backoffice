@@ -3,7 +3,6 @@ import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import SignUpEndWrapper from "./login/SignUpEndWrapper";
 const { SignIn } = require('./login/SignIn');
 const { SignUp } = require('./login/SignUp');
-// const { SignUpEnd } = require('./login/SignUpEnd');
 const constants = require("./others/constants");
 
 class App extends Component {

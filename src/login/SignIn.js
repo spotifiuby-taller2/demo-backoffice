@@ -33,7 +33,9 @@ class SignIn extends SignComponent {
             .current,
 
           password: this.passwordReference
-            .current
+            .current,
+
+          link: "web"
         }
       }
     ).then(response => {
