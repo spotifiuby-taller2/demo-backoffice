@@ -1,10 +1,11 @@
 import constants from "./constants";
 
-const crypto = require('crypto');
+import sjcl from 'sjcl';
 
 function getSHAOf(toHash) {
-  return crypto.createHmac('SHA256', toHash)
-               .digest('hex');
+    const myBitArray = sjcl.hash.sha256.hash(toHash)
+    const myHash = sjcl.codec.hex.fromBits(myBitArray)
+    return myHash;
 }
 
 /*
