@@ -2,12 +2,14 @@
   "name": "demo-backoffice",
   "version": "0.1.0",
   "private": true,
+
   "scripts": {
     "start": "react-scripts start",
     "startdocker": "PORT=4480 react-scripts start",
     "startdev": "PORT=4480 react-scripts start",
     "test": "react-scripts test"
   },
+
   "dependencies": {
     "@emotion/react": "11.8.1",
     "@emotion/styled": "11.8.1",
@@ -29,15 +31,18 @@
     "sjcl": "1.0.8",
     "web-vitals": "2.1.4"
   },
+
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
     ]
   },
+
   "devDependencies": {
     "eslint": "7.11.0"
   },
+
   "browserslist": {
     "production": [
       ">0.2%",
