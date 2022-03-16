@@ -35,7 +35,9 @@ class SignUp extends SignComponent {
                  .current,
 
       password: getSHAOf( getSHAOf( this.passwordReference
-                                        .current) )
+                                        .current) ),
+
+      link: "web"
     }
 
     // response.json() is a promise
