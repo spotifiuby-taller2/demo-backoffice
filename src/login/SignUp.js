@@ -1,7 +1,7 @@
 import {
   Box,
   Button,
-  Container,
+  Container, createTheme,
   CssBaseline,
   TextField,
   Typography
@@ -9,33 +9,37 @@ import {
 import { ThemeProvider } from "@emotion/react";
 import { loginStyles } from "../style/signin/SignIn";
 import { getSHAOf } from "../others/utils";
-import { SignComponent } from "./SignComponent";
 import constants from "../others/constants";
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 
-class SignUp extends SignComponent {
-  constructor(props) {
-    super(props);
+const SignUp = (props) => {
+  const [theme] = useState( createTheme() );
 
-    this.handleSignUp = this.handleSignUp
-                            .bind(this);
+  const [emailReference, setEmailReference] = useState("");
 
-    this.handleSignUpError = this.handleSignUpError
-                                 .bind(this);
+  const [passwordReference, setPasswordReference] = useState("");
+
+  const handleEmailChange = (event) => {
+    setEmailReference(event.target
+                           .value);
   }
 
-  handleSignUpError(error) {
+  const handlePasswordChange = (event) => {
+    setPasswordReference(event.target
+                              .value);
+  }
+
+  const handleSignUpError = (error) =>  {
     alert(error);
   }
 
-  handleSignUp() {
+  const handleSignUp = () => {
     const requestBody = {
-      email: this.emailReference
-                 .current,
+      email: emailReference,
 
-      password: getSHAOf( getSHAOf( this.passwordReference
-                                        .current) ),
+      password: passwordReference === ""
+                ? ""
+                : getSHAOf( getSHAOf( passwordReference ) ),
 
       link: "web"
     }
@@ -49,26 +53,18 @@ class SignUp extends SignComponent {
     ).then(response => response.json())
       .then(response => {
           if (response.error !== undefined) {
-            this.handleSignUpError(response.error);
+            handleSignUpError(response.error);
           } else {
             alert("Mail enviado a tu cuenta.");
 
-            this.emailReference
-                .current = "";
-
-            this.passwordReference
-                .current = "";
-
-            const navigate = useNavigate();
-            navigate(constants.SIGN_IN_URL, { replace: true });
+            props.navigate(constants.SIGN_IN_URL, { replace: true });
           }
         }
       );
   }
 
-  render() {
     return (
-      <ThemeProvider theme={this.theme}>
+      <ThemeProvider theme={ theme }>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
           <Box sx={loginStyles.boxStyle}>
@@ -80,9 +76,8 @@ class SignUp extends SignComponent {
 
             <Box component="form" noValidate sx={{ mt: 1 }}>
               <TextField
-                onChange = { this.handleEmailChange
-                                 .bind(this) }
-                ref = { this.emailReference }
+                onChange = { handleEmailChange }
+                value = { emailReference }
                 margin="normal"
                 required
                 fullWidth
@@ -93,9 +88,8 @@ class SignUp extends SignComponent {
               />
 
               <TextField
-                onChange = { this.handlePasswordChange
-                                 .bind(this) }
-                ref = { this.passwordReference }
+                onChange = { handlePasswordChange }
+                value = { passwordReference }
                 margin="normal"
                 required
                 fullWidth
@@ -106,7 +100,7 @@ class SignUp extends SignComponent {
               />
 
               <Button
-                onClick={this.handleSignUp}
+                onClick={ handleSignUp }
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
@@ -116,8 +110,7 @@ class SignUp extends SignComponent {
           </Box>
         </Container>
       </ThemeProvider>
-    )
-  }
+    );
 }
 
 export {

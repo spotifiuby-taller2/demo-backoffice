@@ -1,25 +1,34 @@
-import React, { Component } from 'react';
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import React from 'react';
+import {BrowserRouter, Route, Routes, useNavigate} from 'react-router-dom';
 import SignUpEndWrapper from "./login/SignUpEndWrapper";
 const { SignIn } = require('./login/SignIn');
 const { SignUp } = require('./login/SignUp');
 const constants = require("./others/constants");
 
-class App extends Component {
-  render() {
+function MyRouter() {
+    const navigate = useNavigate();
+
     return (
-     <BrowserRouter>
-         <Routes>
-           <Route path="/" element={ <SignIn/> }> </Route>
-             <Route exact path={ constants.SIGN_UP_URL } element={ <SignUp/> }> </Route>
+        <Routes>
+            <Route path="/" element={ <SignIn/> }> </Route>
+            <Route exact path={ constants.SIGN_UP_URL }
+                   element={ <SignUp navigate={navigate}/> }> </Route>
 
-             <Route exact path={ constants.SIGN_UP_END_URL + "/:userId" } element={ <SignUpEndWrapper/> }> </Route>
+            <Route exact path={ constants.SIGN_UP_END_URL + "/:userId" }
+                   element={ <SignUpEndWrapper/> }> </Route>
 
-             <Route exact path={ constants.SIGN_IN_URL } element={ <SignIn/> }> </Route>
-         </Routes>
-      </BrowserRouter>
+            <Route exact path={ constants.SIGN_IN_URL }
+                   element={ <SignIn/> }> </Route>
+        </Routes>
     );
-  }
+}
+
+function App () {
+    return (
+    <BrowserRouter>
+         <MyRouter/>
+     </BrowserRouter>
+    );
 }
 
 export default App;
