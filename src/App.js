@@ -1,6 +1,7 @@
 import React from 'react';
 import {BrowserRouter, Route, Routes, useNavigate} from 'react-router-dom';
 import SignUpEndWrapper from "./login/SignUpEndWrapper";
+import {Profile} from "./profile/Profile";
 const { SignIn } = require('./login/SignIn');
 const { SignUp } = require('./login/SignUp');
 const constants = require("./others/constants");
@@ -11,6 +12,7 @@ function MyRouter() {
     return (
         <Routes>
             <Route path="/" element={ <SignIn/> }> </Route>
+
             <Route exact path={ constants.SIGN_UP_URL }
                    element={ <SignUp navigate={navigate}/> }> </Route>
 
@@ -18,7 +20,10 @@ function MyRouter() {
                    element={ <SignUpEndWrapper/> }> </Route>
 
             <Route exact path={ constants.SIGN_IN_URL }
-                   element={ <SignIn/> }> </Route>
+                   element={ <SignIn navigate={navigate}/> }> </Route>
+
+            <Route exact path={ constants.PROFILE_URL }
+                   element={ <Profile navigate={navigate}/> }> </Route>
         </Routes>
     );
 }

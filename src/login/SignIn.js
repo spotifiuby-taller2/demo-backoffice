@@ -7,50 +7,62 @@ import {
   Container,
   CssBaseline,
   Box,
-  Paper
+  Paper, createTheme
 } from '@mui/material';
-import { SIGN_UP_URL } from "../others/constants";
 import { loginStyles } from "../style/signin/SignIn";
 import { ThemeProvider } from "@emotion/react";
 import logo from "../media/hexagon.png";
-import Constants from "../others/constants";
-import { SignComponent } from "./SignComponent";
+import constants from "../others/constants";
+import {useState} from "react";
+import {getSHAOf} from "../others/utils";
 
-class SignIn extends SignComponent {
-  constructor(props) {
-    super(props);
+const SignIn = (props) => {
+  const [theme] = useState( createTheme() );
 
-    this.handleSignIn = this.handleSignIn
-                            .bind(this);
+  const [emailReference, setEmailReference] = useState("");
+
+  const [passwordReference, setPasswordReference] = useState("");
+
+  const handleEmailChange = (event) => {
+    setEmailReference(event.target
+                           .value);
   }
 
-  handleSignIn() {
-    fetch(Constants.USERS_HOST + Constants.SIGN_IN_URL, {
-        method: "POST",
-        headers: Constants.JSON_HEADER,
-        body: {
-          email: this.emailReference
-            .current,
+  const handlePasswordChange = (event) => {
+    setPasswordReference(event.target
+                              .value);
+  }
 
-          password: this.passwordReference
-            .current,
+  const handleSignIn = () => {
+    const requestBody = {
+      email: emailReference,
 
-          link: "web"
+      password: passwordReference === ""
+          ? ""
+          : getSHAOf( getSHAOf( passwordReference ) ),
+
+      link: "web"
+    }
+
+    // response.json() is a promise
+    fetch(constants.USERS_HOST + constants.SIGN_IN_URL, {
+          method: "POST",
+          headers: constants.JSON_HEADER,
+          body: JSON.stringify(requestBody)
         }
-      }
-    ).then(response => {
-        console.log(response);
-      }
-    ).catch(error => {
-        console.log("==========");
-        console.log(error);
-      }
-    );
+    ).then(response => response.json())
+        .then(response => {
+              if (response.error !== undefined) {
+                alert(response.error);
+              } else {
+                props.navigate(constants.PROFILE_URL, { replace: true });
+              }
+            }
+        );
   }
 
-  render() {
-    return (
-      <ThemeProvider theme={this.theme}>
+  return (
+      <ThemeProvider theme={ theme }>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
             <Box sx={loginStyles.boxStyle}>
@@ -66,7 +78,8 @@ class SignIn extends SignComponent {
 
               <Box component="form" noValidate sx={{ mt: 1 }}>
               <TextField
-                onChange = { this.handleEmailChange.bind(this) }
+                onChange = { handleEmailChange }
+                value = { emailReference }
                 margin="normal"
                 required
                 fullWidth
@@ -76,7 +89,8 @@ class SignIn extends SignComponent {
               />
 
               <TextField
-                onChange = { this.handlePasswordChange.bind(this) }
+                onChange = { handlePasswordChange }
+                value = { passwordReference }
                 margin="normal"
                 required
                 fullWidth
@@ -91,7 +105,7 @@ class SignIn extends SignComponent {
               /> */}
 
               <Button
-                onClick={this.handleSignIn}
+                onClick={ handleSignIn }
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
@@ -106,7 +120,7 @@ class SignIn extends SignComponent {
                 </Grid>
 
                 <Grid item>
-                  <Link href={SIGN_UP_URL} variant="body2">
+                  <Link href={constants.SIGN_UP_URL} variant="body2">
                     {"Registrarse"}
                   </Link>
                 </Grid>
@@ -115,8 +129,7 @@ class SignIn extends SignComponent {
           </Box>
         </Container>
       </ThemeProvider>
-    )
-  }
+    );
 }
 
 export {
