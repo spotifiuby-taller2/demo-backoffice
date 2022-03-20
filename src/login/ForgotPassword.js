@@ -8,46 +8,27 @@ import {
 } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import { loginStyles } from "../style/signin/SignIn";
-import { getSHAOf } from "../others/utils";
 import constants from "../others/constants";
 import React, { useState } from "react";
 
-const SignUp = (props) => {
+const ForgotPassword = (props) => {
   const [theme] = useState( createTheme() );
 
   const [emailReference, setEmailReference] = useState("");
-
-  const [passwordReference, setPasswordReference] = useState("");
 
   const handleEmailChange = (event) => {
     setEmailReference(event.target
                            .value);
   }
 
-  const handlePasswordChange = (event) => {
-    setPasswordReference(event.target
-                              .value);
-  }
-
-  const handleSignUpError = (error) =>  {
-    alert(error);
-  }
-
-  const handleSignUp = () => {
+  const handleButton = () => {
     const requestBody = {
       email: emailReference,
 
-      password: passwordReference === ""
-                ? ""
-                : getSHAOf( getSHAOf( passwordReference ) ),
-
-      link: "web",
-
-      isExternal: false
+      link: "web"
     }
 
-    // response.json() is a promise
-    fetch(constants.USERS_HOST + constants.SIGN_UP_URL, {
+    fetch(constants.USERS_HOST + constants.FORGOT_PASSWORD_URL, {
         method: "POST",
         headers: constants.JSON_HEADER,
         body: JSON.stringify(requestBody)
@@ -55,9 +36,9 @@ const SignUp = (props) => {
     ).then(response => response.json())
       .then(response => {
           if (response.error !== undefined) {
-            handleSignUpError(response.error);
+            alert(response.error);
           } else {
-            alert("Mail enviado a tu cuenta.");
+            alert(response.result);
 
             props.navigate(constants.SIGN_IN_URL,
                           { replace: true });
@@ -72,7 +53,7 @@ const SignUp = (props) => {
           <CssBaseline />
           <Box sx={loginStyles.boxStyle}>
             <Typography component="h1" variant="h5"
-            >Registrarse
+            >Ingresá tu cuenta de correo
             </Typography>
 
             <div> <br /> </div>
@@ -90,24 +71,12 @@ const SignUp = (props) => {
                 autoFocus
               />
 
-              <TextField
-                onChange = { handlePasswordChange }
-                value = { passwordReference }
-                margin="normal"
-                required
-                fullWidth
-                name="password-field"
-                label="Contraseña"
-                type="password"
-                autoComplete="current-password"
-              />
-
               <Button
-                onClick={ handleSignUp }
+                onClick={ handleButton }
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-              >Registrarse
+              >Recuperar cuenta
               </Button>
             </Box>
           </Box>
@@ -117,5 +86,5 @@ const SignUp = (props) => {
 }
 
 export {
-  SignUp
+  ForgotPassword
 };

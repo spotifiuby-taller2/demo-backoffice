@@ -6,12 +6,13 @@ require('dotenv').config();
 const USERS_HOST = process.env
                           .REACT_APP_USERS_HOST;
 
-/* Backends paths */
+/* Paths */
 const SIGN_UP_URL = "/signup";
 const SIGN_IN_URL = "/signin";
 const SIGN_UP_END_URL = SIGN_UP_URL + "/end";
 const USER_URL = "/user";
 const PROFILE_URL = USER_URL + "/profile";
+const FORGOT_PASSWORD_URL = "/forgotpassword";
 
 const JSON_HEADER = {
   'Content-Type': 'application/json'
@@ -23,5 +24,6 @@ module.exports = {
   SIGN_IN_URL,
   JSON_HEADER,
   SIGN_UP_END_URL,
-  PROFILE_URL
+  PROFILE_URL,
+  FORGOT_PASSWORD_URL
 }

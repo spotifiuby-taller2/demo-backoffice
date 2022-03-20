@@ -114,7 +114,7 @@ const SignIn = (props) => {
 
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
+                  <Link href={constants.FORGOT_PASSWORD_URL} variant="body2">
                     Reestablecer contraseña
                   </Link>
                 </Grid>

@@ -12,42 +12,28 @@ import { getSHAOf } from "../others/utils";
 import constants from "../others/constants";
 import React, { useState } from "react";
 
-const SignUp = (props) => {
+const RecoverPassword = (props) => {
   const [theme] = useState( createTheme() );
 
-  const [emailReference, setEmailReference] = useState("");
-
-  const [passwordReference, setPasswordReference] = useState("");
-
-  const handleEmailChange = (event) => {
-    setEmailReference(event.target
-                           .value);
-  }
+  const [password, setPassword] = useState("");
 
   const handlePasswordChange = (event) => {
-    setPasswordReference(event.target
-                              .value);
+    setPassword(event.target
+                     .value);
   }
 
-  const handleSignUpError = (error) =>  {
-    alert(error);
-  }
-
-  const handleSignUp = () => {
+  const handleButton = () => {
     const requestBody = {
-      email: emailReference,
-
-      password: passwordReference === ""
-                ? ""
-                : getSHAOf( getSHAOf( passwordReference ) ),
-
-      link: "web",
-
-      isExternal: false
+      password: getSHAOf( getSHAOf( password ) )
     }
 
-    // response.json() is a promise
-    fetch(constants.USERS_HOST + constants.SIGN_UP_URL, {
+    const userId = window.location
+                          .href
+                          .split(constants.FORGOT_PASSWORD_URL + "/")[1];
+
+    fetch(constants.USERS_HOST + constants.FORGOT_PASSWORD_URL
+          + "/"
+          + userId, {
         method: "POST",
         headers: constants.JSON_HEADER,
         body: JSON.stringify(requestBody)
@@ -55,9 +41,9 @@ const SignUp = (props) => {
     ).then(response => response.json())
       .then(response => {
           if (response.error !== undefined) {
-            handleSignUpError(response.error);
+            alert(response.error);
           } else {
-            alert("Mail enviado a tu cuenta.");
+            alert(response.result);
 
             props.navigate(constants.SIGN_IN_URL,
                           { replace: true });
@@ -72,42 +58,30 @@ const SignUp = (props) => {
           <CssBaseline />
           <Box sx={loginStyles.boxStyle}>
             <Typography component="h1" variant="h5"
-            >Registrarse
+            >Ingresá tu nueva contraseña
             </Typography>
 
             <div> <br /> </div>
 
             <Box component="form" noValidate sx={{ mt: 1 }}>
               <TextField
-                onChange = { handleEmailChange }
-                value = { emailReference }
+                onChange = { handlePasswordChange }
+                value = { password }
                 margin="normal"
                 required
                 fullWidth
-                label="Correo"
-                name="email"
-                autoComplete="email"
+                label="Nueva contraseña"
+                name="password"
+                type="password"
                 autoFocus
               />
 
-              <TextField
-                onChange = { handlePasswordChange }
-                value = { passwordReference }
-                margin="normal"
-                required
-                fullWidth
-                name="password-field"
-                label="Contraseña"
-                type="password"
-                autoComplete="current-password"
-              />
-
               <Button
-                onClick={ handleSignUp }
+                onClick={ handleButton }
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-              >Registrarse
+              >Cambiar contraseña
               </Button>
             </Box>
           </Box>
@@ -117,5 +91,5 @@ const SignUp = (props) => {
 }
 
 export {
-  SignUp
+  RecoverPassword
 };

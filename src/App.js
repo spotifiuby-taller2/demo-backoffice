@@ -2,6 +2,8 @@ import React from 'react';
 import {BrowserRouter, Route, Routes, useNavigate} from 'react-router-dom';
 import SignUpEndWrapper from "./login/SignUpEndWrapper";
 import {Profile} from "./profile/Profile";
+import {ForgotPassword} from "./login/ForgotPassword";
+const { RecoverPassword } = require('./login/RecoverPassword');
 const { SignIn } = require('./login/SignIn');
 const { SignUp } = require('./login/SignUp');
 const constants = require("./others/constants");
@@ -24,6 +26,12 @@ function MyRouter() {
 
             <Route exact path={ constants.PROFILE_URL }
                    element={ <Profile navigate={navigate}/> }> </Route>
+
+            <Route exact path={ constants.FORGOT_PASSWORD_URL }
+                   element={ <ForgotPassword navigate={navigate}/> }> </Route>
+
+            <Route exact path={ constants.FORGOT_PASSWORD_URL + "/:userId" }
+                   element={ <RecoverPassword navigate={navigate}/> }> </Route>
         </Routes>
     );
 }
