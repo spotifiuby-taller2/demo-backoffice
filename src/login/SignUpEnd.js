@@ -8,24 +8,29 @@ class SignUpEnd extends Component {
     constructor(props) {
         super(props);
 
+        this.props = props;
         this.theme = createTheme();
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         const userId = window.location
                              .href
                              .split(constants.SIGN_UP_END_URL + "/")[1];
 
-        getTo(constants.USERS_HOST
-              + constants.SIGN_UP_END_URL
-              + "/"
-              + userId,
-            (response) => {
-                alert("Cuenta confirmada");
+        await getTo(constants.USERS_HOST
+                    + constants.SIGN_UP_END_URL
+                    + "/"
+                    + userId,
+                    (response) => {
+                    const message = response.error === undefined
+                                    ? "Cuenta confirmada"
+                                    : response.error;
 
-                this.props
-                    .navigate(constants.SIGN_IN_URL);
-            } );
+                    alert(message);
+
+                    this.props
+                        .navigate(constants.SIGN_IN_URL);
+                } );
     }
 
     render() {

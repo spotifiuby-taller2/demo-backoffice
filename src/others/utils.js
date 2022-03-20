@@ -26,7 +26,7 @@ const getTo = (url, f) => {
         headers: constants.JSON_HEADER,
       }
   ).then(response => response.json()
-  ).then(f);
+  ).then(response => f(response));
 }
 
 export {

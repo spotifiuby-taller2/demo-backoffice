@@ -41,7 +41,9 @@ const SignUp = (props) => {
                 ? ""
                 : getSHAOf( getSHAOf( passwordReference ) ),
 
-      link: "web"
+      link: "web",
+
+      isExternal: false
     }
 
     // response.json() is a promise
