@@ -29,7 +29,15 @@ const getTo = (url, f) => {
   ).then(response => f(response));
 }
 
+function areAnyUndefined(list) {
+    return list.filter( (element) => {
+        return element === undefined
+            || element.length === 0
+    } ).length > 0;
+}
+
 export {
   getTo,
-  getSHAOf
+  getSHAOf,
+  areAnyUndefined
 }

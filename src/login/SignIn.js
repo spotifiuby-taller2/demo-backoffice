@@ -14,10 +14,12 @@ import { ThemeProvider } from "@emotion/react";
 import logo from "../media/hexagon.png";
 import constants from "../others/constants";
 import {useState} from "react";
-import {getSHAOf} from "../others/utils";
+import {areAnyUndefined, getSHAOf} from "../others/utils";
+import { auth } from "../services/FirebaseService";
+const firebaseAuth = require("firebase/auth");
 
 const SignIn = (props) => {
-  const [theme] = useState( createTheme() );
+  const [theme] = useState(createTheme());
 
   const [emailReference, setEmailReference] = useState("");
 
@@ -33,13 +35,39 @@ const SignIn = (props) => {
                               .value);
   }
 
-  const handleSignIn = () => {
+  async function handleSignIn() {
+    if ( areAnyUndefined([emailReference,
+                          passwordReference]) ) {
+      alert("Por favor complete todos los campos.");
+
+      return;
+    }
+
+    const password = getSHAOf( getSHAOf( passwordReference ) );
+
+    const response = await firebaseAuth.signInWithEmailAndPassword(auth,
+                                                                  emailReference,
+                                                                  password)
+        .catch((error) => {
+          return error.toString()
+        } );
+
+    if (response.user === undefined) {
+      alert("No se encontro ningun usuario con ese mail y/ o contraseña");
+
+      return;
+    }
+
+    // app.auth()
+    const idToken = await auth.currentUser
+                              .getIdToken();
+
     const requestBody = {
       email: emailReference,
 
-      password: passwordReference === ""
-          ? ""
-          : getSHAOf( getSHAOf( passwordReference ) ),
+      password: password,
+
+      idToken: idToken,
 
       link: "web"
     }
@@ -55,7 +83,7 @@ const SignIn = (props) => {
               if (response.error !== undefined) {
                 alert(response.error);
               } else {
-                props.navigate(constants.PROFILE_URL, { replace: true });
+                props.navigate(constants.PROFILE_URL);
               }
             }
         );
