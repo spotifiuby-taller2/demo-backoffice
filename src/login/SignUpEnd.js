@@ -1,13 +1,12 @@
-import {Component} from 'react';
-import {ThemeProvider} from "@emotion/react";
-import {Container, createTheme, CssBaseline, Typography} from "@mui/material";
+import { Component } from 'react';
+import { ThemeProvider } from "@emotion/react";
+import { Container, createTheme, CssBaseline, Typography } from "@mui/material";
 import constants from "../others/constants";
-import {getTo} from "../others/utils";
+import { getTo } from "../others/utils";
 
 class SignUpEnd extends Component {
     constructor(props) {
         super(props);
-
         this.props = props;
         this.theme = createTheme();
     }

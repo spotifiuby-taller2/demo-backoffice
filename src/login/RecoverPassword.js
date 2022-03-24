@@ -11,8 +11,11 @@ import { loginStyles } from "../style/signin/SignIn";
 import { getSHAOf } from "../others/utils";
 import constants from "../others/constants";
 import React, { useState } from "react";
+import {useNavigate} from "react-router-dom";
 
-const RecoverPassword = (props) => {
+const RecoverPassword = () => {
+  const navigate = useNavigate();
+
   const [theme] = useState( createTheme() );
 
   const [password, setPassword] = useState("");
@@ -45,7 +48,7 @@ const RecoverPassword = (props) => {
           } else {
             alert(response.result);
 
-            props.navigate(constants.SIGN_IN_URL,
+            navigate(constants.SIGN_IN_URL,
                           { replace: true });
           }
         }

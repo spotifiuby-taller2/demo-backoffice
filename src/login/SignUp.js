@@ -11,8 +11,11 @@ import { loginStyles } from "../style/signin/SignIn";
 import { getSHAOf } from "../others/utils";
 import constants from "../others/constants";
 import React, { useState } from "react";
+import {useNavigate} from "react-router-dom";
 
-const SignUp = (props) => {
+const SignUp = () => {
+  const navigate = useNavigate();
+
   const [theme] = useState( createTheme() );
 
   const [emailReference, setEmailReference] = useState("");
@@ -59,7 +62,7 @@ const SignUp = (props) => {
           } else {
             alert("Mail enviado a tu cuenta.");
 
-            props.navigate(constants.SIGN_IN_URL,
+            navigate(constants.SIGN_IN_URL,
                           { replace: true });
           }
         }

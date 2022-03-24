@@ -13,12 +13,15 @@ import { loginStyles } from "../style/signin/SignIn";
 import { ThemeProvider } from "@emotion/react";
 import logo from "../media/hexagon.png";
 import constants from "../others/constants";
-import {useState} from "react";
-import {areAnyUndefined, getSHAOf} from "../others/utils";
+import { useState } from "react";
+import { areAnyUndefined, getSHAOf } from "../others/utils";
 import { auth } from "../services/FirebaseService";
+import { useNavigate } from 'react-router-dom';
 const firebaseAuth = require("firebase/auth");
 
-const SignIn = (props) => {
+const SignIn = () => {
+  const navigate = useNavigate();
+
   const [theme] = useState(createTheme());
 
   const [emailReference, setEmailReference] = useState("");
@@ -83,7 +86,7 @@ const SignIn = (props) => {
               if (response.error !== undefined) {
                 alert(response.error);
               } else {
-                props.navigate(constants.PROFILE_URL);
+                navigate(constants.PROFILE_URL);
               }
             }
         );
