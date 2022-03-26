@@ -67,7 +67,7 @@ function MyRouter(props) {
                        element={ <SignUpEndWrapper/> }> </Route>
 
                 <Route exact path={ constants.SIGN_IN_URL }
-                       render={ () => (<SignIn updateToken={props.updateToken}/>) }> </Route>
+                       element={ <SignIn updateToken={props.updateToken}/> }> </Route>
 
                 <Route exact path={ constants.FORGOT_PASSWORD_URL }
                        element={ <ForgotPassword/> }> </Route>

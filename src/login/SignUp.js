@@ -40,13 +40,16 @@ const SignUp = () => {
     const requestBody = {
       email: emailReference,
 
-      password: passwordReference === ""
-                ? ""
-                : getSHAOf( getSHAOf( passwordReference ) ),
+      password: getSHAOf( getSHAOf( passwordReference ) ),
 
       link: "web",
 
       isExternal: false
+    }
+
+    if (passwordReference.length < constants.PASSWORD_MIN_LEN) {
+      alert("La contraseña debe tener al menos 10 caracteres;");
+      return;
     }
 
     // response.json() is a promise

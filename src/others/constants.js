@@ -43,6 +43,8 @@ if (isDevelopment) {
   };
 }
 
+const PASSWORD_MIN_LEN = 10;
+
 module.exports = {
   USERS_HOST,
   SIGN_UP_URL,
@@ -52,5 +54,6 @@ module.exports = {
   FORGOT_PASSWORD_URL,
   USERS_URL,
   isDevelopment,
-  firebaseConfig
+  firebaseConfig,
+  PASSWORD_MIN_LEN
 }
