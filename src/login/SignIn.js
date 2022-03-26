@@ -64,7 +64,7 @@ const SignIn = (props) => {
     const idToken = await auth.currentUser
                               .getIdToken();
 
-    // Not working
+    // Not working...
     // props.updateToken(idToken);
 
     const requestBody = {
