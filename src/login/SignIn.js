@@ -19,7 +19,7 @@ import { auth } from "../services/FirebaseService";
 import { useNavigate } from 'react-router-dom';
 const firebaseAuth = require("firebase/auth");
 
-const SignIn = () => {
+const SignIn = (props) => {
   const navigate = useNavigate();
 
   const [theme] = useState(createTheme());
@@ -61,9 +61,11 @@ const SignIn = () => {
       return;
     }
 
-    // app.auth()
     const idToken = await auth.currentUser
                               .getIdToken();
+
+    // Not working
+    // props.updateToken(idToken);
 
     const requestBody = {
       email: emailReference,
@@ -86,6 +88,9 @@ const SignIn = () => {
               if (response.error !== undefined) {
                 alert(response.error);
               } else {
+                localStorage.setItem("token",
+                                     idToken);
+
                 navigate(constants.USERS_URL);
               }
             }
