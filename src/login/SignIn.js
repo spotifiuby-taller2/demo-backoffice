@@ -86,7 +86,7 @@ const SignIn = () => {
               if (response.error !== undefined) {
                 alert(response.error);
               } else {
-                navigate(constants.PROFILE_URL);
+                navigate(constants.USERS_URL);
               }
             }
         );
