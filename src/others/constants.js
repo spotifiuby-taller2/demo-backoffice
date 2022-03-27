@@ -15,6 +15,7 @@ const USERS_URL = "/users";
 
 const JSON_HEADER = {
   'Content-Type': 'application/json',
+  'Access-Control-Allow-Origin': '*'
 }
 
 /* ====== Production vs Development config ====== */
