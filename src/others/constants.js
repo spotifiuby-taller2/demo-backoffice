@@ -14,12 +14,12 @@ const FORGOT_PASSWORD_URL = "/forgotpassword";
 const USERS_URL = "/users";
 
 const JSON_HEADER = {
-  'Content-Type': 'application/json'
+  'Content-Type': 'application/json',
 }
 
 /* ====== Production vs Development config ====== */
 const isDevelopment = process.env
-                             .PRODUCTION === undefined;
+                             .REACT_APP_PRODUCTION === undefined;
 
 let firebaseConfig;
 
