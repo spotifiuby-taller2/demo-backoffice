@@ -14,8 +14,7 @@ const FORGOT_PASSWORD_URL = "/forgotpassword";
 const USERS_URL = "/users";
 
 const JSON_HEADER = {
-  'Content-Type': 'application/json',
-  'Access-Control-Allow-Origin': '*'
+  'Content-Type': 'application/json'
 }
 
 /* ====== Production vs Development config ====== */
