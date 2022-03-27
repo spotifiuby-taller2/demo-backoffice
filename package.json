@@ -27,6 +27,7 @@
     "react-firebaseui": "6.0.0",
     "react-router-dom": "6.2.1",
     "react-scripts": "4.0.3",
+    "simple-node-logger": "^21.8.12",
     "sjcl": "1.0.8",
     "web-vitals": "2.1.4"
   },
