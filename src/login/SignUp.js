@@ -65,8 +65,7 @@ const SignUp = () => {
           } else {
             alert("Mail enviado a tu cuenta.");
 
-            navigate(constants.SIGN_IN_URL,
-                          { replace: true });
+            navigate(constants.SIGN_IN_URL);
           }
         }
       );

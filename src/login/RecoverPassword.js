@@ -48,8 +48,7 @@ const RecoverPassword = () => {
           } else {
             alert(response.result);
 
-            navigate(constants.SIGN_IN_URL,
-                          { replace: true });
+            navigate(constants.SIGN_IN_URL);
           }
         }
       );

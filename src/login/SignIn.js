@@ -64,8 +64,7 @@ const SignIn = (props) => {
     const idToken = await auth.currentUser
                               .getIdToken();
 
-    // Not working...
-    // props.updateToken(idToken);
+    console.log( props.updateToken(idToken) );
 
     const requestBody = {
       email: emailReference,

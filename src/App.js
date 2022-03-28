@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter,
          Route,
          Routes,
@@ -6,9 +6,9 @@ import { BrowserRouter,
 import SignUpEndWrapper from "./login/SignUpEndWrapper";
 import { ForgotPassword } from "./login/ForgotPassword";
 import { UsersList } from "./home/UsersList";
-import {Navbar} from "react-bootstrap";
-import {Button} from "@mui/material";
+import { Button } from "@mui/material";
 import { auth } from "./services/FirebaseService";
+import "./style/HomePageRoutes.css";
 
 const constants = require("./others/constants");
 const { RecoverPassword } = require('./login/RecoverPassword');
@@ -19,44 +19,40 @@ let getUser = () => {
     return auth.currentUser
 };
 
-function MyNavbar() {
+function MyPageContent(props) {
     const navigate = useNavigate();
 
     const redirectUsersLists = (props) => {
-        navigate(constants.USERS_URL,
-            { replace: true });
+        navigate(constants.USERS_URL);
     };
 
     return (
-        <Navbar bg="light">
-            <Button
-                onClick={ redirectUsersLists }
-                variant="themed">Usuarios
-            </Button>
+            <nav className="container">
+                <div className="links">
+                    <Button className="homepage"
+                            onClick={redirectUsersLists}
+                            variant="themed"
+                    >Usuarios</Button>
 
-            <Button
-                onClick={ navigate(constants.USERS_URL,
-                    { replace: true } ) }
-                variant="themed">Transacciones
-            </Button>
+                    <Button className="homepage"
+                            variant="themed"
+                    >Transacciones</Button>
 
-            <Button
-                onClick={ navigate(constants.USERS_URL,
-                    { replace: true } ) }
-                variant="themed">Servicios
-            </Button>
+                    <Button className="homepage"
+                            variant="themed"
+                    >Servicios</Button>
 
-            <Button
-                onClick={ navigate(constants.USERS_URL,
-                    { replace: true } ) }
-                variant="themed">Métricas
-            </Button>
-        </Navbar>
+                    <Button className="homepage"
+                            variant="themed"
+                    >Métricas</Button>
+                </div>
+            </nav>
     );
 }
 
 function MyRouter(props) {
     return (
+            <div>
             <Routes>
                 <Route path="/" element={ <SignIn/> }> </Route>
 
@@ -78,6 +74,7 @@ function MyRouter(props) {
                 <Route exact path={ constants.USERS_URL }
                        element={ <UsersList/> }> </Route>
             </Routes>
+            </div>
     );
 }
 
@@ -89,13 +86,15 @@ function App() {
         setToken(idToken);
     }
 
-    if ( getUser() !== null
-         && token === getUser().getIdToken() ) {
+    // Replace with condition over token
+    if(true) {
         return (
             <BrowserRouter>
-                <MyNavbar/>
+                <MyPageContent>
+                </MyPageContent>
 
-                <MyRouter/>
+                <MyRouter updateToken={updateToken}>
+                </MyRouter>
             </BrowserRouter>
         );
     }

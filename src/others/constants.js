@@ -14,7 +14,8 @@ const FORGOT_PASSWORD_URL = "/forgotpassword";
 const USERS_URL = "/users";
 
 const JSON_HEADER = {
-  'Content-Type': 'application/json'
+  'Content-Type': 'application/json',
+  'Access-Control-Allow-Origin': '*'
 }
 
 /* ====== Production vs Development config ====== */
@@ -45,6 +46,8 @@ if (isDevelopment) {
 
 const PASSWORD_MIN_LEN = 10;
 
+const FIREBASE_ISSUES = true;
+
 module.exports = {
   USERS_HOST,
   SIGN_UP_URL,
@@ -55,5 +58,6 @@ module.exports = {
   USERS_URL,
   isDevelopment,
   firebaseConfig,
-  PASSWORD_MIN_LEN
+  PASSWORD_MIN_LEN,
+  FIREBASE_ISSUES
 }
