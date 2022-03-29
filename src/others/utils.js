@@ -8,17 +8,19 @@ function getSHAOf(toHash) {
     return myHash;
 }
 
-/*
-const postTo = (url, body, f) => {
-  // response.json() is a promise
+
+const postTo = (url, body) => {
   fetch(url, {
         method: "POST",
         headers: constants.JSON_HEADER,
         body: JSON.stringify(body)
       }
-  ).then(response => response.json()
-  ).then(f);
-} */
+  ).catch(error => {
+      return {
+          error: error.toString()
+      };
+  } );
+}
 
 const getTo = (url, f) => {
   fetch(url, {
@@ -39,5 +41,6 @@ function areAnyUndefined(list) {
 export {
   getTo,
   getSHAOf,
-  areAnyUndefined
+  areAnyUndefined,
+  postTo
 }

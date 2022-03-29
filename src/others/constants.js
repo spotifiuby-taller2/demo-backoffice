@@ -6,12 +6,19 @@ require('dotenv').config();
 const USERS_HOST = process.env
                           .REACT_APP_USERS_HOST;
 
+const SERVICES_HOST = process.env
+                             .REACT_APP_SERVICES_HOST;
+
+
 /* Paths */
 const SIGN_UP_URL = "/signup";
 const SIGN_IN_URL = "/signin";
 const SIGN_UP_END_URL = SIGN_UP_URL + "/end";
 const FORGOT_PASSWORD_URL = "/forgotpassword";
 const USERS_URL = "/users";
+const SERVICES_URL = "/services";
+
+const API_KEY_DOWN_URL = "/apikeydown";
 
 const JSON_HEADER = {
   'Content-Type': 'application/json',
@@ -48,6 +55,8 @@ const PASSWORD_MIN_LEN = 10;
 
 const FIREBASE_ISSUES = true;
 
+const MY_API_KEY = "645d293cdffe45a8674aa17b58157181a1a3127c3db705d9021307b678e7856b";
+
 module.exports = {
   USERS_HOST,
   SIGN_UP_URL,
@@ -59,5 +68,9 @@ module.exports = {
   isDevelopment,
   firebaseConfig,
   PASSWORD_MIN_LEN,
-  FIREBASE_ISSUES
+  FIREBASE_ISSUES,
+  SERVICES_URL,
+  SERVICES_HOST,
+  MY_API_KEY,
+  API_KEY_DOWN_URL
 }

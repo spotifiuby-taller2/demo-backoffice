@@ -8,6 +8,7 @@ import { ForgotPassword } from "./login/ForgotPassword";
 import { UsersList } from "./home/UsersList";
 import { Button } from "@mui/material";
 import { auth } from "./services/FirebaseService";
+import { Services } from "./home/Services";
 import "./style/HomePageRoutes.css";
 
 const constants = require("./others/constants");
@@ -26,11 +27,15 @@ function MyPageContent(props) {
         navigate(constants.USERS_URL);
     };
 
+    const redirectServices = (props) => {
+        navigate(constants.SERVICES_URL);
+    }
+
     return (
             <nav className="container">
                 <div className="links">
                     <Button className="homepage"
-                            onClick={redirectUsersLists}
+                            onClick={ redirectUsersLists }
                             variant="themed"
                     >Usuarios</Button>
 
@@ -39,6 +44,7 @@ function MyPageContent(props) {
                     >Transacciones</Button>
 
                     <Button className="homepage"
+                            onClick={ redirectServices }
                             variant="themed"
                     >Servicios</Button>
 
@@ -73,6 +79,9 @@ function MyRouter(props) {
 
                 <Route exact path={ constants.USERS_URL }
                        element={ <UsersList/> }> </Route>
+
+                <Route exact path={ constants.SERVICES_URL }
+                       element={ <Services/> }> </Route>
             </Routes>
             </div>
     );

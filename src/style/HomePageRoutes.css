@@ -4,3 +4,7 @@
     margin-top: 15px;
     display: inline-block;
 }
+
+.new-line {
+    white-space: pre-line;
+}
