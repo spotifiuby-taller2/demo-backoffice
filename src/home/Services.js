@@ -11,7 +11,7 @@ const { postTo } = require("../others/utils");
 
 async function getServices() {
     const requestBody = {
-        "api_key": constants.MY_API_KEY
+        "apiKey": constants.MY_API_KEY
     };
 
     const response = await fetch(constants.SERVICES_HOST + constants.SERVICES_URL, {
@@ -28,7 +28,7 @@ async function getServices() {
     if (response.error !== undefined) {
         return {
             "name": "",
-            "api_key": "",
+            "apiKey": "",
             "status": ""
         }
     }

@@ -18,7 +18,8 @@ const FORGOT_PASSWORD_URL = "/forgotpassword";
 const USERS_URL = "/users";
 const SERVICES_URL = "/services";
 
-const API_KEY_DOWN_URL = "/apikeydown";
+const API_KEY_URL = "/apikeys";
+const API_KEY_DOWN_URL = API_KEY_URL + "/down";
 
 const JSON_HEADER = {
   'Content-Type': 'application/json',
@@ -53,7 +54,7 @@ if (isDevelopment) {
 
 const PASSWORD_MIN_LEN = 10;
 
-const FIREBASE_ISSUES = true;
+const FIREBASE_ISSUES = false;
 
 const MY_API_KEY = "645d293cdffe45a8674aa17b58157181a1a3127c3db705d9021307b678e7856b";
 
