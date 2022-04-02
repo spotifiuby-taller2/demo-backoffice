@@ -20,6 +20,8 @@ const SERVICES_URL = "/services";
 
 const API_KEY_URL = "/apikeys";
 const API_KEY_DOWN_URL = API_KEY_URL + "/down";
+const API_KEY_UP_URL = API_KEY_URL + "/up";
+const API_KEY_QUERY_PARAM = "apiKey=";
 
 const JSON_HEADER = {
   'Content-Type': 'application/json',
@@ -73,5 +75,7 @@ module.exports = {
   SERVICES_URL,
   SERVICES_HOST,
   MY_API_KEY,
-  API_KEY_DOWN_URL
+  API_KEY_DOWN_URL,
+  API_KEY_QUERY_PARAM,
+  API_KEY_UP_URL
 }

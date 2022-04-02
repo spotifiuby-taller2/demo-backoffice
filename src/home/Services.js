@@ -1,96 +1,161 @@
 import "../style/HomePageRoutes.css";
 import { Table,
-         TableHead,
-         TableBody,
-         TableRow,
-         TableCell,
-         Button} from '@mui/material';
+    TableHead,
+    TableBody,
+    TableRow,
+    TableCell,
+    Button} from '@mui/material';
+import {useEffect, useState} from "react";
 
 const constants = require("../others/constants");
 const { postTo } = require("../others/utils");
 
 async function getServices() {
-    const requestBody = {
-        "apiKey": constants.MY_API_KEY
-    };
-
-    const response = await fetch(constants.SERVICES_HOST + constants.SERVICES_URL, {
-                            method: "GET",
-                            headers: constants.JSON_HEADER,
-                            body: JSON.stringify(requestBody)
-                        }
-                    ).catch(error => {
-                        return {
-                            error: error.toString()
-                        };
-                    } );
+    const response = await fetch(constants.SERVICES_HOST + constants.SERVICES_URL
+        + "?"
+        + constants.API_KEY_QUERY_PARAM
+        + constants.MY_API_KEY, {
+            method: "GET",
+            headers: constants.JSON_HEADER
+        }
+    ).then(response => response.json()
+    ).catch(error => {
+        return {
+            error: error.toString()
+        };
+    } );
 
     if (response.error !== undefined) {
         return {
             "name": "",
             "apiKey": "",
-            "status": ""
+            "creationDate": "",
+            "description": ""
         }
     }
 
     return response;
 }
 
-async function disableKey(api_key) {
+async function enableKey(apiKey) {
     const requestBody = {
-        "api_key": constants.MY_API_KEY,
-        "api_key_to_disable": api_key
+        "apiKey": constants.MY_API_KEY,
+        "apiKeyToEnable": apiKey
     }
 
-    const response = await postTo(constants.SERVICES_HOST + constants.API_KEY_DOWN_URL,
-                                  requestBody);
+    const response = await postTo(constants.SERVICES_HOST + constants.API_KEY_UP_URL,
+                                  requestBody
+                           ).catch(error => {
+                                return {
+                                    error: error.toString()
+                                }
+                           } );
 
     if (response.error !== undefined) {
         alert(response.error);
+    } else {
+        window.location
+              .reload();
     }
 }
 
-async function getDisableButton(api_key) {
-    return (
-        <Button onClick={await disableKey(api_key)}
-            >Desactivar
-        </Button>
-    )
+async function disableKey(apiKey) {
+    const requestBody = {
+        "apiKey": constants.MY_API_KEY,
+        "apiKeyToDisable": apiKey
+    }
+
+    const response = await postTo(constants.SERVICES_HOST + constants.API_KEY_DOWN_URL,
+                                  requestBody
+                           ).catch(error => {
+                                return {
+                                    error: error.toString()
+                                }
+                           } );
+
+    if (response.error !== undefined) {
+        alert(response.error);
+    } else {
+        window.location
+              .reload();
+    }
 }
 
 const Services = (props) => {
+    let [rows, setRows] = useState([]);
+
+    // Component did mount
+    useEffect( () => {
+        const getServicesWrapper = async () => {
+            const response = await getServices();
+
+            const responseRows = response.map( (x, i)  => {
+                const isActive = x.active
+                                  .toString();
+
+                const apiKey = x.apiKey;
+
+                let button;
+
+                if (isActive === "true") {
+                    button = (
+                        <Button onClick={ async () => {
+                            await disableKey(apiKey)
+                        } }
+                        >Desactivar
+                        </Button>
+                    );
+                } else {
+                    button = (
+                        <Button onClick={ async () => {
+                            await enableKey(apiKey)
+                        } }
+                        >Activar
+                        </Button>
+                    );
+                }
+
+                return <TableRow key={i}>
+                    <TableCell>{x.name}</TableCell>
+                    <TableCell>{apiKey}</TableCell>
+                    <TableCell>{isActive}</TableCell>
+                    <TableCell>{x.creationDate}</TableCell>
+                    <TableCell>{x.description}</TableCell>
+                    <TableCell>{button}</TableCell>
+                </TableRow>
+            } )
+
+            setRows(responseRows);
+        };
+
+        getServicesWrapper().then(r => r);
+    }, [] );
+
     return(
         <div>
             <div>
-            <br/>
-            <br/>
-            <br/>
+                <br/>
+                <br/>
+                <br/>
             </div>
-        <div>
-        <Table border={1}
-               cellPadding={10}>
-            <TableHead>
-                <TableRow>
-                    <TableCell>Servicio</TableCell>
-                    <TableCell>API-KEY</TableCell>
-                    <TableCell>Estado</TableCell>
-                </TableRow>
-            </TableHead>
+            <div>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Nombre</TableCell>
+                            <TableCell>API-KEY</TableCell>
+                            <TableCell>Activa</TableCell>
+                            <TableCell>Fecha de creación</TableCell>
+                            <TableCell>Descripción</TableCell>
+                            <TableCell></TableCell>
+                        </TableRow>
+                    </TableHead>
 
-            <TableBody>
-                {
-                    Object.keys( getServices() ).map(function (element) {
-                        return <TableRow>
-                                    <TableCell>{element.name}</TableCell>
-                                    <TableCell>{element.api_key}</TableCell>
-                                    <TableCell>{element.status}</TableCell>
-                                    <TableCell>{getDisableButton(element.api_key)}</TableCell>
-                               </TableRow>;
-                    } )
-                }
-            </TableBody>
-        </Table>
-        </div>
+                    <TableBody>
+                        {rows}
+                    </TableBody>
+                </Table>
+            </div>
 
         </div>
     );
