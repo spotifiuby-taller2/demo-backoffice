@@ -4,13 +4,11 @@ import sjcl from 'sjcl';
 
 function getSHAOf(toHash) {
     const myBitArray = sjcl.hash.sha256.hash(toHash)
-    const myHash = sjcl.codec.hex.fromBits(myBitArray)
-    return myHash;
+    return sjcl.codec.hex.fromBits(myBitArray);
 }
 
-
 const postTo = (url, body) => {
-  fetch(url, {
+  return fetch(url, {
         method: "POST",
         headers: constants.JSON_HEADER,
         body: JSON.stringify(body)

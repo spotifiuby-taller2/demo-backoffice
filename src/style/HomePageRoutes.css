@@ -8,3 +8,8 @@
 .new-line {
     white-space: pre-line;
 }
+
+.vertical-line {
+    border-left: 4px solid lightskyblue;
+    height: 50px;
+}

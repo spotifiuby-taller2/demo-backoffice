@@ -22,7 +22,7 @@ const firebaseAuth = require("firebase/auth");
 const SignIn = (props) => {
   const navigate = useNavigate();
 
-  const [theme] = useState(createTheme());
+  const [theme] = useState( createTheme() );
 
   const [emailReference, setEmailReference] = useState("");
 
