@@ -2,16 +2,15 @@ import {
   Grid,
   TextField,
   Button,
-  Typography,
   Link,
   Container,
   CssBaseline,
   Box,
-  Paper, createTheme
+  createTheme
 } from '@mui/material';
 import { loginStyles } from "../style/signin/SignIn";
 import { ThemeProvider } from "@emotion/react";
-import logo from "../media/hexagon.png";
+import logo from "../media/logo.png";
 import constants from "../others/constants";
 import { useState } from "react";
 import { areAnyUndefined, getSHAOf } from "../others/utils";
@@ -101,15 +100,13 @@ const SignIn = (props) => {
         <Container component="main" maxWidth="xs">
           <CssBaseline />
             <Box sx={loginStyles.boxStyle}>
-              <Paper variant="outlined">
-                <img src={logo} alt={"logo"}/>
-              </Paper>
+              <img src={logo}
+                     alt={"logo"}/>
 
-              <div> <br /> </div>
-
-              <Typography component="h1" variant="h5"
-              >Bienvenido
-              </Typography>
+              <div>
+                <br />
+                <br />
+              </div>
 
               <Box component="form" noValidate sx={{ mt: 1 }}>
               <TextField

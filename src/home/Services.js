@@ -1,11 +1,11 @@
 import "../style/HomePageRoutes.css";
 import { Table,
-    TableHead,
     TableBody,
     TableRow,
     TableCell,
     TextField,
     Button} from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
 import React, {useEffect, useState} from "react";
 
 const constants = require("../others/constants");
@@ -50,45 +50,6 @@ async function disableKey(apiKey) {
     }
 }
 
-
-const getRowsToRender = (response)  =>  {
-    return response.map( (x, i)  => {
-        let isActive = x.active
-                        .toString();
-
-        const apiKey = x.apiKey;
-
-        let button;
-
-        if (isActive === "activado") {
-            button = (
-                <Button onClick={ async () => {
-                    await disableKey(apiKey)
-                } }
-                >Desactivar
-                </Button>
-            );
-        } else {
-            button = (
-                <Button onClick={ async () => {
-                    await enableKey(apiKey)
-                } }
-                >Activar
-                </Button>
-            );
-        }
-
-        return <TableRow key={i}>
-            <TableCell>{x.name}</TableCell>
-            <TableCell>{apiKey}</TableCell>
-            <TableCell>{isActive}</TableCell>
-            <TableCell>{x.creationDate}</TableCell>
-            <TableCell>{x.description}</TableCell>
-            <TableCell>{button}</TableCell>
-        </TableRow>
-    } )
-}
-
 const changeBooleans = (response)  =>  {
     response.forEach( (x, i)  => {
         x.active = (x.active)
@@ -99,10 +60,30 @@ const changeBooleans = (response)  =>  {
     return response;
 }
 
-const Services = (props) => {
-    const [rowsToRender,
-          setRowsToRender] = useState([]);
+const renderDisableButton = (params) => {
+    if (params.row
+              .active === 'activado') {
+        return (
+            <Button onClick={ async () => {
+                await disableKey(params.row
+                                       .apiKey)
+            } }
+            >Desactivar
+            </Button>
+        );
+    } else {
+        return (
+            <Button onClick={ async () => {
+                await enableKey(params.row
+                                      .apiKey)
+            } }
+            >Activar
+            </Button>
+        );
+    }
+}
 
+const Services = (props) => {
     const [rows,
           setRows] = useState([]);
 
@@ -153,7 +134,6 @@ const Services = (props) => {
 
             setRows(response);
             setFilteredRows(response);
-            setRowsToRender( getRowsToRender(response) );
         };
 
         getServicesWrapper().then(r => r);
@@ -177,18 +157,52 @@ const Services = (props) => {
 
         const newRows = rows.filter(row => {
             return Object.keys(row).some( (field) => {
-                return row[field].includes(textInTextBox);
+                return row[field]
+                        .toString()
+                        .includes(textInTextBox);
             } );
         } );
 
         setFilteredRows(newRows);
-        setRowsToRender( getRowsToRender(newRows) );
     }
+
+    const columns = [
+        {
+          field: 'name',
+          headerName: 'Nombre',
+          width: 200
+        },
+        {
+            field: 'apiKey',
+            headerName: 'API-KEY',
+            width: 600
+        },
+        {
+            field: 'active',
+            headerName: 'Estado',
+            width: 100
+        },
+        {
+            field: 'creationDate',
+            headerName: 'Fecha de creación',
+            width: 200
+        },
+        {
+            field: 'description',
+            headerName: 'Descripción',
+            width: 500
+        },
+        {
+            field: 'button',
+            headerName: '',
+            width: 200,
+            renderCell: renderDisableButton,
+        }
+    ];
 
     return(
         <div>
             <div>
-                <br/>
                 <br/>
             </div>
 
@@ -243,33 +257,15 @@ const Services = (props) => {
                 <br/>
                 <br/>
                 <br/>
-                <br/>
             </div>
 
-            <div>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Nombre</TableCell>
-
-                            <TableCell>API-KEY</TableCell>
-
-                            <TableCell>Estado</TableCell>
-
-                            <TableCell>Fecha de creación</TableCell>
-
-                            <TableCell>Descripción</TableCell>
-
-                            <TableCell></TableCell>
-                        </TableRow>
-                    </TableHead>
-
-                    <TableBody>
-                        {rowsToRender}
-                    </TableBody>
-                </Table>
+            <div style={{ height: 1800, width: '100%' }}>
+                <DataGrid
+                    rows = {filteredRows}
+                    columns = {columns}/>
             </div>
         </div>
+
     );
 }
 
