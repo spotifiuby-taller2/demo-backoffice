@@ -30,7 +30,7 @@ const JSON_HEADER = {
 
 /* ====== Production vs Development config ====== */
 const isDevelopment = process.env
-                             .REACT_APP_PRODUCTION === undefined;
+                             .REACT_APP_PRODUCTION === "false";
 
 let firebaseConfig;
 

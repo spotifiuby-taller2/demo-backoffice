@@ -16,9 +16,9 @@ const { RecoverPassword } = require('./login/RecoverPassword');
 const { SignIn } = require('./login/SignIn');
 const { SignUp } = require('./login/SignUp');
 
-let getUser = () => {
-    return auth.currentUser
-};
+/* let getUser = () => {
+    return auth.currentUser;
+}; */
 
 function MyPageContent(props) {
     const navigate = useNavigate();
@@ -88,6 +88,8 @@ function MyRouter(props) {
 }
 
 function App() {
+    const x = "";
+
     const [token,
            setToken] = useState("");
 

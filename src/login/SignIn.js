@@ -38,6 +38,8 @@ const SignIn = (props) => {
   }
 
   async function handleSignIn() {
+    console.log(constants.firebaseConfig);
+
     if ( areAnyUndefined([emailReference,
                           passwordReference]) ) {
       alert("Por favor complete todos los campos.");
@@ -63,7 +65,7 @@ const SignIn = (props) => {
     const idToken = await auth.currentUser
                               .getIdToken();
 
-    console.log( props.updateToken(idToken) );
+    // console.log( props.updateToken(idToken) );
 
     const requestBody = {
       email: emailReference,
