@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useMemo, useState} from 'react';
 import { BrowserRouter,
          Route,
          Routes,
@@ -7,18 +7,16 @@ import SignUpEndWrapper from "./login/SignUpEndWrapper";
 import { ForgotPassword } from "./login/ForgotPassword";
 import { UsersList } from "./home/UsersList";
 import { Button } from "@mui/material";
-import { auth } from "./services/FirebaseService";
 import { Services } from "./home/Services";
 import "./style/HomePageRoutes.css";
+import { auth } from "./services/FirebaseService";
+import { AuthContext } from "./services/AuthContext";
+import { useContext } from "./services/AuthContext";
 
 const constants = require("./others/constants");
 const { RecoverPassword } = require('./login/RecoverPassword');
 const { SignIn } = require('./login/SignIn');
 const { SignUp } = require('./login/SignUp');
-
-/* let getUser = () => {
-    return auth.currentUser;
-}; */
 
 function MyPageContent(props) {
     const navigate = useNavigate();
@@ -56,7 +54,7 @@ function MyPageContent(props) {
     );
 }
 
-function MyRouter(props) {
+function NotLoggedRouter(props) {
     return (
             <div>
             <Routes>
@@ -69,13 +67,23 @@ function MyRouter(props) {
                        element={ <SignUpEndWrapper/> }> </Route>
 
                 <Route exact path={ constants.SIGN_IN_URL }
-                       element={ <SignIn updateToken={props.updateToken}/> }> </Route>
+                       element={ <SignIn/> }> </Route>
 
                 <Route exact path={ constants.FORGOT_PASSWORD_URL }
                        element={ <ForgotPassword/> }> </Route>
 
                 <Route exact path={ constants.FORGOT_PASSWORD_URL + "/:userId" }
                        element={ <RecoverPassword/> }> </Route>
+            </Routes>
+            </div>
+    );
+}
+
+function LoggedRouter(props) {
+    return (
+        <div>
+            <Routes>
+                <Route path="/" element={ <UsersList/> }> </Route>
 
                 <Route exact path={ constants.USERS_URL }
                        element={ <UsersList/> }> </Route>
@@ -83,39 +91,69 @@ function MyRouter(props) {
                 <Route exact path={ constants.SERVICES_URL }
                        element={ <Services/> }> </Route>
             </Routes>
-            </div>
+        </div>
+    );
+}
+
+function DisplayApp() {
+    const { isValidToken,
+            updateToken } = useContext();
+
+    updateToken();
+
+    return (
+        <>
+            {
+                ( isValidToken ) ? (
+                    <BrowserRouter>
+                        <MyPageContent>
+                        </MyPageContent>
+
+                        <LoggedRouter>
+                        </LoggedRouter>
+                    </BrowserRouter>
+                ):(
+                    <BrowserRouter>
+                        <NotLoggedRouter>
+                        </NotLoggedRouter>
+                    </BrowserRouter>
+                )
+            }
+        </>
     );
 }
 
 function App() {
-    const x = "";
+    const [isValidToken,
+           setIsValidToken] = useState(false);
 
-    const [token,
-           setToken] = useState("");
+    const context = useMemo( () => {
+        return ( {
+            isValidToken,
 
-    const updateToken = (idToken) => {
-        setToken(idToken);
-    }
+            setIsValidToken,
 
-    // Replace with condition over token
-    if(true) {
-        return (
-            <BrowserRouter>
-                <MyPageContent>
-                </MyPageContent>
+            removeToken: async () => {
+                localStorage.delete('spoti-token');
+            },
 
-                <MyRouter updateToken={updateToken}>
-                </MyRouter>
-            </BrowserRouter>
-        );
-    }
+            updateToken: () => {
+                setIsValidToken( localStorage.getItem('spoti-token') !== "" );
+            },
+
+            saveToken: (token) => {
+                localStorage.setItem('spoti-token', token);
+                setIsValidToken( localStorage.getItem('spoti-token') !== "" );
+            }
+        } );
+    }, [isValidToken, setIsValidToken]);
 
     return (
-        <BrowserRouter>
-            <MyRouter updateToken={updateToken}>
-            </MyRouter>
-        </BrowserRouter>
-    );
+        <AuthContext.Provider value={context}>
+            <DisplayApp>
+            </DisplayApp>
+        </AuthContext.Provider>
+    )
 }
 
 export default App;

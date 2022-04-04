@@ -16,6 +16,7 @@ import { useState } from "react";
 import { areAnyUndefined, getSHAOf } from "../others/utils";
 import { auth } from "../services/FirebaseService";
 import { useNavigate } from 'react-router-dom';
+import { useContext } from "../services/AuthContext";
 const firebaseAuth = require("firebase/auth");
 
 const SignIn = (props) => {
@@ -23,9 +24,13 @@ const SignIn = (props) => {
 
   const [theme] = useState( createTheme() );
 
-  const [emailReference, setEmailReference] = useState("");
+  const { saveToken } = useContext();
 
-  const [passwordReference, setPasswordReference] = useState("");
+  const [emailReference,
+         setEmailReference] = useState("");
+
+  const [passwordReference,
+         setPasswordReference] = useState("");
 
   const handleEmailChange = (event) => {
     setEmailReference(event.target
@@ -38,8 +43,6 @@ const SignIn = (props) => {
   }
 
   async function handleSignIn() {
-    console.log(constants.firebaseConfig);
-
     if ( areAnyUndefined([emailReference,
                           passwordReference]) ) {
       alert("Por favor complete todos los campos.");
@@ -65,7 +68,7 @@ const SignIn = (props) => {
     const idToken = await auth.currentUser
                               .getIdToken();
 
-    // console.log( props.updateToken(idToken) );
+    await saveToken(idToken);
 
     const requestBody = {
       email: emailReference,
