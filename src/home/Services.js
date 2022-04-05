@@ -9,7 +9,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import React, {useEffect, useState} from "react";
 
 const constants = require("../others/constants");
-const { postTo } = require("../others/utils");
+const { postToGateway } = require("../others/utils");
 
 async function enableKey(apiKey,
                          name,
@@ -21,7 +21,7 @@ async function enableKey(apiKey,
         "apiKeyToEnable": apiKey
     }
 
-    const response = await postTo(constants.SERVICES_HOST + constants.API_KEY_UP_URL,
+    const response = await postToGateway(constants.SERVICES_HOST + constants.API_KEY_UP_URL,
                                   requestBody);
 
     if (response.error !== undefined) {
@@ -34,13 +34,14 @@ async function enableKey(apiKey,
 
 async function disableKey(apiKey) {
     const requestBody = {
-        "apiKey": constants.MY_API_KEY,
-        "apiKeyToDisable": apiKey
+        apiKeyToDisable: apiKey,
+
+        redirectTo: constants.SERVICES_HOST + constants.API_KEY_DOWN_URL,
+
+        verbRedirect: "POST"
     }
 
-    const response = await postTo(constants.SERVICES_HOST + constants.API_KEY_DOWN_URL,
-        requestBody
-    );
+    const response = await postToGateway(requestBody);
 
     if (response.error !== undefined) {
         alert(response.error);

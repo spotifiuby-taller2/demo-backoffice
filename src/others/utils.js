@@ -7,8 +7,10 @@ function getSHAOf(toHash) {
     return sjcl.codec.hex.fromBits(myBitArray);
 }
 
-const postTo = (url, body) => {
-  return fetch(url, {
+const postToGateway = (body) => {
+  body.apiKey = constants.MY_API_KEY;
+
+  return fetch(constants.SERVICES_HOST + constants.REDIRECT_URL, {
         method: "POST",
         headers: constants.JSON_HEADER,
         body: JSON.stringify(body)
@@ -40,5 +42,5 @@ export {
   getTo,
   getSHAOf,
   areAnyUndefined,
-  postTo
+  postToGateway
 }

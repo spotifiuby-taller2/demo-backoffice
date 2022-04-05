@@ -9,7 +9,6 @@ import { UsersList } from "./home/UsersList";
 import { Button } from "@mui/material";
 import { Services } from "./home/Services";
 import "./style/HomePageRoutes.css";
-import { auth } from "./services/FirebaseService";
 import { AuthContext } from "./services/AuthContext";
 import { useContext } from "./services/AuthContext";
 
@@ -96,15 +95,12 @@ function LoggedRouter(props) {
 }
 
 function DisplayApp() {
-    const { isValidToken,
-            updateToken } = useContext();
-
-    updateToken();
+    const { checkIsValidToken } = useContext();
 
     return (
         <>
             {
-                ( isValidToken ) ? (
+                ( checkIsValidToken() ) ? (
                     <BrowserRouter>
                         <MyPageContent>
                         </MyPageContent>
@@ -133,17 +129,16 @@ function App() {
 
             setIsValidToken,
 
-            removeToken: async () => {
+            removeToken: () => {
                 localStorage.delete('spoti-token');
             },
 
-            updateToken: () => {
-                setIsValidToken( localStorage.getItem('spoti-token') !== "" );
+            checkIsValidToken: () => {
+                return localStorage.getItem('spoti-token') !== "";
             },
 
             saveToken: (token) => {
                 localStorage.setItem('spoti-token', token);
-                setIsValidToken( localStorage.getItem('spoti-token') !== "" );
             }
         } );
     }, [isValidToken, setIsValidToken]);

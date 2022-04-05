@@ -13,7 +13,7 @@ import { ThemeProvider } from "@emotion/react";
 import logo from "../media/logo.png";
 import constants from "../others/constants";
 import { useState } from "react";
-import { areAnyUndefined, getSHAOf } from "../others/utils";
+import {areAnyUndefined, getSHAOf, postToGateway} from "../others/utils";
 import { auth } from "../services/FirebaseService";
 import { useNavigate } from 'react-router-dom';
 import { useContext } from "../services/AuthContext";
@@ -68,7 +68,7 @@ const SignIn = (props) => {
     const idToken = await auth.currentUser
                               .getIdToken();
 
-    await saveToken(idToken);
+    saveToken(idToken);
 
     const requestBody = {
       email: emailReference,
@@ -77,27 +77,21 @@ const SignIn = (props) => {
 
       idToken: idToken,
 
-      link: "web"
+      link: "web",
+
+      redirectTo: constants.USERS_HOST + constants.SIGN_IN_URL,
     }
 
-    // response.json() is a promise
-    fetch(constants.USERS_HOST + constants.SIGN_IN_URL, {
-          method: "POST",
-          headers: constants.JSON_HEADER,
-          body: JSON.stringify(requestBody)
-        }
-    ).then(response => response.json())
-        .then(response => {
-              if (response.error !== undefined) {
-                alert(response.error);
-              } else {
-                localStorage.setItem("token",
-                                     idToken);
+    const gatewayResponse = await postToGateway(requestBody);
 
-                navigate(constants.USERS_URL);
-              }
-            }
-        );
+    if (gatewayResponse.error !== undefined) {
+      alert(gatewayResponse.error);
+    } else {
+      localStorage.setItem("token",
+                            idToken);
+
+      navigate(constants.USERS_URL);
+    }
   }
 
   return (
