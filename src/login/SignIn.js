@@ -50,7 +50,7 @@ const SignIn = (props) => {
       return;
     }
 
-    const password = getSHAOf( getSHAOf( passwordReference ) );
+    const password = getSHAOf( getSHAOf(passwordReference) );
 
     const response = await firebaseAuth.signInWithEmailAndPassword(auth,
                                                                   emailReference,
@@ -67,8 +67,6 @@ const SignIn = (props) => {
 
     const idToken = await auth.currentUser
                               .getIdToken();
-
-    saveToken(idToken);
 
     const requestBody = {
       email: emailReference,
@@ -87,8 +85,7 @@ const SignIn = (props) => {
     if (gatewayResponse.error !== undefined) {
       alert(gatewayResponse.error);
     } else {
-      localStorage.setItem("token",
-                            idToken);
+      saveToken(idToken);
 
       navigate(constants.USERS_URL);
     }

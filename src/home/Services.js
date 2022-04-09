@@ -9,20 +9,19 @@ import { DataGrid } from '@mui/x-data-grid';
 import React, {useEffect, useState} from "react";
 
 const constants = require("../others/constants");
-const { postToGateway } = require("../others/utils");
+const { postToGateway, getToGateway } = require("../others/utils");
 
 async function enableKey(apiKey,
                          name,
                          description) {
     const requestBody = {
-        "apiKey": constants.MY_API_KEY,
-        "name": name,
-        "description": description,
-        "apiKeyToEnable": apiKey
+        name: name,
+        description: description,
+        apiKeyToEnable: apiKey,
+        redirectTo: constants.SERVICES_HOST + constants.API_KEY_UP_URL
     }
 
-    const response = await postToGateway(constants.SERVICES_HOST + constants.API_KEY_UP_URL,
-                                  requestBody);
+    const response = await postToGateway(requestBody);
 
     if (response.error !== undefined) {
         alert(response.error);
@@ -35,10 +34,7 @@ async function enableKey(apiKey,
 async function disableKey(apiKey) {
     const requestBody = {
         apiKeyToDisable: apiKey,
-
         redirectTo: constants.SERVICES_HOST + constants.API_KEY_DOWN_URL,
-
-        verbRedirect: "POST"
     }
 
     const response = await postToGateway(requestBody);
@@ -101,19 +97,9 @@ const Services = (props) => {
           setSearchText] = useState("");
 
     async function getServices() {
-        let response = await fetch(constants.SERVICES_HOST + constants.SERVICES_URL
-            + "?"
-            + constants.API_KEY_QUERY_PARAM
-            + constants.MY_API_KEY, {
-                method: "GET",
-                headers: constants.JSON_HEADER
-            }
-        ).then(response => response.json()
-        ).catch(error => {
-            return {
-                error: error.toString()
-            };
-        } );
+        let response = await getToGateway(constants.SERVICES_HOST + constants.SERVICES_URL,
+                                          "?" + constants.API_KEY_QUERY_PARAM
+                                              + constants.MY_API_KEY);
 
         if (response.error !== undefined) {
             response =  {

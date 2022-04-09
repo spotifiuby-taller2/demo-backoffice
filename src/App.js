@@ -11,6 +11,7 @@ import { Services } from "./home/Services";
 import "./style/HomePageRoutes.css";
 import { AuthContext } from "./services/AuthContext";
 import { useContext } from "./services/AuthContext";
+import {getFormatedDate} from "./others/utils";
 
 const constants = require("./others/constants");
 const { RecoverPassword } = require('./login/RecoverPassword');
@@ -19,6 +20,7 @@ const { SignUp } = require('./login/SignUp');
 
 function MyPageContent(props) {
     const navigate = useNavigate();
+    const { removeToken } = useContext();
 
     const redirectUsersLists = (props) => {
         navigate(constants.USERS_URL);
@@ -26,6 +28,10 @@ function MyPageContent(props) {
 
     const redirectServices = (props) => {
         navigate(constants.SERVICES_URL);
+    }
+
+    const closeSession = (props) => {
+        removeToken();
     }
 
     return (
@@ -48,6 +54,15 @@ function MyPageContent(props) {
                     <Button className="homepage"
                             variant="themed"
                     >Métricas</Button>
+
+                    <Button className="homepage"
+                            variant="themed"
+                    >Administradores</Button>
+
+                    <Button className="homepage"
+                            variant="themed"
+                            onClick={ closeSession }
+                    >Cerrar Sesión</Button>
                 </div>
             </nav>
     );
@@ -102,12 +117,18 @@ function LoggedRouter(props) {
 }
 
 function DisplayApp() {
-    const { checkIsValidToken } = useContext();
+    const { isValidToken,
+            checkIsValidToken } = useContext();
+
+    // console.log("==============");
+    // console.log(isValidToken);
+    // console.log( checkIsValidToken() );
+    // console.log("==============");
 
     return (
         <>
             {
-                ( checkIsValidToken() ) ? (
+                ( checkIsValidToken() && isValidToken ) ? (
                     <BrowserRouter>
                         <MyPageContent>
                         </MyPageContent>
@@ -127,17 +148,24 @@ function DisplayApp() {
 }
 
 function App() {
+    // State can be used to save the session because it is lost on refresh.
+    // Nevertheless, is is necessary for UseMemo to update dynamically.
+    // Therefore, it is used as a stub.
     const [isValidToken,
-           setIsValidToken] = useState(false);
+          setIsValidToken] = useState(true);
 
     const context = useMemo( () => {
         return ( {
             isValidToken,
 
-            setIsValidToken,
-
             removeToken: () => {
-                localStorage.delete('spoti-token');
+                localStorage.removeItem('spoti-token');
+
+                localStorage.removeItem('token-time');
+
+                localStorage.removeItem('token-date')
+
+                setIsValidToken(false);
             },
 
             checkIsValidToken: () => {
@@ -145,11 +173,10 @@ function App() {
                 const tokenTime = parseInt( localStorage.getItem('token-time') );
                 const tokenDate = localStorage.getItem('token-date');
 
-                if ( now.getDate()
-                        .toString() !== tokenDate
+                if ( getFormatedDate(now) !== tokenDate
                    || now.getTime()
                          .toString() - tokenTime > constants.ONE_HOUR_DIFFERENCE ) {
-                    return false;
+                    return;
                 }
 
                 return localStorage.getItem('spoti-token') !== "";
@@ -163,8 +190,10 @@ function App() {
                 localStorage.setItem( 'token-time', now.getTime()
                                                        .toString() );
 
-                localStorage.setItem( 'token-date', now.getDate()
-                                                       .toString() );
+                localStorage.setItem( 'token-date', getFormatedDate(now) );
+
+                setIsValidToken(false);
+                setIsValidToken(true);
             }
         } );
     }, [isValidToken, setIsValidToken]);

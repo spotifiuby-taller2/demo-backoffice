@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import { loginStyles } from "../style/signin/SignIn";
-import { getSHAOf } from "../others/utils";
+import {getSHAOf, postToGateway} from "../others/utils";
 import constants from "../others/constants";
 import React, { useState } from "react";
 import {useNavigate} from "react-router-dom";
@@ -25,33 +25,28 @@ const RecoverPassword = () => {
                      .value);
   }
 
-  const handleButton = () => {
+  const handleButton = async () => {
+    const userId = window.location
+        .href
+        .split(constants.FORGOT_PASSWORD_URL + "/")[1];
+
     const requestBody = {
-      password: getSHAOf( getSHAOf( password ) )
+      password: getSHAOf( getSHAOf( password ) ),
+
+      redirectTo: constants.USERS_HOST + constants.FORGOT_PASSWORD_URL
+          + "/"
+          + userId
     }
 
-    const userId = window.location
-                          .href
-                          .split(constants.FORGOT_PASSWORD_URL + "/")[1];
+    const response = await postToGateway(requestBody);
 
-    fetch(constants.USERS_HOST + constants.FORGOT_PASSWORD_URL
-          + "/"
-          + userId, {
-        method: "POST",
-        headers: constants.JSON_HEADER,
-        body: JSON.stringify(requestBody)
-      }
-    ).then(response => response.json())
-      .then(response => {
-          if (response.error !== undefined) {
-            alert(response.error);
-          } else {
-            alert(response.result);
+    if (response.error !== undefined) {
+      alert(response.error);
+    } else {
+      alert(response.result);
 
-            navigate(constants.SIGN_IN_URL);
-          }
-        }
-      );
+      navigate(constants.SIGN_IN_URL);
+    }
   }
 
     return (

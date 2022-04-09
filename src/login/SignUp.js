@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import { loginStyles } from "../style/signin/SignIn";
-import { getSHAOf } from "../others/utils";
+import {getSHAOf, postToGateway} from "../others/utils";
 import constants from "../others/constants";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -32,11 +32,7 @@ const SignUp = () => {
                               .value);
   }
 
-  const handleSignUpError = (error) =>  {
-    alert(error);
-  }
-
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     if (passwordReference.length < constants.PASSWORD_MIN_LEN) {
       alert("La contraseña debe tener al menos 10 caracteres;");
       return;
@@ -53,26 +49,20 @@ const SignUp = () => {
 
       link: "web",
 
-      isExternal: false
+      isExternal: false,
+
+      redirectTo: constants.USERS_HOST + constants.SIGN_UP_URL,
     }
 
-    // response.json() is a promise
-    fetch(constants.USERS_HOST + constants.SIGN_UP_URL, {
-        method: "POST",
-        headers: constants.JSON_HEADER,
-        body: JSON.stringify(requestBody)
-      }
-    ).then(response => response.json())
-      .then(response => {
-          if (response.error !== undefined) {
-            handleSignUpError(response.error);
-          } else {
-            alert("Mail enviado a tu cuenta.");
+    const gatewayResponse = await postToGateway(requestBody);
 
-            navigate(constants.SIGN_IN_URL);
-          }
-        }
-      );
+    if (gatewayResponse.error !== undefined) {
+      alert(gatewayResponse.error);
+    } else {
+      alert("Mail enviado a tu cuenta.");
+
+      navigate(constants.SIGN_IN_URL);
+    }
   }
 
     return (

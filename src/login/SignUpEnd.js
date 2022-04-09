@@ -2,7 +2,7 @@ import { Component } from 'react';
 import { ThemeProvider } from "@emotion/react";
 import { Container, createTheme, CssBaseline, Typography } from "@mui/material";
 import constants from "../others/constants";
-import { getTo } from "../others/utils";
+import {getToGateway} from "../others/utils";
 
 class SignUpEnd extends Component {
     constructor(props) {
@@ -16,19 +16,18 @@ class SignUpEnd extends Component {
                              .href
                              .split(constants.SIGN_UP_END_URL + "/")[1];
 
-        await getTo(constants.USERS_HOST + constants.SIGN_UP_END_URL
-                    + "/"
-                    + userId,
-                    (response) => {
-                    const message = response.error === undefined
+        const response = await getToGateway(constants.USERS_HOST + constants.SIGN_UP_END_URL
+                                    + "/"
+                                    + userId, "");
+
+        const message = response.error === undefined
                                     ? "Cuenta confirmada"
                                     : response.error;
 
-                    alert(message);
+        alert(message);
 
-                    this.props
-                        .navigate(constants.SIGN_IN_URL);
-                } );
+        this.props
+            .navigate(constants.SIGN_IN_URL);
     }
 
     render() {
