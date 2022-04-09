@@ -73,6 +73,13 @@ function NotLoggedRouter(props) {
 
                 <Route exact path={ constants.FORGOT_PASSWORD_URL + "/:userId" }
                        element={ <RecoverPassword/> }> </Route>
+
+                {/* Redirect */}
+                <Route exact path={ constants.USERS_URL }
+                       element={ <SignIn/> }> </Route>
+
+                <Route exact path={ constants.SERVICES_URL }
+                       element={ <SignIn/> }> </Route>
             </Routes>
             </div>
     );
@@ -134,11 +141,30 @@ function App() {
             },
 
             checkIsValidToken: () => {
+                const now = new Date();
+                const tokenTime = parseInt( localStorage.getItem('token-time') );
+                const tokenDate = localStorage.getItem('token-date');
+
+                if ( now.getDate()
+                        .toString() !== tokenDate
+                   || now.getTime()
+                         .toString() - tokenTime > constants.ONE_HOUR_DIFFERENCE ) {
+                    return false;
+                }
+
                 return localStorage.getItem('spoti-token') !== "";
             },
 
             saveToken: (token) => {
                 localStorage.setItem('spoti-token', token);
+
+                const now = new Date();
+
+                localStorage.setItem( 'token-time', now.getTime()
+                                                       .toString() );
+
+                localStorage.setItem( 'token-date', now.getDate()
+                                                       .toString() );
             }
         } );
     }, [isValidToken, setIsValidToken]);
