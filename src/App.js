@@ -18,7 +18,7 @@ const { RecoverPassword } = require('./login/RecoverPassword');
 const { SignIn } = require('./login/SignIn');
 const { SignUp } = require('./login/SignUp');
 
-function MyPageContent(props) {
+function NavBar(props) {
     const navigate = useNavigate();
     const { removeToken } = useContext();
 
@@ -43,21 +43,21 @@ function MyPageContent(props) {
                     >Usuarios</Button>
 
                     <Button className="homepage"
-                            variant="themed"
-                    >Transacciones</Button>
-
-                    <Button className="homepage"
                             onClick={ redirectServices }
                             variant="themed"
                     >Servicios</Button>
 
                     <Button className="homepage"
                             variant="themed"
-                    >Métricas</Button>
+                    >Transacciones</Button>
 
                     <Button className="homepage"
                             variant="themed"
-                    >Administradores</Button>
+                    >Contenidos</Button>
+
+                    <Button className="homepage"
+                            variant="themed"
+                    >Métricas</Button>
 
                     <Button className="homepage"
                             variant="themed"
@@ -120,18 +120,13 @@ function DisplayApp() {
     const { isValidToken,
             checkIsValidToken } = useContext();
 
-    // console.log("==============");
-    // console.log(isValidToken);
-    // console.log( checkIsValidToken() );
-    // console.log("==============");
-
     return (
         <>
             {
                 ( checkIsValidToken() && isValidToken ) ? (
                     <BrowserRouter>
-                        <MyPageContent>
-                        </MyPageContent>
+                        <NavBar>
+                        </NavBar>
 
                         <LoggedRouter>
                         </LoggedRouter>

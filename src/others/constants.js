@@ -18,6 +18,9 @@ const FORGOT_PASSWORD_URL = "/forgotpassword";
 const USERS_URL = "/users";
 const SERVICES_URL = "/services";
 const REDIRECT_URL = "/redirect";
+const USERS_LIST_URL = USERS_URL + "/list";
+const USERS_BLOCK_URL = USERS_URL + "/block";
+const USERS_UNLOCK_URL = USERS_URL + "/unlock";
 
 const API_KEY_URL = "/apikeys";
 const API_KEY_DOWN_URL = API_KEY_URL + "/down";
@@ -82,5 +85,8 @@ module.exports = {
   API_KEY_QUERY_PARAM,
   API_KEY_UP_URL,
   REDIRECT_URL,
-  ONE_HOUR_DIFFERENCE
+  ONE_HOUR_DIFFERENCE,
+  USERS_LIST_URL,
+  USERS_BLOCK_URL,
+  USERS_UNLOCK_URL
 }

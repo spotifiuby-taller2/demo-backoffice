@@ -252,7 +252,6 @@ const Services = (props) => {
                     columns = {columns}/>
             </div>
         </div>
-
     );
 }
 
