@@ -171,7 +171,7 @@ function App() {
                 if ( getFormatedDate(now) !== tokenDate
                    || now.getTime()
                          .toString() - tokenTime > constants.ONE_HOUR_DIFFERENCE ) {
-                    return;
+                    return false;
                 }
 
                 return localStorage.getItem('spoti-token') !== "";
