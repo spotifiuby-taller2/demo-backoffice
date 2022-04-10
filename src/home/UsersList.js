@@ -96,16 +96,28 @@ const renderDisableButton = (params) => {
     }
 }
 
+const getProfileOf = async (id) => {
+    const response = await getToGateway(constants.USERS_HOST + constants.PROFILE_URL,
+                            "?" + constants.USER_ID_QUERY_PARAM
+                                + id);
+
+    if (response.error !== undefined) {
+        alert(response.error);
+    } else {
+        alert(JSON.stringify(response));
+    }
+
+    return response;
+}
+
 const renderGetProfile = (params) => {
     return (
-        /* <Button onClick={ async () => {
+        <Button onClick={ async () => {
             await getProfileOf(params.row
-                .id)
-        } } */
-        <Button>Ver perfil
+                                     .id)
+        } }> Ver perfil
         </Button>
     );
-
 }
 
 const UsersList = (props) => {

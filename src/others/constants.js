@@ -21,11 +21,13 @@ const REDIRECT_URL = "/redirect";
 const USERS_LIST_URL = USERS_URL + "/list";
 const USERS_BLOCK_URL = USERS_URL + "/block";
 const USERS_UNLOCK_URL = USERS_URL + "/unlock";
+const PROFILE_URL = USERS_URL + "/profile";
 
 const API_KEY_URL = "/apikeys";
 const API_KEY_DOWN_URL = API_KEY_URL + "/down";
 const API_KEY_UP_URL = API_KEY_URL + "/up";
 const API_KEY_QUERY_PARAM = "apiKey=";
+const USER_ID_QUERY_PARAM = "userId=";
 
 const JSON_HEADER = {
   'Content-Type': 'application/json',
@@ -88,5 +90,7 @@ module.exports = {
   ONE_HOUR_DIFFERENCE,
   USERS_LIST_URL,
   USERS_BLOCK_URL,
-  USERS_UNLOCK_URL
+  USERS_UNLOCK_URL,
+  PROFILE_URL,
+  USER_ID_QUERY_PARAM
 }
