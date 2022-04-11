@@ -11,6 +11,7 @@ import { loginStyles } from "../style/signin/SignIn";
 import constants from "../others/constants";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {postToGateway} from "../others/utils";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -24,30 +25,24 @@ const ForgotPassword = () => {
                            .value);
   }
 
-  const handleButton = () => {
+  const handleButton = async () => {
     const requestBody = {
       email: emailReference,
 
-      link: "web"
+      link: "web",
+
+      redirectTo: constants.USERS_HOST + constants.FORGOT_PASSWORD_URL,
     }
 
-    fetch(constants.USERS_HOST + constants.FORGOT_PASSWORD_URL, {
-        method: "POST",
-        headers: constants.JSON_HEADER,
-        body: JSON.stringify(requestBody)
-      }
-    ).then(response => response.json())
-      .then(response => {
-          if (response.error !== undefined) {
-            alert(response.error);
-          } else {
-            alert(response.result);
+    const response = await postToGateway(requestBody);
 
-            navigate(constants.SIGN_IN_URL,
-                          { replace: true });
-          }
-        }
-      );
+    if (response.error !== undefined) {
+      alert(response.error);
+    } else {
+      alert(response.result);
+
+      navigate(constants.SIGN_IN_URL);
+    }
   }
 
     return (

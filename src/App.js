@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import { BrowserRouter,
          Route,
          Routes,
@@ -6,57 +6,71 @@ import { BrowserRouter,
 import SignUpEndWrapper from "./login/SignUpEndWrapper";
 import { ForgotPassword } from "./login/ForgotPassword";
 import { UsersList } from "./home/UsersList";
-import {Navbar} from "react-bootstrap";
-import {Button} from "@mui/material";
-import { auth } from "./services/FirebaseService";
+import { Button } from "@mui/material";
+import { Services } from "./home/Services";
+import "./style/HomePageRoutes.css";
+import { AuthContext } from "./services/AuthContext";
+import { useContext } from "./services/AuthContext";
+import {getFormatedDate} from "./others/utils";
 
 const constants = require("./others/constants");
 const { RecoverPassword } = require('./login/RecoverPassword');
 const { SignIn } = require('./login/SignIn');
 const { SignUp } = require('./login/SignUp');
 
-let getUser = () => {
-    return auth.currentUser
-};
-
-function MyNavbar() {
+function NavBar(props) {
     const navigate = useNavigate();
+    const { removeToken } = useContext();
 
     const redirectUsersLists = (props) => {
-        navigate(constants.USERS_URL,
-            { replace: true });
+        navigate(constants.USERS_URL);
     };
 
+    const redirectServices = (props) => {
+        navigate(constants.SERVICES_URL);
+    }
+
+    const closeSession = (props) => {
+        removeToken();
+    }
+
     return (
-        <Navbar bg="light">
-            <Button
-                onClick={ redirectUsersLists }
-                variant="themed">Usuarios
-            </Button>
+            <nav className="container">
+                <div className="links">
+                    <Button className="homepage"
+                            onClick={ redirectUsersLists }
+                            variant="themed"
+                    >Usuarios</Button>
 
-            <Button
-                onClick={ navigate(constants.USERS_URL,
-                    { replace: true } ) }
-                variant="themed">Transacciones
-            </Button>
+                    <Button className="homepage"
+                            onClick={ redirectServices }
+                            variant="themed"
+                    >Servicios</Button>
 
-            <Button
-                onClick={ navigate(constants.USERS_URL,
-                    { replace: true } ) }
-                variant="themed">Servicios
-            </Button>
+                    <Button className="homepage"
+                            variant="themed"
+                    >Transacciones</Button>
 
-            <Button
-                onClick={ navigate(constants.USERS_URL,
-                    { replace: true } ) }
-                variant="themed">Métricas
-            </Button>
-        </Navbar>
+                    <Button className="homepage"
+                            variant="themed"
+                    >Contenidos</Button>
+
+                    <Button className="homepage"
+                            variant="themed"
+                    >Métricas</Button>
+
+                    <Button className="homepage"
+                            variant="themed"
+                            onClick={ closeSession }
+                    >Cerrar Sesión</Button>
+                </div>
+            </nav>
     );
 }
 
-function MyRouter(props) {
+function NotLoggedRouter(props) {
     return (
+            <div>
             <Routes>
                 <Route path="/" element={ <SignIn/> }> </Route>
 
@@ -67,7 +81,7 @@ function MyRouter(props) {
                        element={ <SignUpEndWrapper/> }> </Route>
 
                 <Route exact path={ constants.SIGN_IN_URL }
-                       element={ <SignIn updateToken={props.updateToken}/> }> </Route>
+                       element={ <SignIn/> }> </Route>
 
                 <Route exact path={ constants.FORGOT_PASSWORD_URL }
                        element={ <ForgotPassword/> }> </Route>
@@ -75,37 +89,116 @@ function MyRouter(props) {
                 <Route exact path={ constants.FORGOT_PASSWORD_URL + "/:userId" }
                        element={ <RecoverPassword/> }> </Route>
 
+                {/* Redirect */}
+                <Route exact path={ constants.USERS_URL }
+                       element={ <SignIn/> }> </Route>
+
+                <Route exact path={ constants.SERVICES_URL }
+                       element={ <SignIn/> }> </Route>
+            </Routes>
+            </div>
+    );
+}
+
+function LoggedRouter(props) {
+    return (
+        <div>
+            <Routes>
+                <Route path="/" element={ <UsersList/> }> </Route>
+
                 <Route exact path={ constants.USERS_URL }
                        element={ <UsersList/> }> </Route>
+
+                <Route exact path={ constants.SERVICES_URL }
+                       element={ <Services/> }> </Route>
             </Routes>
+        </div>
+    );
+}
+
+function DisplayApp() {
+    const { isValidToken,
+            checkIsValidToken } = useContext();
+
+    return (
+        <>
+            {
+                ( checkIsValidToken() && isValidToken ) ? (
+                    <BrowserRouter>
+                        <NavBar>
+                        </NavBar>
+
+                        <LoggedRouter>
+                        </LoggedRouter>
+                    </BrowserRouter>
+                ):(
+                    <BrowserRouter>
+                        <NotLoggedRouter>
+                        </NotLoggedRouter>
+                    </BrowserRouter>
+                )
+            }
+        </>
     );
 }
 
 function App() {
-    const [token,
-           setToken] = useState("");
+    // State can be used to save the session because it is lost on refresh.
+    // Nevertheless, is is necessary for UseMemo to update dynamically.
+    // Therefore, it is used as a stub.
+    const [isValidToken,
+          setIsValidToken] = useState(true);
 
-    const updateToken = (idToken) => {
-        setToken(idToken);
-    }
+    const context = useMemo( () => {
+        return ( {
+            isValidToken,
 
-    if ( getUser() !== null
-         && token === getUser().getIdToken() ) {
-        return (
-            <BrowserRouter>
-                <MyNavbar/>
+            removeToken: () => {
+                localStorage.removeItem('spoti-token');
 
-                <MyRouter/>
-            </BrowserRouter>
-        );
-    }
+                localStorage.removeItem('token-time');
+
+                localStorage.removeItem('token-date')
+
+                setIsValidToken(false);
+            },
+
+            checkIsValidToken: () => {
+                const now = new Date();
+                const tokenTime = parseInt( localStorage.getItem('token-time') );
+                const tokenDate = localStorage.getItem('token-date');
+
+                if ( getFormatedDate(now) !== tokenDate
+                   || now.getTime()
+                         .toString() - tokenTime > constants.ONE_HOUR_DIFFERENCE ) {
+                    return false;
+                }
+
+                return localStorage.getItem('spoti-token') !== "";
+            },
+
+            saveToken: (token) => {
+                localStorage.setItem('spoti-token', token);
+
+                const now = new Date();
+
+                localStorage.setItem( 'token-time', now.getTime()
+                                                       .toString() );
+
+                localStorage.setItem( 'token-date', getFormatedDate(now) );
+
+                setIsValidToken(false);
+                setIsValidToken(true);
+            }
+        } );
+    }, [isValidToken, setIsValidToken]);
 
     return (
-        <BrowserRouter>
-            <MyRouter updateToken={updateToken}>
-            </MyRouter>
-        </BrowserRouter>
-    );
+        <AuthContext.Provider value={context}>
+            <DisplayApp>
+            </DisplayApp>
+        </AuthContext.Provider>
+    )
 }
 
 export default App;

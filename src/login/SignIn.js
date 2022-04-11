@@ -2,31 +2,35 @@ import {
   Grid,
   TextField,
   Button,
-  Typography,
   Link,
   Container,
   CssBaseline,
   Box,
-  Paper, createTheme
+  createTheme
 } from '@mui/material';
 import { loginStyles } from "../style/signin/SignIn";
 import { ThemeProvider } from "@emotion/react";
-import logo from "../media/hexagon.png";
+import logo from "../media/logo.png";
 import constants from "../others/constants";
 import { useState } from "react";
-import { areAnyUndefined, getSHAOf } from "../others/utils";
+import {areAnyUndefined, getSHAOf, postToGateway} from "../others/utils";
 import { auth } from "../services/FirebaseService";
 import { useNavigate } from 'react-router-dom';
+import { useContext } from "../services/AuthContext";
 const firebaseAuth = require("firebase/auth");
 
 const SignIn = (props) => {
   const navigate = useNavigate();
 
-  const [theme] = useState(createTheme());
+  const [theme] = useState( createTheme() );
 
-  const [emailReference, setEmailReference] = useState("");
+  const { saveToken } = useContext();
 
-  const [passwordReference, setPasswordReference] = useState("");
+  const [emailReference,
+         setEmailReference] = useState("");
+
+  const [passwordReference,
+         setPasswordReference] = useState("");
 
   const handleEmailChange = (event) => {
     setEmailReference(event.target
@@ -46,7 +50,7 @@ const SignIn = (props) => {
       return;
     }
 
-    const password = getSHAOf( getSHAOf( passwordReference ) );
+    const password = getSHAOf( getSHAOf(passwordReference) );
 
     const response = await firebaseAuth.signInWithEmailAndPassword(auth,
                                                                   emailReference,
@@ -64,9 +68,6 @@ const SignIn = (props) => {
     const idToken = await auth.currentUser
                               .getIdToken();
 
-    // Not working...
-    // props.updateToken(idToken);
-
     const requestBody = {
       email: emailReference,
 
@@ -74,27 +75,20 @@ const SignIn = (props) => {
 
       idToken: idToken,
 
-      link: "web"
+      link: "web",
+
+      redirectTo: constants.USERS_HOST + constants.SIGN_IN_URL,
     }
 
-    // response.json() is a promise
-    fetch(constants.USERS_HOST + constants.SIGN_IN_URL, {
-          method: "POST",
-          headers: constants.JSON_HEADER,
-          body: JSON.stringify(requestBody)
-        }
-    ).then(response => response.json())
-        .then(response => {
-              if (response.error !== undefined) {
-                alert(response.error);
-              } else {
-                localStorage.setItem("token",
-                                     idToken);
+    const gatewayResponse = await postToGateway(requestBody);
 
-                navigate(constants.USERS_URL);
-              }
-            }
-        );
+    if (gatewayResponse.error !== undefined) {
+      alert(gatewayResponse.error);
+    } else {
+      saveToken(idToken);
+
+      navigate(constants.USERS_URL);
+    }
   }
 
   return (
@@ -102,15 +96,13 @@ const SignIn = (props) => {
         <Container component="main" maxWidth="xs">
           <CssBaseline />
             <Box sx={loginStyles.boxStyle}>
-              <Paper variant="outlined">
-                <img src={logo} alt={"logo"}/>
-              </Paper>
+              <img src={logo}
+                     alt={"logo"}/>
 
-              <div> <br /> </div>
-
-              <Typography component="h1" variant="h5"
-              >Bienvenido
-              </Typography>
+              <div>
+                <br />
+                <br />
+              </div>
 
               <Box component="form" noValidate sx={{ mt: 1 }}>
               <TextField

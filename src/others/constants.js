@@ -6,20 +6,37 @@ require('dotenv').config();
 const USERS_HOST = process.env
                           .REACT_APP_USERS_HOST;
 
+const SERVICES_HOST = process.env
+                             .REACT_APP_SERVICES_HOST;
+
+
 /* Paths */
 const SIGN_UP_URL = "/signup";
 const SIGN_IN_URL = "/signin";
 const SIGN_UP_END_URL = SIGN_UP_URL + "/end";
 const FORGOT_PASSWORD_URL = "/forgotpassword";
 const USERS_URL = "/users";
+const SERVICES_URL = "/services";
+const REDIRECT_URL = "/redirect";
+const USERS_LIST_URL = USERS_URL + "/list";
+const USERS_BLOCK_URL = USERS_URL + "/block";
+const USERS_UNLOCK_URL = USERS_URL + "/unlock";
+const PROFILE_URL = USERS_URL + "/profile";
+
+const API_KEY_URL = "/apikeys";
+const API_KEY_DOWN_URL = API_KEY_URL + "/down";
+const API_KEY_UP_URL = API_KEY_URL + "/up";
+const API_KEY_QUERY_PARAM = "apiKey=";
+const USER_ID_QUERY_PARAM = "userId=";
 
 const JSON_HEADER = {
-  'Content-Type': 'application/json'
+  'Content-Type': 'application/json',
+  'Access-Control-Allow-Origin': '*'
 }
 
 /* ====== Production vs Development config ====== */
 const isDevelopment = process.env
-                             .REACT_APP_PRODUCTION === undefined;
+                             .REACT_APP_PRODUCTION === "false";
 
 let firebaseConfig;
 
@@ -45,6 +62,12 @@ if (isDevelopment) {
 
 const PASSWORD_MIN_LEN = 10;
 
+const FIREBASE_ISSUES = false;
+
+const MY_API_KEY = "645d293cdffe45a8674aa17b58157181a1a3127c3db705d9021307b678e7856b";
+
+const ONE_HOUR_DIFFERENCE = 3600000;
+
 module.exports = {
   USERS_HOST,
   SIGN_UP_URL,
@@ -55,5 +78,19 @@ module.exports = {
   USERS_URL,
   isDevelopment,
   firebaseConfig,
-  PASSWORD_MIN_LEN
+  PASSWORD_MIN_LEN,
+  FIREBASE_ISSUES,
+  SERVICES_URL,
+  SERVICES_HOST,
+  MY_API_KEY,
+  API_KEY_DOWN_URL,
+  API_KEY_QUERY_PARAM,
+  API_KEY_UP_URL,
+  REDIRECT_URL,
+  ONE_HOUR_DIFFERENCE,
+  USERS_LIST_URL,
+  USERS_BLOCK_URL,
+  USERS_UNLOCK_URL,
+  PROFILE_URL,
+  USER_ID_QUERY_PARAM
 }
