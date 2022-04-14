@@ -77,7 +77,7 @@ function NotLoggedRouter(props) {
                 <Route exact path={ constants.SIGN_UP_URL }
                        element={ <SignUp/> }> </Route>
 
-                <Route exact path={ constants.SIGN_UP_END_URL + "/:userId" }
+                <Route exact path={ constants.SIGN_UP_END_URL + "/:userId/:pin" }
                        element={ <SignUpEndWrapper/> }> </Route>
 
                 <Route exact path={ constants.SIGN_IN_URL }
