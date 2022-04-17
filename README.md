@@ -1,11 +1,9 @@
 # backoffice
 
 ### Instalación y configuración
+* npm ci
+* npm run startdev
 
-- #### Con Docker
+### [Arquitectura](https://drive.google.com/file/d/1aOISbgnXT0ToTs0DnvuCf7xsU4iSmJUU/view?usp=sharing)
 
-- #### Sin Docker
-
-### Arquitectura
-
-### [Bitácora y Postmortem](https://edjeordjian.github.io/bitacora/)
+### [Bitácora y Postmortem](https://spotifiuby-taller2.github.io/bitacora/)
