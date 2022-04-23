@@ -141,12 +141,6 @@ const SignIn = (props) => {
                     Reestablecer contraseña
                   </Link>
                 </Grid>
-
-                <Grid item>
-                  <Link href={constants.SIGN_UP_URL} variant="body2">
-                    {"Registrarse"}
-                  </Link>
-                </Grid>
               </Grid>
             </Box>
           </Box>
