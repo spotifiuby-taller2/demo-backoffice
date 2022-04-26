@@ -25,6 +25,7 @@ const PROFILE_URL = USERS_URL + "/profile";
 const DATADOG_DASHBOARD_URL = "https://p.datadoghq.com/sb/463d20a2-daba-11eb-acf2-da7ad0900002-" +
                               "6134ee8888fd07dd3f05a1499b83adec?from_ts=1650918160437&to_ts=" +
                               "1650932560437&live=true";
+const METRICS_URL = "/metrics";
 
 const API_KEY_URL = "/apikeys";
 const API_KEY_DOWN_URL = API_KEY_URL + "/down";
@@ -96,5 +97,6 @@ module.exports = {
   USERS_UNLOCK_URL,
   PROFILE_URL,
   USER_ID_QUERY_PARAM,
-  DATADOG_DASHBOARD_URL
+  DATADOG_DASHBOARD_URL,
+  METRICS_URL
 }

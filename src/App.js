@@ -12,6 +12,7 @@ import "./style/HomePageRoutes.css";
 import { AuthContext } from "./services/AuthContext";
 import { useContext } from "./services/AuthContext";
 import {getFormatedDate} from "./others/utils";
+import {RedirectToMetrics} from "./home/RedirectToMetrics";
 
 const constants = require("./others/constants");
 const { RecoverPassword } = require('./login/RecoverPassword');
@@ -26,8 +27,8 @@ function NavBar(props) {
         navigate(constants.USERS_URL);
     };
 
-    const metrics = (props) => {
-        navigate(constants.METRICS_URL)
+    const redirectMetrics = (props) => {
+        navigate(constants.METRICS_URL);
     }
 
     const redirectServices = (props) => {
@@ -61,7 +62,7 @@ function NavBar(props) {
 
                     <Button className="homepage"
                             variant="themed"
-                            onclick={ metrics }
+                            onClick={ redirectMetrics }
                     >Métricas</Button>
 
                     <Button className="homepage"
@@ -117,7 +118,8 @@ function LoggedRouter(props) {
                 <Route exact path={ constants.SERVICES_URL }
                        element={ <Services/> }> </Route>
 
-                <Route exact path={ constants.DATADOG_DASHBOARD_URL }> </Route>
+                <Route exact path={ constants.METRICS_URL }
+                       element={ <RedirectToMetrics/> }/>
             </Routes>
         </div>
     );
