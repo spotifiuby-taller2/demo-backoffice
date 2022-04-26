@@ -26,6 +26,10 @@ function NavBar(props) {
         navigate(constants.USERS_URL);
     };
 
+    const metrics = (props) => {
+        navigate(constants.METRICS_URL)
+    }
+
     const redirectServices = (props) => {
         navigate(constants.SERVICES_URL);
     }
@@ -57,6 +61,7 @@ function NavBar(props) {
 
                     <Button className="homepage"
                             variant="themed"
+                            onclick={ metrics }
                     >Métricas</Button>
 
                     <Button className="homepage"
@@ -111,6 +116,8 @@ function LoggedRouter(props) {
 
                 <Route exact path={ constants.SERVICES_URL }
                        element={ <Services/> }> </Route>
+
+                <Route exact path={ constants.DATADOG_DASHBOARD_URL }> </Route>
             </Routes>
         </div>
     );
