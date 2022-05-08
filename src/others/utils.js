@@ -8,9 +8,11 @@ function getSHAOf(toHash) {
 }
 
 // response.json() is a promise
-const postTo = (body,
-                url) => {
-  return fetch(url, {
+const postToGateway = (body) => {
+  body.verbRedirect = "POST";
+  body.apiKey = constants.MY_API_KEY;
+
+  return fetch(constants.SERVICES_HOST + constants.REDIRECT_URL, {
         method: "POST",
         headers: constants.JSON_HEADER,
         body: JSON.stringify(body)
@@ -24,10 +26,18 @@ const postTo = (body,
   } );
 }
 
-const getTo = (url) => {
-    return fetch(url, {
-            method: "GET",
-            headers: constants.JSON_HEADER
+const getToGateway = (destiny,
+                      redirectParams) => {
+    const body = {}
+    body.redirectParams = redirectParams
+    body.verbRedirect = "GET";
+    body.redirectTo = destiny;
+    body.apiKey = constants.MY_API_KEY;
+
+    return fetch(constants.SERVICES_HOST + constants.REDIRECT_URL, {
+            method: "POST",
+            headers: constants.JSON_HEADER,
+            body: JSON.stringify(body)
         }
     ).then(response =>
         response.json()
@@ -45,6 +55,15 @@ function getFormatedDate(dateNow) {
         + dateNow.getFullYear();
 }
 
+const getTo = (url, f) => {
+  fetch(url, {
+        method: "GET",
+        headers: constants.JSON_HEADER,
+      }
+  ).then(response => response.json()
+  ).then(response => f(response));
+}
+
 function areAnyUndefined(list) {
     return list.filter( (element) => {
         return element === undefined
@@ -56,6 +75,7 @@ export {
   getTo,
   getSHAOf,
   areAnyUndefined,
-  postTo,
-  getFormatedDate
+  postToGateway,
+  getFormatedDate,
+  getToGateway
 }

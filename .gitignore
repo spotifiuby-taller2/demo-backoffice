@@ -4,6 +4,7 @@ node_modules
 build
 package-lock.json
 
+.env.development.local
 .idea
 .DS_Store
 
