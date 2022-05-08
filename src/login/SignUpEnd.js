@@ -1,8 +1,8 @@
-import { Component } from 'react';
+import {Component} from 'react';
 import { ThemeProvider } from "@emotion/react";
 import { Container, createTheme, CssBaseline, Typography } from "@mui/material";
 import constants from "../others/constants";
-import {getToGateway} from "../others/utils";
+import {getTo} from "../others/utils";
 
 class SignUpEnd extends Component {
     constructor(props) {
@@ -12,11 +12,15 @@ class SignUpEnd extends Component {
     }
 
     async componentDidMount() {
+        document.body
+                .style
+                .backgroundColor = '#f9f6f4';
+
         const userId = window.location
                              .href
                              .split(constants.SIGN_UP_END_URL + "/")[1];
 
-        const response = await getToGateway(constants.USERS_HOST + constants.SIGN_UP_END_URL
+        const response = await getTo(constants.BACK_HOST + constants.SIGN_UP_END_URL
                                     + "/"
                                     + userId, "");
 

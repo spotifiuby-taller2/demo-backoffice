@@ -3,35 +3,19 @@ require('dotenv').config();
 /* Frontend paths */
 
 /* Backend hosts */
-const USERS_HOST = process.env
-                          .REACT_APP_USERS_HOST;
-
-const SERVICES_HOST = process.env
-                             .REACT_APP_SERVICES_HOST;
-
+const BACK_HOST = process.env
+                          .REACT_APP_BACK_HOST;
 
 /* Paths */
 const SIGN_UP_URL = "/signup";
 const SIGN_IN_URL = "/signin";
 const SIGN_UP_END_URL = SIGN_UP_URL + "/end";
 const FORGOT_PASSWORD_URL = "/forgotpassword";
-const USERS_URL = "/users";
-const SERVICES_URL = "/services";
-const REDIRECT_URL = "/redirect";
-const USERS_LIST_URL = USERS_URL + "/list";
-const USERS_BLOCK_URL = USERS_URL + "/block";
-const USERS_UNLOCK_URL = USERS_URL + "/unlock";
-const PROFILE_URL = USERS_URL + "/profile";
-const DATADOG_DASHBOARD_URL = "https://p.datadoghq.com/sb/463d20a2-daba-11eb-acf2-da7ad0900002-" +
-                              "6134ee8888fd07dd3f05a1499b83adec?from_ts=1650918160437&to_ts=" +
-                              "1650932560437&live=true";
-const METRICS_URL = "/metrics";
-
-const API_KEY_URL = "/apikeys";
-const API_KEY_DOWN_URL = API_KEY_URL + "/down";
-const API_KEY_UP_URL = API_KEY_URL + "/up";
-const API_KEY_QUERY_PARAM = "apiKey=";
-const USER_ID_QUERY_PARAM = "userId=";
+const RESTAURANTS_URL = "/restaurants";
+const RESTAURANT_URL = "/restaurant";
+const PLATES_URL = "/plates";
+const RESTAURANTS_LIST_URL = RESTAURANTS_URL + "/list";
+const RESTAURANTS_NEW_URL = RESTAURANTS_URL + "/new";
 
 const JSON_HEADER = {
   'Content-Type': 'application/json',
@@ -42,61 +26,25 @@ const JSON_HEADER = {
 const isDevelopment = process.env
                              .REACT_APP_PRODUCTION === "false";
 
-let firebaseConfig;
-
-if (isDevelopment) {
-  firebaseConfig = {
-    apiKey: "AIzaSyDlFbw1n3eqg7ogdwGuiTetV6isK4Uhqno",
-    authDomain: "fir-firebase-acc6b.firebaseapp.com",
-    projectId: "fir-firebase-acc6b",
-    storageBucket: "fir-firebase-acc6b.appspot.com",
-    messagingSenderId: "296878360901",
-    appId: "1:296878360901:web:7987ce42ec0a406b1f162c"
-  };
-} else {
-  firebaseConfig = {
-    apiKey: "AIzaSyCnDa9J7DKKtNv5crxZ4NrRGcW5c7nZTAg",
-    authDomain: "fir-firebase-2-9eb22.firebaseapp.com",
-    projectId: "fir-firebase-2-9eb22",
-    storageBucket: "fir-firebase-2-9eb22.appspot.com",
-    messagingSenderId: "701624425016",
-    appId: "1:701624425016:web:6cb2157c5a2c0a34e1a4cd"
-  };
-}
-
 const PASSWORD_MIN_LEN = 10;
 
 const FIREBASE_ISSUES = false;
 
-const MY_API_KEY = "645d293cdffe45a8674aa17b58157181a1a3127c3db705d9021307b678e7856b";
-
 const ONE_HOUR_DIFFERENCE = 3600000;
 
 module.exports = {
-  USERS_HOST,
+  BACK_HOST,
   SIGN_UP_URL,
   SIGN_IN_URL,
   JSON_HEADER,
   SIGN_UP_END_URL,
   FORGOT_PASSWORD_URL,
-  USERS_URL,
   isDevelopment,
-  firebaseConfig,
   PASSWORD_MIN_LEN,
   FIREBASE_ISSUES,
-  SERVICES_URL,
-  SERVICES_HOST,
-  MY_API_KEY,
-  API_KEY_DOWN_URL,
-  API_KEY_QUERY_PARAM,
-  API_KEY_UP_URL,
-  REDIRECT_URL,
   ONE_HOUR_DIFFERENCE,
-  USERS_LIST_URL,
-  USERS_BLOCK_URL,
-  USERS_UNLOCK_URL,
-  PROFILE_URL,
-  USER_ID_QUERY_PARAM,
-  DATADOG_DASHBOARD_URL,
-  METRICS_URL
+  RESTAURANTS_NEW_URL,
+  RESTAURANTS_LIST_URL,
+  RESTAURANT_URL,
+  PLATES_URL
 }

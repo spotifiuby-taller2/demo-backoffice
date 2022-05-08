@@ -8,9 +8,9 @@ import {
 } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import { loginStyles } from "../style/signin/SignIn";
-import {getSHAOf, postToGateway} from "../others/utils";
+import {getSHAOf, postTo} from "../others/utils";
 import constants from "../others/constants";
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
@@ -21,6 +21,12 @@ const SignUp = () => {
   const [emailReference, setEmailReference] = useState("");
 
   const [passwordReference, setPasswordReference] = useState("");
+
+  useEffect(() => {
+    document.body
+        .style
+        .backgroundColor = '#f9f6f4'
+  }, []);
 
   const handleEmailChange = (event) => {
     setEmailReference(event.target
@@ -48,13 +54,10 @@ const SignUp = () => {
       password: password,
 
       link: "web",
-
-      isExternal: false,
-
-      redirectTo: constants.USERS_HOST + constants.SIGN_UP_URL,
     }
 
-    const gatewayResponse = await postToGateway(requestBody);
+    const gatewayResponse = await postTo(requestBody,
+                                         constants.BACK_HOST + constants.SIGN_UP_URL);
 
     if (gatewayResponse.error !== undefined) {
       alert(gatewayResponse.error);
@@ -116,5 +119,5 @@ const SignUp = () => {
 }
 
 export {
-  SignUp
+  SignUp,
 };

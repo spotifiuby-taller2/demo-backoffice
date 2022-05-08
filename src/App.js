@@ -5,14 +5,12 @@ import { BrowserRouter,
          useNavigate } from 'react-router-dom';
 import SignUpEndWrapper from "./login/SignUpEndWrapper";
 import { ForgotPassword } from "./login/ForgotPassword";
-import { UsersList } from "./home/UsersList";
-import { Button } from "@mui/material";
-import { Services } from "./home/Services";
+import { RestaurantsList } from "./home/RestaurantsList";
+import {Button, Typography} from "@mui/material";
 import "./style/HomePageRoutes.css";
 import { AuthContext } from "./services/AuthContext";
 import { useContext } from "./services/AuthContext";
 import {getFormatedDate} from "./others/utils";
-import {RedirectToMetrics} from "./home/RedirectToMetrics";
 
 const constants = require("./others/constants");
 const { RecoverPassword } = require('./login/RecoverPassword');
@@ -21,49 +19,58 @@ const { SignUp } = require('./login/SignUp');
 
 function NavBar(props) {
     const navigate = useNavigate();
+
     const { removeToken } = useContext();
 
-    const redirectUsersLists = (props) => {
-        navigate(constants.USERS_URL);
+    const [focused, setFocused] = useState(true);
+
+    const [focused2, setFocused2] = useState(false);
+
+    const redirectRestaurantList = (props) => {
+        navigate(constants.RESTAURANTS_LIST_URL);
     };
-
-    const redirectMetrics = (props) => {
-        navigate(constants.METRICS_URL);
-    }
-
-    const redirectServices = (props) => {
-        navigate(constants.SERVICES_URL);
-    }
 
     const closeSession = (props) => {
         removeToken();
+        navigate("/");
+    }
+
+    const focus1 = () => {
+        setFocused(true);
+        setFocused2(false);
+    }
+
+    const focus2 = () => {
+        setFocused(false);
+        setFocused2(true);
     }
 
     return (
-            <nav className="container">
-                <div className="links">
+            <nav className="container"
+                 style={{background: 'black'}}>
+                <div className="links"
+                     style={{color: 'white'}}>
                     <Button className="homepage"
-                            onClick={ redirectUsersLists }
+                            onClick={ redirectRestaurantList }
+                            style={{color: focused ? 'red' : ''}}
                             variant="themed"
-                    >Usuarios</Button>
+                            onFocus={() => focus1()}
+                    >Restaurantes</Button>
 
                     <Button className="homepage"
-                            onClick={ redirectServices }
+                            onClick={ redirectRestaurantList }
+                            style={{color: focused2 ? 'red' : ''}}
                             variant="themed"
-                    >Servicios</Button>
+                            onFocus={() => focus2()}
+                    >Otra cosa</Button>
 
-                    <Button className="homepage"
-                            variant="themed"
-                    >Transacciones</Button>
-
-                    <Button className="homepage"
-                            variant="themed"
-                    >Contenidos</Button>
-
-                    <Button className="homepage"
-                            variant="themed"
-                            onClick={ redirectMetrics }
-                    >Métricas</Button>
+                    {/* Very untidy way of moving away sign out button */}
+                    <Typography className="homepage"
+                               style={{color: 'black'}}
+                    >...............................................................
+                        ............................................................
+                        ............................................................
+                        ..............</Typography>
 
                     <Button className="homepage"
                             variant="themed"
@@ -110,16 +117,10 @@ function LoggedRouter(props) {
     return (
         <div>
             <Routes>
-                <Route path="/" element={ <UsersList/> }> </Route>
+                <Route path="/" element={ <RestaurantsList/> }> </Route>
 
-                <Route exact path={ constants.USERS_URL }
-                       element={ <UsersList/> }> </Route>
-
-                <Route exact path={ constants.SERVICES_URL }
-                       element={ <Services/> }> </Route>
-
-                <Route exact path={ constants.METRICS_URL }
-                       element={ <RedirectToMetrics/> }/>
+                <Route exact path={ constants.RESTAURANTS_LIST_URL }
+                       element={ <RestaurantsList/> }> </Route>
             </Routes>
         </div>
     );
@@ -163,7 +164,7 @@ function App() {
             isValidToken,
 
             removeToken: () => {
-                localStorage.removeItem('spoti-token');
+                localStorage.removeItem('my-token');
 
                 localStorage.removeItem('token-time');
 
@@ -183,11 +184,11 @@ function App() {
                     return false;
                 }
 
-                return localStorage.getItem('spoti-token') !== "";
+                return localStorage.getItem('my-token') !== "";
             },
 
             saveToken: (token) => {
-                localStorage.setItem('spoti-token', token);
+                localStorage.setItem('my-token', token);
 
                 const now = new Date();
 
@@ -197,6 +198,7 @@ function App() {
                 localStorage.setItem( 'token-date', getFormatedDate(now) );
 
                 setIsValidToken(false);
+
                 setIsValidToken(true);
             }
         } );

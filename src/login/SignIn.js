@@ -12,12 +12,10 @@ import { loginStyles } from "../style/signin/SignIn";
 import { ThemeProvider } from "@emotion/react";
 import logo from "../media/logo.png";
 import constants from "../others/constants";
-import { useState } from "react";
-import {areAnyUndefined, getSHAOf, postToGateway} from "../others/utils";
-import { auth } from "../services/FirebaseService";
+import {useEffect, useState} from "react";
+import {areAnyUndefined, getSHAOf, postTo} from "../others/utils";
 import { useNavigate } from 'react-router-dom';
 import { useContext } from "../services/AuthContext";
-const firebaseAuth = require("firebase/auth");
 
 const SignIn = (props) => {
   const navigate = useNavigate();
@@ -32,19 +30,25 @@ const SignIn = (props) => {
   const [passwordReference,
          setPasswordReference] = useState("");
 
+  useEffect(() => {
+    document.body
+            .style
+            .backgroundColor = '#f9f6f4';
+  }, []);
+
   const handleEmailChange = (event) => {
     setEmailReference(event.target
-                           .value);
+        .value);
   }
 
   const handlePasswordChange = (event) => {
     setPasswordReference(event.target
-                              .value);
+        .value);
   }
 
   async function handleSignIn() {
     if ( areAnyUndefined([emailReference,
-                          passwordReference]) ) {
+      passwordReference]) ) {
       alert("Por favor complete todos los campos.");
 
       return;
@@ -52,42 +56,24 @@ const SignIn = (props) => {
 
     const password = getSHAOf( getSHAOf(passwordReference) );
 
-    const response = await firebaseAuth.signInWithEmailAndPassword(auth,
-                                                                  emailReference,
-                                                                  password)
-        .catch((error) => {
-          return error.toString()
-        } );
-
-    if (response.user === undefined) {
-      alert("No se encontro ningun usuario con ese mail y/ o contraseña");
-
-      return;
-    }
-
-    const idToken = await auth.currentUser
-                              .getIdToken();
-
     const requestBody = {
       email: emailReference,
 
       password: password,
 
-      idToken: idToken,
-
       link: "web",
-
-      redirectTo: constants.USERS_HOST + constants.SIGN_IN_URL,
     }
 
-    const gatewayResponse = await postToGateway(requestBody);
+    const response = await postTo(requestBody,
+        constants.BACK_HOST + constants.SIGN_IN_URL);
 
-    if (gatewayResponse.error !== undefined) {
-      alert(gatewayResponse.error);
+    if (response.error !== undefined) {
+      alert(response.error);
     } else {
-      saveToken(idToken);
+      // This would be a Firebase token
+      saveToken(response.email);
 
-      navigate(constants.USERS_URL);
+      navigate(constants.RESTAURANTS_LIST_URL);
     }
   }
 
@@ -139,6 +125,12 @@ const SignIn = (props) => {
                 <Grid item xs>
                   <Link href={constants.FORGOT_PASSWORD_URL} variant="body2">
                     Reestablecer contraseña
+                  </Link>
+                </Grid>
+
+                <Grid item>
+                  <Link href={constants.SIGN_UP_URL} variant="body2">
+                    {"Registrarse"}
                   </Link>
                 </Grid>
               </Grid>
