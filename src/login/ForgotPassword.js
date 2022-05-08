@@ -11,7 +11,7 @@ import { loginStyles } from "../style/signin/SignIn";
 import constants from "../others/constants";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {postTo} from "../others/utils";
+import {postToGateway} from "../others/utils";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ const ForgotPassword = () => {
       redirectTo: constants.USERS_HOST + constants.FORGOT_PASSWORD_URL,
     }
 
-    const response = await postTo(requestBody);
+    const response = await postToGateway(requestBody);
 
     if (response.error !== undefined) {
       alert(response.error);

@@ -8,9 +8,9 @@ import {
 } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import { loginStyles } from "../style/signin/SignIn";
-import {getSHAOf, postTo} from "../others/utils";
+import {getSHAOf, postToGateway} from "../others/utils";
 import constants from "../others/constants";
-import React, {useEffect, useState} from "react";
+import React, { useState } from "react";
 import {useNavigate} from "react-router-dom";
 
 const RecoverPassword = () => {
@@ -25,12 +25,6 @@ const RecoverPassword = () => {
                      .value);
   }
 
-  useEffect(() => {
-    document.body
-        .style
-        .backgroundColor = '#f9f6f4'
-  }, []);
-
   const handleButton = async () => {
     const userId = window.location
         .href
@@ -44,7 +38,7 @@ const RecoverPassword = () => {
           + userId
     }
 
-    const response = await postTo(requestBody);
+    const response = await postToGateway(requestBody);
 
     if (response.error !== undefined) {
       alert(response.error);
