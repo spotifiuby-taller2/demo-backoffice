@@ -12,7 +12,7 @@ import { loginStyles } from "../style/signin/SignIn";
 import { ThemeProvider } from "@emotion/react";
 import logo from "../media/logo.png";
 import constants from "../others/constants";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import {areAnyUndefined, getSHAOf, postToGateway} from "../others/utils";
 import { auth } from "../services/FirebaseService";
 import { useNavigate } from 'react-router-dom';
@@ -31,6 +31,12 @@ const SignIn = (props) => {
 
   const [passwordReference,
          setPasswordReference] = useState("");
+
+  useEffect( () => {
+    document.body
+        .style
+        .backgroundColor = '#ffffff';
+  }, [] );
 
   const handleEmailChange = (event) => {
     setEmailReference(event.target
