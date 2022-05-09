@@ -6,6 +6,8 @@ import {
 import {DataGrid} from "@mui/x-data-grid";
 import {getSHAOf, getToGateway, postToGateway} from "../others/utils";
 import * as constants from "../others/constants";
+import {useNavigate} from "react-router-dom";
+import {matrixStyles} from "../style/matrixStyles";
 
 async function enableUser(userId,
                          name,
@@ -96,31 +98,9 @@ const renderDisableButton = (params) => {
     }
 }
 
-const getProfileOf = async (id) => {
-    const response = await getToGateway(constants.USERS_HOST + constants.PROFILE_URL,
-                            "?" + constants.USER_ID_QUERY_PARAM
-                                + id);
-
-    if (response.error !== undefined) {
-        alert(response.error);
-    } else {
-        alert(JSON.stringify(response));
-    }
-
-    return response;
-}
-
-const renderGetProfile = (params) => {
-    return (
-        <Button onClick={ async () => {
-            await getProfileOf(params.row
-                                     .id)
-        } }> Ver perfil
-        </Button>
-    );
-}
-
 const UsersList = (props) => {
+    const navigate = useNavigate();
+
     const [rows,
         setRows] = useState([]);
 
@@ -135,6 +115,19 @@ const UsersList = (props) => {
 
     const [searchText,
         setSearchText] = useState("");
+
+    const classes = matrixStyles();
+
+    const renderGetProfile = (params) => {
+        return (
+            <Button onClick={ async () => {
+                navigate(constants.PROFILE_URL + "/"
+                                               + params.row
+                                                       .id)
+            } }> Ver perfil
+            </Button>
+        );
+    }
 
     async function getUsers() {
         let response = await getToGateway(constants.USERS_HOST + constants.USERS_LIST_URL,
@@ -155,6 +148,10 @@ const UsersList = (props) => {
 
     // Component did mount
     useEffect( () => {
+        document.body
+            .style
+            .backgroundColor = '#f9f6f4';
+
         const getServicesWrapper = async () => {
             const response = changeBooleans( await getUsers() );
 
@@ -196,33 +193,39 @@ const UsersList = (props) => {
         {
             field: 'id',
             headerName: 'ID',
+            headerClassName: classes.headerCell,
             width: 400
         },
         {
             field: 'email',
             headerName: 'Correo',
+            headerClassName: classes.headerCell,
             width: 400
         },
         {
             field: 'isAdmin',
             headerName: 'Admin',
+            headerClassName: classes.headerCell,
             width: 100
         },
         {
             field: 'isBlocked',
             headerName: 'Bloqueado',
+            headerClassName: classes.headerCell,
             width: 200
         },
         {
             field: 'activation button',
             headerName: '',
             width: 200,
+            headerClassName: classes.headerCell,
             renderCell: renderDisableButton,
         },
         {
             field: 'profile button',
             headerName: '',
             width: 200,
+            headerClassName: classes.headerCell,
             renderCell: renderGetProfile,
         }
     ];
@@ -244,10 +247,6 @@ const UsersList = (props) => {
                                            label="🔍"
                                            style = {{width: 800}}
                                            autoFocus> </TextField>
-                            </TableCell>
-
-                            <TableCell>
-                                <div className="vertical-line"/>
                             </TableCell>
 
                             <TableCell>
@@ -290,8 +289,11 @@ const UsersList = (props) => {
 
             <div style={{ height: 1800, width: '100%' }}>
                 <DataGrid
+                    rowClick="show"
+                    classes={{ headerCell: classes.headerCell, row: classes.row }}
                     rows = {filteredRows}
-                    columns = {columns}/>
+                    columns = {columns}
+                    EnableHeadersVisualStyles = {false}/>
             </div>
         </div>
     );

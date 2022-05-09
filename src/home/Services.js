@@ -7,6 +7,7 @@ import { Table,
     Button} from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import React, {useEffect, useState} from "react";
+import {matrixStyles} from "../style/matrixStyles";
 
 const constants = require("../others/constants");
 const { postToGateway, getToGateway } = require("../others/utils");
@@ -96,6 +97,8 @@ const Services = (props) => {
     const [searchText,
           setSearchText] = useState("");
 
+    const classes = matrixStyles();
+
     async function getServices() {
         let response = await getToGateway(constants.SERVICES_HOST + constants.SERVICES_URL,
                                           "?" + constants.API_KEY_QUERY_PARAM
@@ -116,6 +119,10 @@ const Services = (props) => {
 
     // Component did mount
     useEffect( () => {
+        document.body
+            .style
+            .backgroundColor = '#f9f6f4';
+
         const getServicesWrapper = async () => {
             const response = changeBooleans( await getServices() );
 
@@ -157,31 +164,37 @@ const Services = (props) => {
         {
           field: 'name',
           headerName: 'Nombre',
+          headerClassName: classes.headerCell,
           width: 200
         },
         {
             field: 'apiKey',
             headerName: 'API-KEY',
+            headerClassName: classes.headerCell,
             width: 600
         },
         {
             field: 'active',
             headerName: 'Estado',
+            headerClassName: classes.headerCell,
             width: 100
         },
         {
             field: 'creationDate',
             headerName: 'Fecha de creación',
+            headerClassName: classes.headerCell,
             width: 200
         },
         {
             field: 'description',
             headerName: 'Descripción',
+            headerClassName: classes.headerCell,
             width: 500
         },
         {
             field: 'button',
             headerName: '',
+            headerClassName: classes.headerCell,
             width: 200,
             renderCell: renderDisableButton,
         }
@@ -204,10 +217,6 @@ const Services = (props) => {
                                            label="🔍"
                                            style = {{width: 800}}
                                            autoFocus> </TextField>
-                            </TableCell>
-
-                            <TableCell>
-                                <div className="vertical-line"/>
                             </TableCell>
 
                             <TableCell>
@@ -240,15 +249,10 @@ const Services = (props) => {
                 </Table>
             </div>
 
-            <div>
-                <br/>
-                <br/>
-                <br/>
-            </div>
-
             <div style={{ height: 1800, width: '100%' }}>
                 <DataGrid
                     rows = {filteredRows}
+                    classes={{ headerCell: classes.headerCell, row: classes.row }}
                     columns = {columns}/>
             </div>
         </div>

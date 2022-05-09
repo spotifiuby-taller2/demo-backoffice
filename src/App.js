@@ -6,13 +6,14 @@ import { BrowserRouter,
 import SignUpEndWrapper from "./login/SignUpEndWrapper";
 import { ForgotPassword } from "./login/ForgotPassword";
 import { UsersList } from "./home/UsersList";
-import { Button } from "@mui/material";
+import {Button, Typography} from "@mui/material";
 import { Services } from "./home/Services";
 import "./style/HomePageRoutes.css";
 import { AuthContext } from "./services/AuthContext";
 import { useContext } from "./services/AuthContext";
 import {getFormatedDate} from "./others/utils";
 import {RedirectToMetrics} from "./home/RedirectToMetrics";
+import {UserProfile} from "./home/UserProfile";
 
 const constants = require("./others/constants");
 const { RecoverPassword } = require('./login/RecoverPassword');
@@ -21,7 +22,74 @@ const { SignUp } = require('./login/SignUp');
 
 function NavBar(props) {
     const navigate = useNavigate();
+
     const { removeToken } = useContext();
+
+    const [focuses1, setFocuses1] = useState(true);
+
+    const [focuses2, setFocuses2] = useState(false);
+
+    const [focuses3, setFocuses3] = useState(false);
+
+    const [focuses4, setFocuses4] = useState(false);
+
+    const [focuses5, setFocuses5] = useState(false);
+
+    const [focuses6, setFocuses6] = useState(false);
+
+    const focus1 = ()  => {
+        setFocuses1(true);
+        setFocuses2(false);
+        setFocuses3(false);
+        setFocuses4(false);
+        setFocuses5(false);
+        setFocuses6(false);
+    }
+
+    const focus2 = ()  => {
+        setFocuses1(false);
+        setFocuses2(true);
+        setFocuses3(false);
+        setFocuses4(false);
+        setFocuses5(false);
+        setFocuses6(false);
+    }
+
+    const focus3 = ()  => {
+        setFocuses1(false);
+        setFocuses2(false);
+        setFocuses3(true);
+        setFocuses4(false);
+        setFocuses5(false);
+        setFocuses6(false);
+    }
+
+    const focus4 = ()  => {
+        setFocuses1(false);
+        setFocuses2(false);
+        setFocuses3(false);
+        setFocuses4(true);
+        setFocuses5(false);
+        setFocuses6(false);
+    }
+
+    const focus5 = ()  => {
+        setFocuses1(true);
+        setFocuses2(false);
+        setFocuses3(false);
+        setFocuses4(false);
+        setFocuses5(true);
+        setFocuses6(false);
+    }
+
+    const focus6 = ()  => {
+        setFocuses1(false);
+        setFocuses2(false);
+        setFocuses3(false);
+        setFocuses4(false);
+        setFocuses5(false);
+        setFocuses6(true);
+    }
 
     const redirectUsersLists = (props) => {
         navigate(constants.USERS_URL);
@@ -40,33 +108,52 @@ function NavBar(props) {
     }
 
     return (
-            <nav className="container">
-                <div className="links">
+            <nav className="container"
+                 style={{background: 'black'}}>
+                <div className="links"
+                     style={{color: 'white'}}>
                     <Button className="homepage"
                             onClick={ redirectUsersLists }
                             variant="themed"
+                            style={{color: focuses1 ? 'red' : ''}}
+                            onFocus={() => focus1()}
                     >Usuarios</Button>
 
                     <Button className="homepage"
                             onClick={ redirectServices }
                             variant="themed"
+                            style={{color: focuses2 ? 'red' : ''}}
+                            onFocus={() => focus2()}
                     >Servicios</Button>
 
                     <Button className="homepage"
                             variant="themed"
+                            style={{color: focuses3 ? 'red' : ''}}
+                            onFocus={() => focus3()}
                     >Transacciones</Button>
 
                     <Button className="homepage"
                             variant="themed"
+                            style={{color: focuses4 ? 'red' : ''}}
+                            onFocus={() => focus4()}
                     >Contenidos</Button>
 
                     <Button className="homepage"
                             variant="themed"
+                            style={{color: focuses5 ? 'red' : ''}}
+                            onFocus={() => focus5()}
                             onClick={ redirectMetrics }
                     >Métricas</Button>
 
+                    <Typography className="homepage"
+                                style={{color: 'black'}}
+                    >...............................................................
+                        .....................</Typography>
+
                     <Button className="homepage"
                             variant="themed"
+                            style={{color: focuses6 ? 'red' : ''}}
+                            onFocus={() => focus6()}
                             onClick={ closeSession }
                     >Cerrar Sesión</Button>
                 </div>
@@ -120,6 +207,9 @@ function LoggedRouter(props) {
 
                 <Route exact path={ constants.METRICS_URL }
                        element={ <RedirectToMetrics/> }/>
+
+                <Route exact path={ constants.PROFILE_URL + "/:userId" }
+                       element={ <UserProfile/> }/>
             </Routes>
         </div>
     );

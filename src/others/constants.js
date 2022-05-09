@@ -11,6 +11,10 @@ const SERVICES_HOST = process.env
 
 
 /* Paths */
+const DATADOG_DASHBOARD_URL = "https://p.datadoghq.com/sb/463d20a2-daba-11eb-acf2-da7ad0900002-" +
+    "6134ee8888fd07dd3f05a1499b83adec?from_ts=1650918160437&to_ts=" +
+    "1650932560437&live=true";
+
 const SIGN_UP_URL = "/signup";
 const SIGN_IN_URL = "/signin";
 const SIGN_UP_END_URL = SIGN_UP_URL + "/end";
@@ -22,9 +26,6 @@ const USERS_LIST_URL = USERS_URL + "/list";
 const USERS_BLOCK_URL = USERS_URL + "/block";
 const USERS_UNLOCK_URL = USERS_URL + "/unlock";
 const PROFILE_URL = USERS_URL + "/profile";
-const DATADOG_DASHBOARD_URL = "https://p.datadoghq.com/sb/463d20a2-daba-11eb-acf2-da7ad0900002-" +
-                              "6134ee8888fd07dd3f05a1499b83adec?from_ts=1650918160437&to_ts=" +
-                              "1650932560437&live=true";
 const METRICS_URL = "/metrics";
 
 const API_KEY_URL = "/apikeys";
