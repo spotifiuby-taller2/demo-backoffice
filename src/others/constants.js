@@ -25,6 +25,9 @@ const REDIRECT_URL = "/redirect";
 const USERS_LIST_URL = USERS_URL + "/list";
 const USERS_BLOCK_URL = USERS_URL + "/block";
 const USERS_UNLOCK_URL = USERS_URL + "/unlock";
+const USERS_CREATE_ADMIN_URL = USERS_URL + "/createadmin";
+const USERS_VERIFIED_URL = USERS_URL + "/verified";
+const USERS_UNVERIFIED_URL = USERS_URL + "/unverified";
 const PROFILE_URL = USERS_URL + "/profile";
 const METRICS_URL = "/metrics";
 
@@ -86,5 +89,8 @@ module.exports = {
   PROFILE_URL,
   USER_ID_QUERY_PARAM,
   DATADOG_DASHBOARD_URL,
-  METRICS_URL
+  METRICS_URL,
+  USERS_CREATE_ADMIN_URL,
+  USERS_VERIFIED_URL,
+  USERS_UNVERIFIED_URL
 }

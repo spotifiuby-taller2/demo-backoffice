@@ -198,18 +198,10 @@ function LoggedRouter(props) {
         <div>
             <Routes>
                 <Route path="/" element={ <UsersList/> }> </Route>
-
-                <Route exact path={ constants.USERS_URL }
-                       element={ <UsersList/> }> </Route>
-
-                <Route exact path={ constants.SERVICES_URL }
-                       element={ <Services/> }> </Route>
-
-                <Route exact path={ constants.METRICS_URL }
-                       element={ <RedirectToMetrics/> }/>
-
-                <Route exact path={ constants.PROFILE_URL + "/:userId" }
-                       element={ <UserProfile/> }/>
+                <Route exact path={ constants.USERS_URL } element={ <UsersList/> }> </Route>
+                <Route exact path={ constants.SERVICES_URL } element={ <Services/> }> </Route>
+                <Route exact path={ constants.METRICS_URL } element={ <RedirectToMetrics/> }/>
+                <Route exact path={ constants.PROFILE_URL + "/:userId" } element={ <UserProfile/> }/>
             </Routes>
         </div>
     );

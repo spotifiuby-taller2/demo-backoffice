@@ -70,7 +70,6 @@ const SignIn = (props) => {
 
       return;
     }
-
     const idToken = await auth.currentUser
                               .getIdToken();
 

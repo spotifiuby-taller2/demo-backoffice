@@ -1,304 +1,272 @@
 import React, {useEffect, useState} from "react";
-import {
-    Button,
-    Table, TableBody, TableCell, TableRow, TextField,
-} from "@mui/material";
+import {Button, Table, TableBody, TableCell, TableRow, TextField,} from "@mui/material";
 import {DataGrid} from "@mui/x-data-grid";
 import {getSHAOf, getToGateway, postToGateway} from "../others/utils";
 import * as constants from "../others/constants";
 import {useNavigate} from "react-router-dom";
 import {matrixStyles} from "../style/matrixStyles";
-
-async function enableUser(userId,
-                         name,
-                         password,
-                         check) {
-    if (check) {
-        if (password === "" || name === "") {
-            alert("Por favor, complete los campos del nuevo admin.");
-            return;
-        }
-    }
-
-    const hashedPassword = password === undefined
-                           ? undefined
-                           : getSHAOf( getSHAOf( password ) );
-
-    const requestBody = {
-        email: name,
-
-        password: hashedPassword,
-
-        idToUnlock: userId,
-
-        redirectTo: constants.USERS_HOST + constants.USERS_UNLOCK_URL
-    }
-
-    const response = await postToGateway(requestBody);
-
-    if (response.error !== undefined) {
-        alert(response.error);
-    } else {
-        window.location
-            .reload();
-    }
-}
-
-async function disableUser(userId) {
-    const requestBody = {
-        idToBlock: userId,
-
-        redirectTo: constants.USERS_HOST + constants.USERS_BLOCK_URL,
-    }
-
-    const response = await postToGateway(requestBody);
-
-    if (response.error !== undefined) {
-        alert(response.error);
-    } else {
-        window.location
-            .reload();
-    }
-}
-
-const changeBooleans = (response)  =>  {
-    response.forEach( (x, i)  => {
-        x.isBlocked = (x.isBlocked)
-            ? "bloqueado"
-            : "activo";
-
-        x.isAdmin = (x.isAdmin)
-            ? "admin"
-            : "no admin";
-    } );
-
-    return response;
-}
-
-const renderDisableButton = (params) => {
-    if (params.row
-              .isBlocked === 'bloqueado') {
-        return (
-            <Button onClick={ async () => {
-                await enableUser(params.row
-                                        .id)
-            } }
-            >Desbloquear
-            </Button>
-        );
-    } else {
-        return (
-            <Button onClick={ async () => {
-                await disableUser(params.row
-                                        .id)
-            } }
-            >Bloquear
-            </Button>
-        );
-    }
-}
+import Switch from '@mui/material/Switch';
 
 const UsersList = (props) => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [rows, setRows] = useState([]);
+  const [filteredRows, setFilteredRows] = useState([]);
+  const [userName, setUserName] = useState("");
+  const [userPassword, setUserPassword] = useState("");
+  const [searchText, setSearchText] = useState("");
+  const classes = matrixStyles();
 
-    const [rows,
-        setRows] = useState([]);
-
-    const [filteredRows,
-        setFilteredRows] = useState([]);
-
-    const [userName,
-        setUserName] = useState("");
-
-    const [userPassword,
-        setUserPassword] = useState("");
-
-    const [searchText,
-        setSearchText] = useState("");
-
-    const classes = matrixStyles();
-
-    const renderGetProfile = (params) => {
-        return (
-            <Button onClick={ async () => {
-                navigate(constants.PROFILE_URL + "/"
-                                               + params.row
-                                                       .id)
-            } }> Ver perfil
-            </Button>
-        );
+  async function createAdmin(name, password) {
+    if (password === "" || name === "" || name === undefined) {
+      alert("Por favor, complete los campos del nuevo admin.");
+      return;
     }
-
-    async function getUsers() {
-        let response = await getToGateway(constants.USERS_HOST + constants.USERS_LIST_URL,
-                                          "?" + constants.API_KEY_QUERY_PARAM
-                                          + constants.MY_API_KEY);
-
-        if (response.error !== undefined) {
-            return {
-                "id": "",
-                "email": "",
-                "isAdmin": "",
-                "isBlocked": "",
-            }
-        }
-
-        return response.users;
+    const hashedPassword = password === undefined ? undefined : getSHAOf(getSHAOf(password));
+    const requestBody = {
+      email: name,
+      password: hashedPassword,
+      redirectTo: constants.USERS_HOST + constants.USERS_CREATE_ADMIN_URL
     }
+    const response = await postToGateway(requestBody);
 
-    // Component did mount
-    useEffect( () => {
-        document.body
-            .style
-            .backgroundColor = '#f9f6f4';
-
-        const getServicesWrapper = async () => {
-            const response = changeBooleans( await getUsers() );
-
-            setRows(response);
-            setFilteredRows(response);
-        };
-
-        getServicesWrapper().then(r => r);
-    }, [] );
-
-    const handleUserName = (event) => {
-        setUserName(event.target
-            .value);
+    if (response.error !== undefined) {
+      alert(response.error);
+    } else {
+      window.location.reload();
     }
+  }
 
-    const handleUserPassword = (event) => {
-        setUserPassword(event.target
-            .value);
-    }
-
-    const handleSearchText = (event) => {
-        const textInTextBox = event.target
-            .value;
-
-        setSearchText(textInTextBox);
-
-        const newRows = rows.filter(row => {
-            return Object.keys(row).some( (field) => {
-                return row[field]
-                    .toString()
-                    .includes(textInTextBox);
-            } );
-        } );
-
-        setFilteredRows(newRows);
-    }
-
-    const columns = [
-        {
-            field: 'id',
-            headerName: 'ID',
-            headerClassName: classes.headerCell,
-            width: 400
-        },
-        {
-            field: 'email',
-            headerName: 'Correo',
-            headerClassName: classes.headerCell,
-            width: 400
-        },
-        {
-            field: 'isAdmin',
-            headerName: 'Admin',
-            headerClassName: classes.headerCell,
-            width: 100
-        },
-        {
-            field: 'isBlocked',
-            headerName: 'Bloqueado',
-            headerClassName: classes.headerCell,
-            width: 200
-        },
-        {
-            field: 'activation button',
-            headerName: '',
-            width: 200,
-            headerClassName: classes.headerCell,
-            renderCell: renderDisableButton,
-        },
-        {
-            field: 'profile button',
-            headerName: '',
-            width: 200,
-            headerClassName: classes.headerCell,
-            renderCell: renderGetProfile,
-        }
-    ];
-
-    return(
-        <div>
-            <div>
-                <br/>
-            </div>
-
-            <div>
-                <Table>
-                    <TableBody>
-                        <TableRow>
-                            <TableCell style = {{width: 600}}>
-                                <TextField onChange = { handleSearchText }
-                                           value = { searchText }
-                                           margin="normal"
-                                           label="🔍"
-                                           style = {{width: 800}}
-                                           autoFocus> </TextField>
-                            </TableCell>
-
-                            <TableCell>
-                                <TextField onChange = { handleUserName }
-                                           value = { userName }
-                                           margin="normal"
-                                           label="Email"
-                                           autoFocus> </TextField>
-                            </TableCell>
-
-                            <TableCell>
-                                <TextField onChange = { handleUserPassword }
-                                           value = { userPassword }
-                                           margin="normal"
-                                           label="Password"
-                                           type="password"
-                                           autoFocus> </TextField>
-                            </TableCell>
-
-                            <TableCell>
-                                <Button onClick={ async () => {
-                                    await enableUser(undefined,
-                                                    userName,
-                                                    userPassword,
-                                                    true)
-                                } }
-                                >Crear admin
-                                </Button>
-                            </TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-            </div>
-
-            <div>
-                <br/>
-                <br/>
-                <br/>
-            </div>
-
-            <div style={{ height: 1800, width: '100%' }}>
-                <DataGrid
-                    rowClick="show"
-                    classes={{ headerCell: classes.headerCell, row: classes.row }}
-                    rows = {filteredRows}
-                    columns = {columns}
-                    EnableHeadersVisualStyles = {false}/>
-            </div>
-        </div>
+  const renderBlockedSwitch = (params) => {
+    return (
+      <Switch
+        checked={params.row.isBlocked}
+        onChange={async (e) => handleBlockedSwitch(e, params.row.id)}
+        inputProps={{'aria-label': 'controlled'}}
+      />
     );
+  }
+
+  const renderUserType = (params) => {
+    let types = [];
+    if (params.row.isAdmin) types.push('Administrador');
+    if (params.row.isArtist) types.push('Artista');
+    if (params.row.isListener) types.push('Oyente');
+    const text = types.reduce((prev, curr) => [prev, ', ', curr]);
+    return (
+      <p>{text}</p>
+    );
+  }
+
+  async function handleBlockedSwitch(event, userId) {
+    let url = constants.USERS_HOST + constants.USERS_UNLOCK_URL;
+    if (event.target.checked) url = constants.USERS_HOST + constants.USERS_BLOCK_URL;
+    const requestBody = {
+      userId,
+      redirectTo: url
+    }
+    const response = await postToGateway(requestBody);
+    if (response.error !== undefined) {
+      alert(response.error);
+    } else {
+      window.location.reload();
+    }
+  }
+
+  async function handleVerifiedSwitch(event, userId) {
+    let url = constants.USERS_HOST + constants.USERS_UNVERIFIED_URL;
+    if (event.target.checked) url = constants.USERS_HOST + constants.USERS_VERIFIED_URL;
+    const requestBody = {
+      userId,
+      redirectTo: url
+    }
+    const response = await postToGateway(requestBody);
+    if (response.error !== undefined) {
+      alert(response.error);
+    } else {
+      window.location.reload();
+    }
+  }
+
+  const renderVerifiedSwitch = (params) => {
+    if (params.row.isArtist) {
+      return (
+        <Switch
+          checked={params.row.isVerified}
+          onChange={async (e) => handleVerifiedSwitch(e, params.row.id)}
+          inputProps={{'aria-label': 'controlled'}}
+        />
+      );
+    }
+  }
+
+  const renderGetProfile = (params) => {
+    return (
+      <Button onClick={async () => {
+        navigate(constants.PROFILE_URL + "/" + params.row.id)
+      }}> Ver perfil
+      </Button>
+    );
+  }
+
+  async function getUsers() {
+    let response = await getToGateway(constants.USERS_HOST + constants.USERS_LIST_URL,
+      "?" + constants.API_KEY_QUERY_PARAM
+      + constants.MY_API_KEY);
+
+    if (response.error !== undefined) {
+      return {
+        "id": "",
+        "email": "",
+        "isAdmin": "",
+        "isListener": "",
+        "IsArtist": "",
+        "isBlocked": "",
+        "isVerified": "",
+      }
+    }
+    return response.users;
+  }
+
+  // Component did mount
+  useEffect(() => {
+    document.body.style.backgroundColor = '#f9f6f4';
+
+    const getServicesWrapper = async () => {
+      const response = await getUsers();
+      setRows(response);
+      setFilteredRows(response);
+    };
+    getServicesWrapper().then(r => r);
+  }, []);
+
+  const handleUserName = (event) => {
+    setUserName(event.target.value);
+  }
+
+  const handleUserPassword = (event) => {
+    setUserPassword(event.target.value);
+  }
+
+  const handleSearchText = (event) => {
+    const textInTextBox = event.target.value;
+    setSearchText(textInTextBox);
+    const newRows = rows.filter(row => {
+      return Object.keys(row).some((field) => {
+        return row[field].toString().includes(textInTextBox);
+      });
+    });
+    setFilteredRows(newRows);
+  }
+
+  const columns = [
+    {
+      field: 'id',
+      headerName: 'ID',
+      headerClassName: classes.headerCell,
+      width: 300
+    },
+    {
+      field: 'email',
+      headerName: 'Correo',
+      headerClassName: classes.headerCell,
+      width: 250
+    },
+    {
+      field: 'userType',
+      headerName: 'Tipo',
+      headerClassName: classes.headerCell,
+      width: 200,
+      renderCell: renderUserType,
+    },
+    {
+      field: 'isBlocked',
+      headerName: 'Bloqueado',
+      width: 150,
+      headerClassName: classes.headerCell,
+      renderCell: renderBlockedSwitch,
+    },
+    {
+      field: 'isVerified',
+      headerName: 'Verificado',
+      headerClassName: classes.headerCell,
+      width: 150,
+      renderCell: renderVerifiedSwitch,
+    },
+    {
+      field: 'profile button',
+      headerName: '',
+      width: 200,
+      headerClassName: classes.headerCell,
+      renderCell: renderGetProfile,
+    }
+  ];
+
+  return (
+    <div>
+      <div>
+        <br/>
+      </div>
+
+      <div>
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell style={{width: 600}}>
+                <TextField onChange={handleSearchText}
+                           value={searchText}
+                           margin="normal"
+                           label="🔍"
+                           style={{width: 800}}
+                           autoFocus> </TextField>
+              </TableCell>
+
+              <TableCell>
+                <TextField onChange={handleUserName}
+                           value={userName}
+                           margin="normal"
+                           label="Email"
+                           autoFocus> </TextField>
+              </TableCell>
+
+              <TableCell>
+                <TextField onChange={handleUserPassword}
+                           value={userPassword}
+                           margin="normal"
+                           label="Password"
+                           type="password"
+                           autoFocus> </TextField>
+              </TableCell>
+
+              <TableCell>
+                <Button onClick={async () => {
+                  await createAdmin(userName, userPassword)
+                }}
+                >Crear admin
+                </Button>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+
+      <div>
+        <br/>
+        <br/>
+        <br/>
+      </div>
+
+      <div style={{height: 1800, width: '100%'}}>
+        <DataGrid
+          rowClick="show"
+          classes={{headerCell: classes.headerCell, row: classes.row}}
+          rows={filteredRows}
+          columns={columns}
+          EnableHeadersVisualStyles={false}/>
+      </div>
+    </div>
+  );
 }
 
 export {
-    UsersList
+  UsersList
 }
