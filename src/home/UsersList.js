@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from "react";
-import {Button, Table, TableBody, TableCell, TableRow, TextField,} from "@mui/material";
+import {Box, Button, Modal, Table, TableBody, TableCell, TableRow, TextField} from "@mui/material";
 import {DataGrid} from "@mui/x-data-grid";
 import {getSHAOf, getToGateway, postToGateway} from "../others/utils";
 import * as constants from "../others/constants";
 import {useNavigate} from "react-router-dom";
 import {matrixStyles} from "../style/matrixStyles";
 import Switch from '@mui/material/Switch';
+
 
 const UsersList = (props) => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const UsersList = (props) => {
   const [userName, setUserName] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [searchText, setSearchText] = useState("");
+  const [addAdminModalVisible, setAddAdminModalVisible] = useState(false);
   const classes = matrixStyles();
 
   async function createAdmin(name, password) {
@@ -101,7 +103,7 @@ const UsersList = (props) => {
 
   const renderGetProfile = (params) => {
     return (
-      <Button onClick={async () => {
+      <Button style={{float: 'right'}} onClick={async () => {
         navigate(constants.PROFILE_URL + "/" + params.row.id)
       }}> Ver perfil
       </Button>
@@ -158,30 +160,33 @@ const UsersList = (props) => {
     setFilteredRows(newRows);
   }
 
+  const handlerModalOpen = () => setAddAdminModalVisible(true);
+  const handlerModalClose = () => setAddAdminModalVisible(false);
+
   const columns = [
     {
       field: 'id',
       headerName: 'ID',
       headerClassName: classes.headerCell,
-      width: 300
+      width: 350
     },
     {
       field: 'email',
       headerName: 'Correo',
       headerClassName: classes.headerCell,
-      width: 250
+      width: 300
     },
     {
       field: 'userType',
-      headerName: 'Tipo',
+      headerName: 'Rol',
       headerClassName: classes.headerCell,
-      width: 200,
+      width: 250,
       renderCell: renderUserType,
     },
     {
       field: 'isBlocked',
       headerName: 'Bloqueado',
-      width: 150,
+      width: 175,
       headerClassName: classes.headerCell,
       renderCell: renderBlockedSwitch,
     },
@@ -189,7 +194,7 @@ const UsersList = (props) => {
       field: 'isVerified',
       headerName: 'Verificado',
       headerClassName: classes.headerCell,
-      width: 150,
+      width: 175,
       renderCell: renderVerifiedSwitch,
     },
     {
@@ -216,33 +221,61 @@ const UsersList = (props) => {
                            value={searchText}
                            margin="normal"
                            label="🔍"
-                           style={{width: 800}}
-                           autoFocus> </TextField>
+                           style={{width: 500}}
+                           size={"small"}
+                           autoFocus>
+                </TextField>
               </TableCell>
 
               <TableCell>
-                <TextField onChange={handleUserName}
-                           value={userName}
-                           margin="normal"
-                           label="Email"
-                           autoFocus> </TextField>
-              </TableCell>
+                <Button style={{float: 'right'}} onClick={handlerModalOpen}>
+                  Crear administrador
 
-              <TableCell>
-                <TextField onChange={handleUserPassword}
-                           value={userPassword}
-                           margin="normal"
-                           label="Password"
-                           type="password"
-                           autoFocus> </TextField>
-              </TableCell>
-
-              <TableCell>
-                <Button onClick={async () => {
-                  await createAdmin(userName, userPassword)
-                }}
-                >Crear admin
                 </Button>
+                <Modal
+                  open={addAdminModalVisible}
+                  onClose={handlerModalClose}
+                  aria-labelledby="modal-modal-title"
+                  aria-describedby="modal-modal-description"
+                >
+                  <Box sx={{flexDirection: 'column', display: 'flex'}}
+                       style={{
+                         backgroundColor: 'white',
+                         borderRadius: 10,
+                         height: 200,
+                         width: 400,
+                         alignItems: 'center',
+                         position: 'absolute',
+                         top: '50%',
+                         left: '50%',
+                         transform: 'translate(-50%, -50%)',
+                         border: '2px solid #000',
+                         boxShadow: 100
+                       }}>
+                    <TextField onChange={handleUserName}
+                               value={userName}
+                               margin="normal"
+                               label="Email"
+                               size="small"
+                               style={{width: 300, marginTop:25}}
+                               autoFocus
+                    >
+                    </TextField>
+
+                    <TextField onChange={handleUserPassword}
+                               value={userPassword}
+                               margin="normal"
+                               label="Password"
+                               size="small"
+                               style={{width: 300}}
+                               autoFocus
+                    >
+                    </TextField>
+                    <Button onClick={() => createAdmin(userName, userPassword)} style={{width: 300, marginTop:10}}>
+                      Crear administrador
+                    </Button>
+                  </Box>
+                </Modal>
               </TableCell>
             </TableRow>
           </TableBody>

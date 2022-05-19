@@ -7,6 +7,7 @@ import SignUpEndWrapper from "./login/SignUpEndWrapper";
 import { ForgotPassword } from "./login/ForgotPassword";
 import { UsersList } from "./home/UsersList";
 import {Button, Typography} from "@mui/material";
+
 import { Services } from "./home/Services";
 import "./style/HomePageRoutes.css";
 import { AuthContext } from "./services/AuthContext";
@@ -109,9 +110,8 @@ function NavBar(props) {
 
     return (
             <nav className="container"
-                 style={{background: 'black'}}>
-                <div className="links"
-                     style={{color: 'white'}}>
+                 style={{background: '#607D8B'}}>
+                <div className="links" style={{color: 'white'}}>
                     <Button className="homepage"
                             onClick={ redirectUsersLists }
                             variant="themed"
