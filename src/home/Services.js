@@ -1,264 +1,237 @@
 import "../style/HomePageRoutes.css";
-import { Table,
-    TableBody,
-    TableRow,
-    TableCell,
-    TextField,
-    Button} from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import {Box, Button, Modal, Table, TableBody, TableCell, TableRow, TextField} from '@mui/material';
+import {DataGrid} from '@mui/x-data-grid';
 import React, {useEffect, useState} from "react";
 import {matrixStyles} from "../style/matrixStyles";
+import Switch from "@mui/material/Switch";
 
 const constants = require("../others/constants");
-const { postToGateway, getToGateway } = require("../others/utils");
+const {postToGateway, getToGateway} = require("../others/utils");
 
-async function enableKey(apiKey,
-                         name,
-                         description) {
-    const requestBody = {
-        name: name,
-        description: description,
-        apiKeyToEnable: apiKey,
-        redirectTo: constants.SERVICES_HOST + constants.API_KEY_UP_URL
-    }
-
-    const response = await postToGateway(requestBody);
-
-    if (response.error !== undefined) {
-        alert(response.error);
-    } else {
-        window.location
-              .reload();
-    }
-}
-
-async function disableKey(apiKey) {
-    const requestBody = {
-        apiKeyToDisable: apiKey,
-        redirectTo: constants.SERVICES_HOST + constants.API_KEY_DOWN_URL,
-    }
-
-    const response = await postToGateway(requestBody);
-
-    if (response.error !== undefined) {
-        alert(response.error);
-    } else {
-        window.location
-            .reload();
-    }
-}
-
-const changeBooleans = (response)  =>  {
-    response.forEach( (x, i)  => {
-        x.active = (x.active)
-                    ? "activado"
-                    : "desactivado";
-    } );
-
-    return response;
-}
-
-const renderDisableButton = (params) => {
-    if (params.row
-              .active === 'activado') {
-        return (
-            <Button onClick={ async () => {
-                await disableKey(params.row
-                                       .apiKey)
-            } }
-            >Desactivar
-            </Button>
-        );
-    } else {
-        return (
-            <Button onClick={ async () => {
-                await enableKey(params.row
-                                      .apiKey)
-            } }
-            >Activar
-            </Button>
-        );
-    }
-}
 
 const Services = (props) => {
-    const [rows,
-          setRows] = useState([]);
+  const [rows, setRows] = useState([]);
+  const [filteredRows, setFilteredRows] = useState([]);
+  const [apiName, setApiName] = useState("");
+  const [apiDescription, setApiDescription] = useState("");
+  const [searchText, setSearchText] = useState("");
+  const [addAdminModalVisible, setAddAdminModalVisible] = useState(false);
 
-    const [filteredRows,
-          setFilteredRows] = useState([]);
+  const classes = matrixStyles();
 
-    const [apiName,
-           setApiName] = useState("");
+  async function getServices() {
+    let response = await getToGateway(constants.SERVICES_HOST + constants.SERVICES_URL,
+      "?" + constants.API_KEY_QUERY_PARAM + constants.MY_API_KEY);
 
-    const [apiDescription,
-           setApiDescription] = useState("");
-
-    const [searchText,
-          setSearchText] = useState("");
-
-    const classes = matrixStyles();
-
-    async function getServices() {
-        let response = await getToGateway(constants.SERVICES_HOST + constants.SERVICES_URL,
-                                          "?" + constants.API_KEY_QUERY_PARAM
-                                              + constants.MY_API_KEY);
-
-        if (response.error !== undefined) {
-            response =  {
-                "name": "",
-                "apiKey": "",
-                "active": "",
-                "creationDate": "",
-                "description": ""
-            }
-        }
-
-        return response;
+    if (response.error !== undefined) {
+      response = {
+        "name": "",
+        "apiKey": "",
+        "active": "",
+        "creationDate": "",
+        "description": ""
+      }
     }
 
-    // Component did mount
-    useEffect( () => {
-        document.body
-            .style
-            .backgroundColor = '#f9f6f4';
+    return response;
+  }
 
-        const getServicesWrapper = async () => {
-            const response = changeBooleans( await getServices() );
+  // Component did mount
+  useEffect(() => {
+    document.body.style.backgroundColor = '#f9f6f4';
 
-            setRows(response);
-            setFilteredRows(response);
-        };
+    const getServicesWrapper = async () => {
+      const response = await getServices();
+      setRows(response);
+      setFilteredRows(response);
+    };
 
-        getServicesWrapper().then(r => r);
-    }, [] );
+    getServicesWrapper().then(r => r);
+  }, []);
 
-    const handleApiName = (event) => {
-        setApiName(event.target
-                        .value);
+  async function addService(name, description) {
+    if (name === "" || name === undefined || description === undefined) {
+      alert("Por favor, complete los campos del nuevo servicio.");
+      return;
     }
-
-    const handleApiDescription = (event) => {
-        setApiDescription(event.target
-                               .value);
+    const requestBody = {
+      name: name,
+      description: description,
+      redirectTo: constants.SERVICES_HOST + constants.API_KEY_CREATE_SERVICE_URL
     }
-
-    const handleSearchText = (event) => {
-        const textInTextBox = event.target
-                                   .value;
-
-        setSearchText(textInTextBox);
-
-        const newRows = rows.filter(row => {
-            return Object.keys(row).some( (field) => {
-                return row[field]
-                        .toString()
-                        .includes(textInTextBox);
-            } );
-        } );
-
-        setFilteredRows(newRows);
+    const response = await postToGateway(requestBody);
+    if (response.error !== undefined) {
+      alert(response.error);
+    } else {
+      window.location.reload();
     }
+  }
 
-    const columns = [
-        {
-          field: 'name',
-          headerName: 'Nombre',
-          headerClassName: classes.headerCell,
-          width: 200
-        },
-        {
-            field: 'apiKey',
-            headerName: 'API-KEY',
-            headerClassName: classes.headerCell,
-            width: 600
-        },
-        {
-            field: 'active',
-            headerName: 'Estado',
-            headerClassName: classes.headerCell,
-            width: 100
-        },
-        {
-            field: 'creationDate',
-            headerName: 'Fecha de creación',
-            headerClassName: classes.headerCell,
-            width: 200
-        },
-        {
-            field: 'description',
-            headerName: 'Descripción',
-            headerClassName: classes.headerCell,
-            width: 500
-        },
-        {
-            field: 'button',
-            headerName: '',
-            headerClassName: classes.headerCell,
-            width: 200,
-            renderCell: renderDisableButton,
-        }
-    ];
+  async function handleDisabledSwitch(event, apiKey) {
+    let url = constants.SERVICES_HOST + constants.API_KEY_DOWN_URL;
+    if (event.target.checked) url = constants.SERVICES_HOST + constants.API_KEY_UP_URL;
+    const requestBody = {
+      apiKeyToChange: apiKey,
+      redirectTo: url
+    }
+    const response = await postToGateway(requestBody);
+    if (response.error !== undefined) {
+      alert(response.error);
+    } else {
+      window.location.reload();
+    }
+  }
 
-    return(
-        <div>
-            <div>
-                <br/>
-            </div>
-
-            <div>
-                <Table>
-                    <TableBody>
-                        <TableRow>
-                            <TableCell style = {{width: 600}}>
-                                <TextField onChange = { handleSearchText }
-                                           value = { searchText }
-                                           margin="normal"
-                                           label="🔍"
-                                           style = {{width: 800}}
-                                           autoFocus> </TextField>
-                            </TableCell>
-
-                            <TableCell>
-                                <TextField onChange = { handleApiName }
-                                           value = { apiName }
-                                           margin="normal"
-                                           label="Nombre"
-                                           autoFocus> </TextField>
-                            </TableCell>
-
-                            <TableCell>
-                                <TextField onChange = { handleApiDescription }
-                                           value = { apiDescription }
-                                           margin="normal"
-                                           label="Descripción"
-                                           autoFocus> </TextField>
-                            </TableCell>
-
-                            <TableCell>
-                                <Button onClick={ async () => {
-                                    await enableKey(undefined,
-                                                    apiName,
-                                                    apiDescription)
-                                } }
-                                >Agregar servicio
-                                </Button>
-                            </TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-            </div>
-
-            <div style={{ height: 1800, width: '100%' }}>
-                <DataGrid
-                    rows = {filteredRows}
-                    classes={{ headerCell: classes.headerCell, row: classes.row }}
-                    columns = {columns}/>
-            </div>
-        </div>
+  const renderDisableButton = (params) => {
+    return (
+      <Switch
+        checked={params.row.active}
+        onChange={async (e) => handleDisabledSwitch(e, params.row.apiKey)}
+        inputProps={{'aria-label': 'controlled'}}
+      />
     );
+  }
+
+  const handleApiName = (event) => {
+    setApiName(event.target.value);
+  }
+
+  const handleApiDescription = (event) => {
+    setApiDescription(event.target.value);
+  }
+
+  const handleSearchText = (event) => {
+    const textInTextBox = event.target.value;
+    setSearchText(textInTextBox);
+
+    const newRows = rows.filter(row => {
+      return Object.keys(row).some((field) => {
+        return row[field].toString().includes(textInTextBox);
+      });
+    });
+    setFilteredRows(newRows);
+  }
+
+  const handlerModalOpen = () => setAddAdminModalVisible(true);
+  const handlerModalClose = () => setAddAdminModalVisible(false);
+
+  const columns = [
+    {
+      field: 'name',
+      headerName: 'Nombre',
+      headerClassName: classes.headerCell,
+      width: 200
+    },
+    {
+      field: 'apiKey',
+      headerName: 'API-KEY',
+      headerClassName: classes.headerCell,
+      width: 600
+    },
+    {
+      field: 'creationDate',
+      headerName: 'Fecha de creación',
+      headerClassName: classes.headerCell,
+      width: 250
+    },
+    {
+      field: 'description',
+      headerName: 'Host',
+      headerClassName: classes.headerCell,
+      width: 200
+    },
+    {
+      field: 'active',
+      headerName: 'Estado',
+      headerClassName: classes.headerCell,
+      width: 175,
+      renderCell: renderDisableButton
+    }
+  ];
+
+  return (
+    <div>
+      <div>
+        <br/>
+      </div>
+
+      <div>
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell style={{width: 600}}>
+                <TextField onChange={handleSearchText}
+                           value={searchText}
+                           margin="normal"
+                           label="🔍"
+                           style={{width: 500}}
+                           size={"small"}
+                           autoFocus>
+                </TextField>
+              </TableCell>
+              <TableCell>
+                <Button variant="contained" style={{float: 'right'}} onClick={handlerModalOpen}>
+                  Agregar servicio
+                </Button>
+                <Modal
+                  open={addAdminModalVisible}
+                  onClose={handlerModalClose}
+                  aria-labelledby="modal-modal-title"
+                  aria-describedby="modal-modal-description"
+                >
+                  <Box sx={{flexDirection: 'column', display: 'flex'}}
+                       style={{
+                         backgroundColor: 'white',
+                         borderRadius: 10,
+                         height: 200,
+                         width: 400,
+                         alignItems: 'center',
+                         position: 'absolute',
+                         top: '50%',
+                         left: '50%',
+                         transform: 'translate(-50%, -50%)',
+                         border: '2px solid #000',
+                         boxShadow: 100
+                       }}>
+                    <TextField onChange={handleApiName}
+                               value={apiName}
+                               margin="normal"
+                               label="Nombre"
+                               size="small"
+                               style={{width: 300, marginTop: 25}}
+                               autoFocus
+                    >
+                    </TextField>
+                    <TextField onChange={handleApiDescription}
+                               value={apiDescription}
+                               margin="normal"
+                               label="Host"
+                               size="small"
+                               style={{width: 300}}
+                               autoFocus
+                    >
+                    </TextField>
+                    <Button onClick={() => addService(apiName, apiDescription)} style={{width: 300, marginTop: 10}}>
+                      Agregar servicio
+                    </Button>
+                  </Box>
+                </Modal>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+
+      <div style={{height: 1800, width: '100%'}}>
+        <DataGrid
+          rows={filteredRows}
+          classes={{headerCell: classes.headerCell, row: classes.row}}
+          columns={columns}/>
+      </div>
+    </div>
+  );
 }
 
 export {
-    Services
+  Services
 }

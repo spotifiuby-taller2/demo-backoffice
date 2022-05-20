@@ -34,6 +34,7 @@ const METRICS_URL = "/metrics";
 const API_KEY_URL = "/apikeys";
 const API_KEY_DOWN_URL = API_KEY_URL + "/down";
 const API_KEY_UP_URL = API_KEY_URL + "/up";
+const API_KEY_CREATE_SERVICE_URL = API_KEY_URL + "/createservice";
 const API_KEY_QUERY_PARAM = "apiKey=";
 const USER_ID_QUERY_PARAM = "userId=";
 
@@ -92,5 +93,6 @@ module.exports = {
   METRICS_URL,
   USERS_CREATE_ADMIN_URL,
   USERS_VERIFIED_URL,
-  USERS_UNVERIFIED_URL
+  USERS_UNVERIFIED_URL,
+  API_KEY_CREATE_SERVICE_URL
 }

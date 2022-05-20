@@ -90,15 +90,18 @@ const UsersList = (props) => {
   }
 
   const renderVerifiedSwitch = (params) => {
-    if (params.row.isArtist) {
-      return (
-        <Switch
-          checked={params.row.isVerified}
-          onChange={async (e) => handleVerifiedSwitch(e, params.row.id)}
-          inputProps={{'aria-label': 'controlled'}}
-        />
-      );
-    }
+    return (
+      <>
+        {(params.row.isArtist) ?
+          (<Switch
+            checked={params.row.isVerified}
+            onChange={async (e) => handleVerifiedSwitch(e, params.row.id)}
+            inputProps={{'aria-label': 'controlled'}}
+          />) :
+          <></>
+        }
+      </>
+    );
   }
 
   const renderGetProfile = (params) => {
@@ -228,8 +231,8 @@ const UsersList = (props) => {
               </TableCell>
 
               <TableCell>
-                <Button style={{float: 'right'}} onClick={handlerModalOpen}>
-                  Crear administrador
+                <Button variant="contained" style={{float: 'right'}} onClick={handlerModalOpen}>
+                  Agregar administrador
 
                 </Button>
                 <Modal
@@ -257,7 +260,7 @@ const UsersList = (props) => {
                                margin="normal"
                                label="Email"
                                size="small"
-                               style={{width: 300, marginTop:25}}
+                               style={{width: 300, marginTop: 25}}
                                autoFocus
                     >
                     </TextField>
@@ -271,7 +274,7 @@ const UsersList = (props) => {
                                autoFocus
                     >
                     </TextField>
-                    <Button onClick={() => createAdmin(userName, userPassword)} style={{width: 300, marginTop:10}}>
+                    <Button onClick={() => createAdmin(userName, userPassword)} style={{width: 300, marginTop: 10}}>
                       Crear administrador
                     </Button>
                   </Box>
