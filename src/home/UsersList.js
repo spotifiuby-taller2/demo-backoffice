@@ -48,26 +48,6 @@ const UsersList = (props) => {
     );
   }
 
-  const renderUserType = (params) => {
-    let text = [];
-
-    if (params.row.isAdmin) {
-      text += 'Administrador ';
-    }
-
-    if (params.row.isArtist) {
-      text += 'Artista ';
-    }
-
-    if (params.row.isListener) {
-      text += 'Oyente ';
-    }
-
-    return (
-      <p>{text}</p>
-    );
-  }
-
   async function handleBlockedSwitch(event, userId) {
     let url = constants.USERS_HOST + constants.USERS_UNLOCK_URL;
     if (event.target.checked) url = constants.USERS_HOST + constants.USERS_BLOCK_URL;
@@ -146,12 +126,34 @@ const UsersList = (props) => {
     document.body.style.backgroundColor = '#f9f6f4';
 
     const getServicesWrapper = async () => {
-      const response = await getUsers();
+      const response = parseIsAdmin( await getUsers() );
       setRows(response);
       setFilteredRows(response);
     };
     getServicesWrapper().then(r => r);
   }, []);
+
+  const parseIsAdmin = (response)  =>  {
+    response.forEach( (x, i)  => {
+      let text = '';
+
+      if (x.isAdmin) {
+        text += 'Administrador ';
+      }
+
+      if (x.isArtist) {
+        text += 'Artista ';
+      }
+
+      if (x.isListener) {
+        text += 'Oyente ';
+      }
+
+      x.isAdmin = text;
+    } );
+
+    return response;
+  }
 
   const handleUserName = (event) => {
     setUserName(event.target.value);
@@ -194,32 +196,31 @@ const UsersList = (props) => {
       width: 300
     },
     {
-      field: 'userType',
+      field: 'isAdmin',
       headerName: 'Rol',
       headerClassName: classes.headerCell,
       width: 250,
-      renderCell: renderUserType,
     },
     {
       field: 'isBlocked',
       headerName: 'Bloqueado',
       width: 175,
       headerClassName: classes.headerCell,
-      renderCell: renderBlockedSwitch,
+      renderCell: renderBlockedSwitch
     },
     {
       field: 'isVerified',
       headerName: 'Verificado',
       headerClassName: classes.headerCell,
       width: 175,
-      renderCell: renderVerifiedSwitch,
+      renderCell: renderVerifiedSwitch
     },
     {
       field: 'profile button',
       headerName: '',
       width: 200,
       headerClassName: classes.headerCell,
-      renderCell: renderGetProfile,
+      renderCell: renderGetProfile
     }
   ];
 
