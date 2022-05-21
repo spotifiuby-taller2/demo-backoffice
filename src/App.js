@@ -3,7 +3,7 @@ import {BrowserRouter, Route, Routes, useNavigate} from 'react-router-dom';
 import SignUpEndWrapper from "./login/SignUpEndWrapper";
 import {ForgotPassword} from "./login/ForgotPassword";
 import {UsersList} from "./home/UsersList";
-import {Button, IconButton} from "@mui/material";
+import {Button, IconButton, Typography} from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
 import {Services} from "./home/Services";
 import "./style/HomePageRoutes.css";
@@ -121,6 +121,10 @@ function NavBar(props) {
                 onFocus={() => focus5()}
                 onClick={redirectMetrics}
         >Métricas</Button>
+
+        <Typography className="homepage"
+                    style={{color: '#607D8B'}}
+        >..........................................</Typography>
 
         <IconButton component="span"
                     className="homepage"

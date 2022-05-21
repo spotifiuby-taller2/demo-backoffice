@@ -49,11 +49,20 @@ const UsersList = (props) => {
   }
 
   const renderUserType = (params) => {
-    let types = [];
-    if (params.row.isAdmin) types.push('Administrador');
-    if (params.row.isArtist) types.push('Artista');
-    if (params.row.isListener) types.push('Oyente');
-    const text = types.reduce((prev, curr) => [prev, ', ', curr]);
+    let text = [];
+
+    if (params.row.isAdmin) {
+      text += 'Administrador ';
+    }
+
+    if (params.row.isArtist) {
+      text += 'Artista ';
+    }
+
+    if (params.row.isListener) {
+      text += 'Oyente ';
+    }
+
     return (
       <p>{text}</p>
     );
@@ -153,13 +162,18 @@ const UsersList = (props) => {
   }
 
   const handleSearchText = (event) => {
-    const textInTextBox = event.target.value;
-    setSearchText(textInTextBox);
-    const newRows = rows.filter(row => {
-      return Object.keys(row).some((field) => {
-        return row[field].toString().includes(textInTextBox);
-      });
-    });
+      const textInTextBox = event.target.value;
+
+      setSearchText(textInTextBox);
+
+      const newRows = rows.filter(row => {
+        return Object.keys(row)
+            .filter(field => field.toString() !== "photoUrl")
+            .some(field => {
+              return row[field].toString().includes(textInTextBox);
+            });
+      } );
+
     setFilteredRows(newRows);
   }
 
@@ -269,6 +283,7 @@ const UsersList = (props) => {
                                value={userPassword}
                                margin="normal"
                                label="Password"
+                               type="password"
                                size="small"
                                style={{width: 300}}
                                autoFocus
