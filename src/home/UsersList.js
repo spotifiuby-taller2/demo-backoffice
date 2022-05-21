@@ -168,11 +168,15 @@ const UsersList = (props) => {
 
       setSearchText(textInTextBox);
 
+      const lowerText = textInTextBox;
+
       const newRows = rows.filter(row => {
         return Object.keys(row)
             .filter(field => field.toString() !== "photoUrl")
             .some(field => {
-              return row[field].toString().includes(textInTextBox);
+              return row[field].toString()
+                                .toLowerCase()
+                                .includes(lowerText);
             });
       } );
 

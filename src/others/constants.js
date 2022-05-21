@@ -30,6 +30,7 @@ const USERS_VERIFIED_URL = USERS_URL + "/verified";
 const USERS_UNVERIFIED_URL = USERS_URL + "/unverified";
 const PROFILE_URL = USERS_URL + "/profile";
 const METRICS_URL = "/metrics";
+const USER_PROFILE_ADM_REQUEST = "adminRequest=";
 
 const API_KEY_URL = "/apikeys";
 const API_KEY_DOWN_URL = API_KEY_URL + "/down";
@@ -94,5 +95,6 @@ module.exports = {
   USERS_CREATE_ADMIN_URL,
   USERS_VERIFIED_URL,
   USERS_UNVERIFIED_URL,
-  API_KEY_CREATE_SERVICE_URL
+  API_KEY_CREATE_SERVICE_URL,
+  USER_PROFILE_ADM_REQUEST
 }

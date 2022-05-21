@@ -59,7 +59,9 @@ const Services = (props) => {
       description: description,
       redirectTo: constants.SERVICES_HOST + constants.API_KEY_CREATE_SERVICE_URL
     }
+
     const response = await postToGateway(requestBody);
+
     if (response.error !== undefined) {
       alert(response.error);
     } else {
@@ -102,13 +104,19 @@ const Services = (props) => {
 
   const handleSearchText = (event) => {
     const textInTextBox = event.target.value;
+
     setSearchText(textInTextBox);
+
+    const lowerText = textInTextBox.toLowerCase();
 
     const newRows = rows.filter(row => {
       return Object.keys(row).some((field) => {
-        return row[field].toString().includes(textInTextBox);
+        return row[field].toString()
+                         .toLowerCase()
+                         .includes(lowerText);
       });
     });
+
     setFilteredRows(newRows);
   }
 
