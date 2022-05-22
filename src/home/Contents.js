@@ -28,7 +28,7 @@ const Contents = (props) => {
         "name": "",
         "genre": "",
         "type": "",
-        "active": ""
+        "blocked": ""
       }
     }
 
@@ -48,15 +48,18 @@ const Contents = (props) => {
     getServicesWrapper().then(r => r);
   }, []);
 
-  async function handleDisabledSwitch(event, apiKey) {
+  async function handleDisabledSwitch(event,
+                                      type,
+                                      id) {
     let url = constants.MEDIA_HOST + constants.ENABLE_CONTENT_URL;
 
-    if (event.target.checked) {
+    if (! event.target.checked) {
       url = constants.MEDIA_HOST + constants.DISABLE_CONTENT_URL;
     }
 
     const requestBody = {
-      apiKeyToChange: apiKey,
+      contentType: type,
+      contentId: id,
       redirectTo: url
     }
 
@@ -70,12 +73,22 @@ const Contents = (props) => {
   }
 
   const renderDisableButton = (params) => {
+    const contentType = params.row
+                              .id
+                              .split('_')[0];
+
+    const contentId = params.row
+                            .id
+                            .split('_')[1];
+
     return (
       <Switch
-        checked={params.row
-                       .active}
-        onChange={async (e) => handleDisabledSwitch(e, params.row
-                                                             .apiKey)}
+        checked={! params.row
+                         .blocked}
+
+        onChange={async (e) => handleDisabledSwitch(e,
+                                                    contentType,
+                                                    contentId)}
         inputProps={{'aria-label': 'controlled'}}
       />
     );
@@ -119,7 +132,7 @@ const Contents = (props) => {
       width: 200
     },
     {
-      field: 'active',
+      field: 'blocked',
       headerName: 'Estado',
       headerClassName: classes.headerCell,
       width: 175,

@@ -41,7 +41,8 @@ const UsersList = (props) => {
   const renderBlockedSwitch = (params) => {
     return (
       <Switch
-        checked={params.row.isBlocked}
+        checked={! params.row
+                         .isBlocked}
         onChange={async (e) => handleBlockedSwitch(e, params.row.id)}
         inputProps={{'aria-label': 'controlled'}}
       />
@@ -50,12 +51,16 @@ const UsersList = (props) => {
 
   async function handleBlockedSwitch(event, userId) {
     let url = constants.USERS_HOST + constants.USERS_UNLOCK_URL;
-    if (event.target.checked) url = constants.USERS_HOST + constants.USERS_BLOCK_URL;
+
+    if (! event.target.checked) url = constants.USERS_HOST + constants.USERS_BLOCK_URL;
+
     const requestBody = {
       userId,
       redirectTo: url
     }
+
     const response = await postToGateway(requestBody);
+
     if (response.error !== undefined) {
       alert(response.error);
     } else {
@@ -65,12 +70,16 @@ const UsersList = (props) => {
 
   async function handleVerifiedSwitch(event, userId) {
     let url = constants.USERS_HOST + constants.USERS_UNVERIFIED_URL;
-    if (event.target.checked) url = constants.USERS_HOST + constants.USERS_VERIFIED_URL;
+
+    if (! event.target.checked) url = constants.USERS_HOST + constants.USERS_VERIFIED_URL;
+
     const requestBody = {
       userId,
       redirectTo: url
     }
+
     const response = await postToGateway(requestBody);
+
     if (response.error !== undefined) {
       alert(response.error);
     } else {
@@ -207,7 +216,7 @@ const UsersList = (props) => {
     },
     {
       field: 'isBlocked',
-      headerName: 'Bloqueado',
+      headerName: 'Estado',
       width: 175,
       headerClassName: classes.headerCell,
       renderCell: renderBlockedSwitch
