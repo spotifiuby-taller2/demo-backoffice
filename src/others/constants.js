@@ -9,6 +9,8 @@ const USERS_HOST = process.env
 const SERVICES_HOST = process.env
                              .REACT_APP_SERVICES_HOST;
 
+const MEDIA_HOST = process.env
+                          .REACT_APP_MEDIA_HOST;
 
 /* Paths */
 const DATADOG_DASHBOARD_URL = "https://p.datadoghq.com/sb/463d20a2-daba-11eb-acf2-da7ad0900002-" +
@@ -31,6 +33,9 @@ const USERS_UNVERIFIED_URL = USERS_URL + "/unverified";
 const PROFILE_URL = USERS_URL + "/profile";
 const METRICS_URL = "/metrics";
 const USER_PROFILE_ADM_REQUEST = "adminRequest=";
+const CONTENT_URL = "/content";
+const ENABLE_CONTENT_URL = "/enablecontent";
+const DISABLE_CONTENT_URL = "/disablecontent";
 
 const API_KEY_URL = "/apikeys";
 const API_KEY_DOWN_URL = API_KEY_URL + "/down";
@@ -96,5 +101,9 @@ module.exports = {
   USERS_VERIFIED_URL,
   USERS_UNVERIFIED_URL,
   API_KEY_CREATE_SERVICE_URL,
-  USER_PROFILE_ADM_REQUEST
+  USER_PROFILE_ADM_REQUEST,
+  CONTENT_URL,
+  MEDIA_HOST,
+  ENABLE_CONTENT_URL,
+  DISABLE_CONTENT_URL
 }

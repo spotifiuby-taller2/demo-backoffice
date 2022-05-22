@@ -6,6 +6,7 @@ import {UsersList} from "./home/UsersList";
 import {Button, IconButton, Typography} from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
 import {Services} from "./home/Services";
+import {Contents} from "./home/Contents";
 import "./style/HomePageRoutes.css";
 import {AuthContext, useContext} from "./services/AuthContext";
 import {getFormatedDate} from "./others/utils";
@@ -81,9 +82,14 @@ function NavBar(props) {
     setFocuses6(true);
   }
 
-  const redirectUsersLists = () => navigate(constants.USERS_URL)
-  const redirectMetrics = () => navigate(constants.METRICS_URL)
-  const redirectServices = () => navigate(constants.SERVICES_URL)
+  const redirectUsersLists = () => navigate(constants.USERS_URL);
+
+  const redirectMetrics = () => navigate(constants.METRICS_URL);
+
+  const redirectServices = () => navigate(constants.SERVICES_URL);
+
+  const redirectContent = () => navigate(constants.CONTENT_URL);
+
   const closeSession = () => removeToken()
 
   return (
@@ -111,6 +117,7 @@ function NavBar(props) {
 
         <Button className="homepage"
                 variant="themed"
+                onClick={redirectContent}
                 style={{color: focuses4 ? 'black' : '', verticalAlign:'top'}}
                 onFocus={() => focus4()}
         >Contenidos</Button>
@@ -178,6 +185,7 @@ function LoggedRouter(props) {
         <Route exact path={constants.USERS_URL} element={<UsersList/>}> </Route>
         <Route exact path={constants.SERVICES_URL} element={<Services/>}> </Route>
         <Route exact path={constants.METRICS_URL} element={<RedirectToMetrics/>}/>
+        <Route exact path={constants.CONTENT_URL} element={<Contents/>}> </Route>
         <Route exact path={constants.PROFILE_URL + "/:userId"} element={<UserProfile/>}/>
       </Routes>
     </div>
