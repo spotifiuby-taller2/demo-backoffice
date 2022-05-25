@@ -94,7 +94,7 @@ function NavBar(props) {
 
   return (
     <nav className="container" style={{background: '#607D8B'}}>
-      <div className="links" style={{color: 'white'}}>
+      <div className="links" style={{color: 'white', flexDirection: 'row'}}>
         <Button className="homepage"
                 onClick={redirectUsersLists}
                 variant="themed"
@@ -131,11 +131,11 @@ function NavBar(props) {
 
         <Typography className="homepage"
                     style={{color: '#607D8B'}}
-        >..........................................</Typography>
+        ></Typography>
 
         <IconButton component="span"
                     className="homepage"
-                    style={{color: focuses6 ? 'black' : 'white', verticalAlign:'top', marginLeft:320}}
+                    style={{color: focuses6 ? 'black' : 'white', verticalAlign:'top', marginLeft:250}}
                     onFocus={() => focus6()}
                     onClick={closeSession}>
           <LogoutIcon/>
