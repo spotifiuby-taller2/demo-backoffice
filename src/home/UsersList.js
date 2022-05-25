@@ -127,7 +127,7 @@ const UsersList = (props) => {
         "isVerified": "",
       }
     }
-    return response.users;
+    return response.list;
   }
 
   // Component did mount
@@ -135,14 +135,15 @@ const UsersList = (props) => {
     document.body.style.backgroundColor = '#f9f6f4';
 
     const getServicesWrapper = async () => {
-      const response = parseIsAdmin( await getUsers() );
+      const users = await getUsers();
+      const response = await parseIsAdmin(users);
       setRows(response);
       setFilteredRows(response);
     };
     getServicesWrapper().then(r => r);
   }, []);
 
-  const parseIsAdmin = (response)  =>  {
+  const parseIsAdmin = async (response)  =>  {
     response.forEach( (x, i)  => {
       let text = '';
 
