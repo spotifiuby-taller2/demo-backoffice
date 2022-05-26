@@ -1,9 +1,9 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {BrowserRouter, Route, Routes, useNavigate} from 'react-router-dom';
 import SignUpEndWrapper from "./login/SignUpEndWrapper";
 import {ForgotPassword} from "./login/ForgotPassword";
 import {UsersList} from "./home/UsersList";
-import {Button, IconButton, Typography} from "@mui/material";
+import {Button, IconButton} from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
 import {Services} from "./home/Services";
 import {Contents} from "./home/Contents";
@@ -20,67 +20,14 @@ const {SignUp} = require('./login/SignUp');
 
 function NavBar(props) {
   const navigate = useNavigate();
-  const {removeToken} = useContext();
-  const [focuses1, setFocuses1] = useState(true);
-  const [focuses2, setFocuses2] = useState(false);
-  const [focuses3, setFocuses3] = useState(false);
-  const [focuses4, setFocuses4] = useState(false);
-  const [focuses5, setFocuses5] = useState(false);
-  const [focuses6, setFocuses6] = useState(false);
 
-  const focus1 = () => {
-    setFocuses1(true);
-    setFocuses2(false);
-    setFocuses3(false);
-    setFocuses4(false);
-    setFocuses5(false);
-    setFocuses6(false);
-  }
-
-  const focus2 = () => {
-    setFocuses1(false);
-    setFocuses2(true);
-    setFocuses3(false);
-    setFocuses4(false);
-    setFocuses5(false);
-    setFocuses6(false);
-  }
-
-  const focus3 = () => {
-    setFocuses1(false);
-    setFocuses2(false);
-    setFocuses3(true);
-    setFocuses4(false);
-    setFocuses5(false);
-    setFocuses6(false);
-  }
-
-  const focus4 = () => {
-    setFocuses1(false);
-    setFocuses2(false);
-    setFocuses3(false);
-    setFocuses4(true);
-    setFocuses5(false);
-    setFocuses6(false);
-  }
-
-  const focus5 = () => {
-    setFocuses1(true);
-    setFocuses2(false);
-    setFocuses3(false);
-    setFocuses4(false);
-    setFocuses5(true);
-    setFocuses6(false);
-  }
-
-  const focus6 = () => {
-    setFocuses1(false);
-    setFocuses2(false);
-    setFocuses3(false);
-    setFocuses4(false);
-    setFocuses5(false);
-    setFocuses6(true);
-  }
+  const {focus1, isFocus1,
+    focus2, isFocus2,
+    focus3, isFocus3,
+    focus4, isFocus4,
+    focus5, isFocus5,
+    focus6, isFocus6,
+    removeToken} = useContext();
 
   const redirectUsersLists = () => navigate(constants.USERS_URL);
 
@@ -98,44 +45,44 @@ function NavBar(props) {
         <Button className="homepage"
                 onClick={redirectUsersLists}
                 variant="themed"
-                style={{color: focuses1 ? 'black' : '', verticalAlign:'top'}}
+                style={{color: isFocus1() ? 'black' : '', verticalAlign:'top'}}
                 onFocus={() => focus1()}
         >Usuarios</Button>
 
         <Button className="homepage"
                 onClick={redirectServices}
                 variant="themed"
-                style={{color: focuses2 ? 'black' : '', verticalAlign:'top'}}
+                style={{color: isFocus2() ? 'black' : '', verticalAlign:'top'}}
                 onFocus={() => focus2()}
         >Servicios</Button>
 
         <Button className="homepage"
                 variant="themed"
-                style={{color: focuses3 ? 'black' : '', verticalAlign:'top'}}
+                style={{color: isFocus3() ? 'black' : '', verticalAlign:'top'}}
                 onFocus={() => focus3()}
         >Transacciones</Button>
 
         <Button className="homepage"
                 variant="themed"
                 onClick={redirectContent}
-                style={{color: focuses4 ? 'black' : '', verticalAlign:'top'}}
+                style={{color: isFocus4() ? 'black' : '', verticalAlign:'top'}}
                 onFocus={() => focus4()}
         >Contenidos</Button>
 
         <Button className="homepage"
                 variant="themed"
-                style={{color: focuses5 ? 'black' : '', verticalAlign:'top'}}
+                style={{color: isFocus5() ? 'black' : '', verticalAlign:'top'}}
                 onFocus={() => focus5()}
                 onClick={redirectMetrics}
         >Métricas</Button>
 
-        <Typography className="homepage"
+        { /* <Typography className="homepage"
                     style={{color: '#607D8B'}}
-        ></Typography>
+        ></Typography> */ }
 
         <IconButton component="span"
                     className="homepage"
-                    style={{color: focuses6 ? 'black' : 'white', verticalAlign:'top', marginLeft:250}}
+                    style={{color: isFocus6() ? 'black' : 'white', verticalAlign:'top', marginLeft:250}}
                     onFocus={() => focus6()}
                     onClick={closeSession}>
           <LogoutIcon/>
@@ -231,6 +178,84 @@ function App() {
     return ({
       isValidToken,
 
+      isFocus1: () => {
+        return localStorage.getItem('focus1') === "true";
+      },
+
+      isFocus2: () => {
+        return localStorage.getItem('focus2') === "true";
+      },
+
+      isFocus3: () => {
+        return localStorage.getItem('focus3') === "true";
+      },
+
+      isFocus4: () => {
+        return localStorage.getItem('focus4') === "true";
+      },
+
+      isFocus5: () => {
+        return localStorage.getItem('focus5') === "true";
+      },
+
+      isFocus6: () => {
+        return localStorage.getItem('focus6') === "true";
+      },
+
+      focus1: () => {
+        localStorage.setItem('focus1', "true");
+        localStorage.setItem('focus2', "false");
+        localStorage.setItem('focus3', "false");
+        localStorage.setItem('focus4', "false");
+        localStorage.setItem('focus5', "false");
+        localStorage.setItem('focus6', "false");
+      },
+
+      focus2: () => {
+        localStorage.setItem('focus1', "false");
+        localStorage.setItem('focus2', "true");
+        localStorage.setItem('focus3', "false");
+        localStorage.setItem('focus4', "false");
+        localStorage.setItem('focus5', "false");
+        localStorage.setItem('focus6', "false");
+      },
+
+      focus3: () => {
+        localStorage.setItem('focus1', "false");
+        localStorage.setItem('focus2', "false");
+        localStorage.setItem('focus3', "true");
+        localStorage.setItem('focus4', "false");
+        localStorage.setItem('focus5', "false");
+        localStorage.setItem('focus6', "false");
+      },
+
+      focus4: () => {
+        localStorage.setItem('focus1', "false");
+        localStorage.setItem('focus2', "false");
+        localStorage.setItem('focus3', "false");
+        localStorage.setItem('focus4', "true");
+        localStorage.setItem('focus5', "false");
+        localStorage.setItem('focus6', "false");
+      },
+
+      focus5: () => {
+        localStorage.setItem('focus1', "false");
+        localStorage.setItem('focus2', "false");
+        localStorage.setItem('focus3', "false");
+        localStorage.setItem('focus4', "false");
+        localStorage.setItem('focus5', "true");
+        localStorage.setItem('focus6', "false");
+      },
+
+      focus6: () => {
+        localStorage.setItem('focus1', "true");
+        localStorage.setItem('focus2', "false");
+        localStorage.setItem('focus3', "false");
+        localStorage.setItem('focus4', "false");
+        localStorage.setItem('focus5', "false");
+        localStorage.setItem('focus6', "false");
+      },
+
       removeToken: () => {
         localStorage.removeItem('spoti-token');
 
@@ -269,7 +294,11 @@ function App() {
         setIsValidToken(true);
       }
     });
-  }, [isValidToken, setIsValidToken]);
+  }, [isValidToken,
+      setIsValidToken]);
+
+  useEffect( () => {
+  }, [] );
 
   return (
     <AuthContext.Provider value={context}>
