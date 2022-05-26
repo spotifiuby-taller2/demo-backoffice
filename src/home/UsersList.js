@@ -71,7 +71,7 @@ const UsersList = (props) => {
   async function handleVerifiedSwitch(event, userId) {
     let url = constants.USERS_HOST + constants.USERS_UNVERIFIED_URL;
 
-    if (! event.target.checked) url = constants.USERS_HOST + constants.USERS_VERIFIED_URL;
+    if (event.target.checked) url = constants.USERS_HOST + constants.USERS_VERIFIED_URL;
 
     const requestBody = {
       userId,
@@ -305,7 +305,7 @@ const UsersList = (props) => {
                     >
                     </TextField>
                     <Button onClick={() => createAdmin(userName, userPassword)} style={{width: 300, marginTop: 10}}>
-                      Crear administrador
+                      Agregar administrador
                     </Button>
                   </Box>
                 </Modal>
