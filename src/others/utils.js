@@ -9,17 +9,33 @@ function getSHAOf(toHash) {
 
 // response.json() is a promise
 const postToGateway = (body) => {
-  body.verbRedirect = "POST";
   body.apiKey = constants.MY_API_KEY;
 
-  return fetch(constants.SERVICES_HOST + constants.REDIRECT_URL, {
+  return fetch(constants.SERVICES_HOST + constants.CHECK_URL, {
         method: "POST",
         headers: constants.JSON_HEADER,
         body: JSON.stringify(body)
       }
-  ).then(response =>
-          response.json()
-  ).catch(error => {
+  ).then(async r => {
+       const gatewayResponse = await r.json();
+
+       if (gatewayResponse.error !== undefined) {
+           return gatewayResponse.error;
+       }
+
+      return await fetch(body.redirectTo, {
+              method: "POST",
+              headers: constants.JSON_HEADER,
+              body: JSON.stringify(body)
+          } )
+             .then(async response => {
+                 return await response.json();
+             }).catch(err => {
+                     return {
+                         error: err.toString()
+                     }
+                 } );
+  } ).catch(error => {
       return {
           error: error.toString()
       };
@@ -29,19 +45,36 @@ const postToGateway = (body) => {
 const getToGateway = (destiny,
                       redirectParams) => {
     const body = {}
-    body.redirectParams = redirectParams
-    body.verbRedirect = "GET";
-    body.redirectTo = destiny;
     body.apiKey = constants.MY_API_KEY;
 
-    return fetch(constants.SERVICES_HOST + constants.REDIRECT_URL, {
+    const redirectParamsAux = redirectParams !== undefined ? redirectParams
+                                                           : "";
+    const redirectTo = destiny + redirectParamsAux;
+
+    return fetch(constants.SERVICES_HOST + constants.CHECK_URL, {
             method: "POST",
             headers: constants.JSON_HEADER,
             body: JSON.stringify(body)
         }
-    ).then(response =>
-        response.json()
-    ).catch(error => {
+    ).then(async r => {
+        const gatewayResponse = await r.json();
+
+        if (gatewayResponse.error !== undefined) {
+            return gatewayResponse.error;
+        }
+
+        return await fetch(redirectTo, {
+            method: "GET",
+            headers: constants.JSON_HEADER
+        } )
+            .then(async response => {
+                return await response.json();
+            }).catch(err => {
+                return {
+                    error: err.toString()
+                }
+            } );
+    } ).catch(error => {
         return {
             error: error.toString()
         };
