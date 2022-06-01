@@ -253,7 +253,7 @@ const UsersList = (props) => {
                            value={searchText}
                            margin="normal"
                            label="🔍"
-                           style={{width: 500}}
+                           style={{width: 500, backgroundColor: '#f5fcff', borderRadius: 5}}
                            size={"small"}
                            autoFocus>
                 </TextField>
