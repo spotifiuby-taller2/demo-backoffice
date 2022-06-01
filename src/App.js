@@ -3,7 +3,7 @@ import {BrowserRouter, Route, Routes, useNavigate} from 'react-router-dom';
 import SignUpEndWrapper from "./login/SignUpEndWrapper";
 import {ForgotPassword} from "./login/ForgotPassword";
 import {UsersList} from "./home/UsersList";
-import {Button, IconButton} from "@mui/material";
+import {Button, IconButton, Typography} from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
 import {Services} from "./home/Services";
 import {Contents} from "./home/Contents";
@@ -76,9 +76,9 @@ function NavBar(props) {
                 onClick={redirectMetrics}
         >Métricas</Button>
 
-        { /* <Typography className="homepage"
+        <Typography className="homepage"
                     style={{color: '#607D8B'}}
-        ></Typography> */ }
+        >........................................................</Typography>
 
         <IconButton component="span"
                     className="homepage"
