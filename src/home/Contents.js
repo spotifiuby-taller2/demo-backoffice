@@ -117,26 +117,26 @@ const Contents = (props) => {
       field: 'name',
       headerName: 'Nombre',
       headerClassName: classes.headerCell,
-      width: 200
+      width: 600,
     },
     {
       field: 'genre',
       headerName: 'Género',
       headerClassName: classes.headerCell,
-      width: 200
+      width: 300,
     },
     {
       field: 'type',
       headerName: 'Tipo',
       headerClassName: classes.headerCell,
-      width: 200
+      width: 300,
     },
     {
       field: 'blocked',
       headerName: 'Estado',
       headerClassName: classes.headerCell,
-      width: 175,
-      renderCell: renderDisableButton
+      width: 200,
+      renderCell: renderDisableButton,
     }
   ];
 
@@ -155,7 +155,7 @@ const Contents = (props) => {
                            value={searchText}
                            margin="normal"
                            label="🔍"
-                           style={{width: 500}}
+                           style={{width: 500,backgroundColor: '#f5fcff', borderRadius: 5}}
                            size={"small"}
                            autoFocus>
                 </TextField>
@@ -165,7 +165,7 @@ const Contents = (props) => {
         </Table>
       </div>
 
-      <div style={{height: 1800, width: '100%'}}>
+      <div style={{height: 1800, width: '100%', }}>
         <DataGrid
           rows={filteredRows}
           classes={{headerCell: classes.headerCell, row: classes.row}}

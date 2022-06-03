@@ -10,6 +10,8 @@ import {Box,
 import {ThemeProvider} from "@emotion/react";
 import {loginStyles} from "../style/signin/SignIn";
 import {TextRow} from "./components/TextRow";
+import {profileStyles} from '../style/profileStyles'
+import defaultImage from '../media/default.png'
 
 const getProfileOf = async (id) => {
     const response = await getToGateway(constants.USERS_HOST + constants.PROFILE_URL,
@@ -46,177 +48,217 @@ const UserProfile = (props) => {
     }, [userId]);
 
     return (
-        <ThemeProvider theme={ theme }>
-            <Container component="main" maxWidth="xs">
-                <CssBaseline />
-                <Box sx={loginStyles.boxStyle}>
-                    <Typography component="h1"
-                                variant="h3">{user.name + " "
-                                                        + user.surname}
-                    </Typography>
+        <div style={{backgroundColor: '#607D8B', height: '91vh'}}>
+            <ThemeProvider theme={ theme }>                        
+                <div style={{flex: 1, flexDirection: 'row', justifyContent: 'center',display: 'flex', flexWrap: 'wrap'}}>
+                    <div style={{flex: 1, alignItems: 'center'}}>
+                        <Container component="main" maxWidth="sx" style={{width: 700,}}>
+                            <CssBaseline />
+                            <Box sx={loginStyles.boxStyle}>
 
-                    <div>
-                        <br />
-                    </div>
-
-                    <img src={user.photoUrl}
-                         alt="Sin Imagen">
-                    </img>
-
-                    <div>
-                        <br />
-                    </div>
-
-                    <TextRow text={"Email: " + user.email}/>
-
-                    <TextRow text={"Teléfono: " + user.phoneNumber}/>
-
-                    <div>
-                        <br />
-                    </div>
-
-                    <div>
-                        { (user.isArtist) && (
-                            <div>
-                                <Typography component="h1"
-                                            variant="h5">{
-                                    "Suscriptores: " +
-                                    user.nFollowers}
+                                <div>
+                                    <img 
+                                        src={user.photoUrl ? user.photoUrl : defaultImage}
+                                        style={{height: 250, width: 250, borderRadius: '50%',}}
+                                        alt="Sin Imagen">
+                                    </img>
+                                </div>
+                                <Typography 
+                                    component="h1"
+                                    variant="h3">{user.name + " "+ user.surname}
                                 </Typography>
 
                                 <div>
-                                    <br/>
+                                    <br />
                                 </div>
-                            </div>
-                            )
-                        }
-                    </div>
 
-                    <div>
-                        { (user.isArtist) && (user.verificationVideoUrl !== null)
-                                          && (! user.isVerified)
-                                          && (
-                            <div>
-                                <Typography component="h1"
-                                            variant="h5">{
-                                                "Video de verificación: " +
-                                                user.verificationVideoUrl}
-                                </Typography>
+                                <TextRow text={"Email: " + user.email}/>
+
+                                <TextRow text={"Teléfono: " + user.phoneNumber}/>
 
                                 <div>
-                                    <br/>
+                                    <br />
                                 </div>
-                            </div>
-                            )
-                        }
-                    </div>
 
-                    <div>
-                        <br />
-                    </div>
+                                <div>
+                                    { (user.isArtist) && (
+                                        <div>
+                                            <Typography component="h1"
+                                                        variant="h5">{
+                                                "Suscriptores: " +
+                                                user.nFollowers}
+                                            </Typography>
 
-                    <div>
-                        { (user.isListener) && (
-                            <TextRow text="Intereses musicales:"/> )
-                        }
-                    </div>
+                                            <div>
+                                                <br/>
+                                            </div>
+                                        </div>
+                                        )
+                                    }
+                                </div>
 
-                    <div> {
-                            (user.metal) && (
-                                <TextRow text="Metal"/>
-                            )
-                        }
-                    </div>
+                                <div>
+                                    { (user.isArtist) && (user.verificationVideoUrl !== null)
+                                                    && (! user.isVerified)
+                                                    && (
+                                        <div>
+                                            <Typography component="h1"
+                                                        variant="h5">{
+                                                            "Video de verificación: " +
+                                                            user.verificationVideoUrl}
+                                            </Typography>
 
-                    <div> {
-                        (user.rap) && (
-                            <TextRow text="Rap"/>
-                        )
+                                            <div>
+                                                <br/>
+                                            </div>
+                                        </div>
+                                        )
+                                    }
+                                </div>
+                            </Box>
+                        </Container>
+                    </div>
+                    
+                    {
+                        (user.isListener) && (
+                            <div style={{flex: 1,}}>
+                            <Container component="main" maxWidth="sx" style={{width: 400}}>
+                                <CssBaseline />
+                                <Box sx={loginStyles.boxStyle}>
+                                    
+                                    <div>
+                                        {  
+                                            <TextRow text="Intereses musicales:" style={{color: 'lightblue'}}/>
+                                        }
+                                    </div>
+                                    
+                                    <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap'}}>
+
+                                    <div> {
+                                            (user.metal) && (
+                                                <div style={{height: 33, width: 135, backgroundColor: 'lightblue', borderRadius: 10, textAlign: 'center', margin: 3}}>
+                                                    <TextRow text="Metal"/>
+                                                </div>
+                                            )
+                                        }
+                                    </div>
+
+                                    <div> {
+                                        (user.rap) && (
+                                            <div style={{height: 33, width: 135, backgroundColor: 'lightblue', borderRadius: 10, textAlign: 'center', margin: 3}}>
+                                                <TextRow text="Rap"/>
+                                            </div>
+                                        )
+                                    }
+                                    </div>
+
+                                    <div> {
+                                        (user.pop) && (
+                                            <div style={{height: 33, width: 135, backgroundColor: 'lightblue', borderRadius: 10, textAlign: 'center', margin: 3}}>
+                                                <TextRow text="Pop"/>
+                                            </div>
+                                        )
+                                    }
+                                    </div>
+
+                                    <div> {
+                                        (user.classic) && (
+                                            <div style={{height: 33, width: 135, backgroundColor: 'lightblue', borderRadius: 10, textAlign: 'center', margin: 3}}>
+                                                <TextRow text="Clásica"/>
+                                            </div>
+                                        )
+                                    }
+                                    </div>
+
+                                    <div> {
+                                        (user.electronic) && (
+                                            <div style={{height: 33, width: 135, backgroundColor: 'lightblue', borderRadius: 10, textAlign: 'center', margin: 3}}>
+                                                <TextRow text="Electrónica"/>
+                                            </div>
+                                        )
+                                    }
+                                    </div>
+
+                                    <div> {
+                                        (user.jazz) && (
+                                            <div style={{height: 33, width: 135, backgroundColor: 'lightblue', borderRadius: 10, textAlign: 'center', margin: 3}}>
+                                                <TextRow text="Jazz"/>
+                                            </div>
+                                        )
+                                    }
+                                    </div>
+
+                                    <div> {
+                                        (user.reggeaton) && (
+                                            <div style={{height: 33, width: 135, backgroundColor: 'lightblue', borderRadius: 10, textAlign: 'center', margin: 3}}>
+                                                <TextRow text="Reggeaton"/>
+                                            </div>
+                                        )
+                                    }
+                                    </div>
+
+                                    <div> {
+                                        (user.indie) && (
+                                            <div style={{height: 33, width: 135, backgroundColor: 'lightblue', borderRadius: 10, textAlign: 'center', margin: 3}}>
+                                                <TextRow text="Indie"/>
+                                            </div>
+                                        )
+                                    }
+                                    </div>
+
+                                    <div> {
+                                        (user.punk) && (
+                                            <div style={{height: 33, width: 135, backgroundColor: 'lightblue', borderRadius: 10, textAlign: 'center', margin: 3}}>
+                                                <TextRow text="Punk"/>
+                                            </div>
+                                        )
+                                    }
+                                    </div>
+
+                                    <div> {
+                                        (user.salsa) && (
+                                            <div style={{height: 33, width: 135, backgroundColor: 'lightblue', borderRadius: 10, textAlign: 'center', margin: 3}}>
+                                                <TextRow text="Salsa"/>
+                                            </div>
+                                        )
+                                    }
+                                    </div>
+
+                                    <div> {
+                                        (user.blues) && (
+                                            <div style={{height: 33, width: 135, backgroundColor: 'lightblue', borderRadius: 10, textAlign: 'center', margin: 3}}>
+                                                <TextRow text="Blues"/>
+                                            </div>
+                                        )
+                                    }
+                                    </div>
+
+                                    <div> {
+                                        (user.rock) && (
+                                            <div style={{height: 33, width: 135, backgroundColor: 'lightblue', borderRadius: 10, textAlign: 'center', margin: 3}}>
+                                                <TextRow text="Rock"/>
+                                            </div>
+                                        )
+                                    }
+                                    </div>
+
+                                    <div> {
+                                        (user.other) && (
+                                            <div style={{height: 33, width: 135, backgroundColor: 'lightblue', borderRadius: 10, textAlign: 'center', margin: 3}}>
+                                                <TextRow text="Other"/>
+                                            </div>
+                                        )
+                                    }
+                                    </div>
+                                    </div>
+                                </Box>
+                            </Container>
+                        </div>)
                     }
-                    </div>
-
-                    <div> {
-                        (user.pop) && (
-                            <TextRow text="Pop"/>
-                        )
-                    }
-                    </div>
-
-                    <div> {
-                        (user.classic) && (
-                            <TextRow text="Clásica"/>
-                        )
-                    }
-                    </div>
-
-                    <div> {
-                        (user.electronic) && (
-                            <TextRow text="Electrónica"/>
-                        )
-                    }
-                    </div>
-
-                    <div> {
-                        (user.jazz) && (
-                            <TextRow text="Jazz"/>
-                        )
-                    }
-                    </div>
-
-                    <div> {
-                        (user.reggeaton) && (
-                            <TextRow text="Reggeaton"/>
-                        )
-                    }
-                    </div>
-
-                    <div> {
-                        (user.indie) && (
-                            <TextRow text="Indie"/>
-                        )
-                    }
-                    </div>
-
-                    <div> {
-                        (user.punk) && (
-                            <TextRow text="Punk"/>
-                        )
-                    }
-                    </div>
-
-                    <div> {
-                        (user.salsa) && (
-                            <TextRow text="Salsa"/>
-                        )
-                    }
-                    </div>
-
-                    <div> {
-                        (user.blues) && (
-                            <TextRow text="Blues"/>
-                        )
-                    }
-                    </div>
-
-                    <div> {
-                        (user.rock) && (
-                            <TextRow text="Rock"/>
-                        )
-                    }
-                    </div>
-
-                    <div> {
-                        (user.other) && (
-                            <TextRow text="Other"/>
-                        )
-                    }
-                    </div>
-                    <div>
-                        <br />
-                    </div>
-                </Box>
-            </Container>
-        </ThemeProvider>
+                    
+                </div>
+            </ThemeProvider>
+        </div>
     );
 }
 
