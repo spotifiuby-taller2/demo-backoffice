@@ -126,7 +126,7 @@ function NotLoggedRouter(props) {
 
 function LoggedRouter(props) {
   return (
-    <div>
+    <div style={{backgroundColor: '#607D8B'}}>
       <Routes>
         <Route path="/" element={<UsersList/>}> </Route>
         <Route exact path={constants.USERS_URL} element={<UsersList/>}> </Route>
