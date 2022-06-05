@@ -23,7 +23,6 @@ const SIGN_UP_END_URL = SIGN_UP_URL + "/end";
 const FORGOT_PASSWORD_URL = "/forgotpassword";
 const USERS_URL = "/users";
 const SERVICES_URL = "/services";
-const REDIRECT_URL = "/redirect";
 const USERS_LIST_URL = USERS_URL + "/list";
 const USERS_BLOCK_URL = USERS_URL + "/block";
 const USERS_UNLOCK_URL = USERS_URL + "/unlock";
@@ -77,7 +76,6 @@ module.exports = {
   firebaseConfig, PASSWORD_MIN_LEN, FIREBASE_ISSUES, SERVICES_URL,
   SERVICES_HOST, MY_API_KEY, API_KEY_DOWN_URL, API_KEY_QUERY_PARAM,
   API_KEY_UP_URL,
-  REDIRECT_URL,
   ONE_HOUR_DIFFERENCE,
   USERS_LIST_URL,
   USERS_BLOCK_URL,

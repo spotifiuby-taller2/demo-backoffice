@@ -10,7 +10,6 @@ import {Box,
 import {ThemeProvider} from "@emotion/react";
 import {loginStyles} from "../style/signin/SignIn";
 import {TextRow} from "./components/TextRow";
-import {profileStyles} from '../style/profileStyles'
 import defaultImage from '../media/default.png'
 
 const getProfileOf = async (id) => {
