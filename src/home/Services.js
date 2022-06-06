@@ -24,13 +24,7 @@ const Services = (props) => {
       "?" + constants.API_KEY_QUERY_PARAM + constants.MY_API_KEY);
 
     if (response.error !== undefined) {
-      response = {
-        "name": "",
-        "apiKey": "",
-        "active": "",
-        "creationDate": "",
-        "description": ""
-      }
+      response = [ ]
     }
 
     return response;

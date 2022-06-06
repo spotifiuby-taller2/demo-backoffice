@@ -117,15 +117,7 @@ const UsersList = (props) => {
       + constants.MY_API_KEY);
 
     if (response.error !== undefined) {
-      return {
-        "id": "",
-        "email": "",
-        "isAdmin": "",
-        "isListener": "",
-        "IsArtist": "",
-        "isBlocked": "",
-        "isVerified": "",
-      }
+      return [ ]
     }
     return response.list;
   }
