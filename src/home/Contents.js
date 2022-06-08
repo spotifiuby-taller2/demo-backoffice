@@ -24,12 +24,7 @@ const Contents = (props) => {
     let response = await getToGateway(constants.MEDIA_HOST + constants.CONTENT_URL);
 
     if (response.error !== undefined) {
-      response = {
-        "name": "",
-        "genre": "",
-        "type": "",
-        "blocked": ""
-      }
+      response = []
     }
 
     return response;
