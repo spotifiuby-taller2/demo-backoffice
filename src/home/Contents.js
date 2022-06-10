@@ -118,19 +118,19 @@ const Contents = (props) => {
       field: 'genre',
       headerName: 'Género',
       headerClassName: classes.headerCell,
-      width: 300,
+      width: 500,
     },
     {
       field: 'type',
       headerName: 'Tipo',
       headerClassName: classes.headerCell,
-      width: 300,
+      width: 500,
     },
     {
       field: 'blocked',
       headerName: 'Estado',
       headerClassName: classes.headerCell,
-      width: 200,
+      width: 400,
       renderCell: renderDisableButton,
     }
   ];

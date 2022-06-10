@@ -193,24 +193,24 @@ const UsersList = (props) => {
       field: 'id',
       headerName: 'ID',
       headerClassName: classes.headerCell,
-      width: 350
+      width: 420
     },
     {
       field: 'email',
       headerName: 'Correo',
       headerClassName: classes.headerCell,
-      width: 300
+      width: 370
     },
     {
       field: 'isAdmin',
       headerName: 'Rol',
       headerClassName: classes.headerCell,
-      width: 250,
+      width: 320,
     },
     {
       field: 'isBlocked',
       headerName: 'Estado',
-      width: 175,
+      width: 260,
       headerClassName: classes.headerCell,
       renderCell: renderBlockedSwitch
     },
@@ -218,13 +218,13 @@ const UsersList = (props) => {
       field: 'isVerified',
       headerName: 'Verificado',
       headerClassName: classes.headerCell,
-      width: 175,
+      width: 260,
       renderCell: renderVerifiedSwitch
     },
     {
       field: 'profile button',
       headerName: '',
-      width: 200,
+      width: 280,
       headerClassName: classes.headerCell,
       renderCell: renderGetProfile
     }

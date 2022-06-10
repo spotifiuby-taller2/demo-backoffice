@@ -12,6 +12,7 @@ import {AuthContext, useContext} from "./services/AuthContext";
 import {getFormatedDate} from "./others/utils";
 import {RedirectToMetrics} from "./home/RedirectToMetrics";
 import {UserProfile} from "./home/UserProfile";
+import {Metrics} from "./home/Metrics";
 
 const constants = require("./others/constants");
 const {RecoverPassword} = require('./login/RecoverPassword');
@@ -131,7 +132,7 @@ function LoggedRouter(props) {
         <Route path="/" element={<UsersList/>}> </Route>
         <Route exact path={constants.USERS_URL} element={<UsersList/>}> </Route>
         <Route exact path={constants.SERVICES_URL} element={<Services/>}> </Route>
-        <Route exact path={constants.METRICS_URL} element={<RedirectToMetrics/>}/>
+        <Route exact path={constants.METRICS_URL} element={<Metrics/>}/>
         <Route exact path={constants.CONTENT_URL} element={<Contents/>}> </Route>
         <Route exact path={constants.PROFILE_URL + "/:userId"} element={<UserProfile/>}/>
       </Routes>

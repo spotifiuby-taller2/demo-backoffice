@@ -122,31 +122,31 @@ const Services = (props) => {
       field: 'name',
       headerName: 'Nombre',
       headerClassName: classes.headerCell,
-      width: 200
+      width: 300
     },
     {
       field: 'apiKey',
       headerName: 'API-KEY',
       headerClassName: classes.headerCell,
-      width: 600
+      width: 700
     },
     {
       field: 'creationDate',
       headerName: 'Fecha de creación',
       headerClassName: classes.headerCell,
-      width: 250
+      width: 350
     },
     {
       field: 'description',
       headerName: 'Host',
       headerClassName: classes.headerCell,
-      width: 200
+      width: 300
     },
     {
       field: 'active',
       headerName: 'Estado',
       headerClassName: classes.headerCell,
-      width: 175,
+      width: 260,
       renderCell: renderDisableButton
     }
   ];
