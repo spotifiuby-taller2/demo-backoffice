@@ -24,7 +24,7 @@ const Services = (props) => {
       "?" + constants.API_KEY_QUERY_PARAM + constants.MY_API_KEY);
 
     if (response.error !== undefined) {
-      response = [ ]
+      response = []
     }
 
     return response;
@@ -106,8 +106,8 @@ const Services = (props) => {
     const newRows = rows.filter(row => {
       return Object.keys(row).some((field) => {
         return row[field].toString()
-                         .toLowerCase()
-                         .includes(lowerText);
+          .toLowerCase()
+          .includes(lowerText);
       });
     });
 
@@ -122,41 +122,37 @@ const Services = (props) => {
       field: 'name',
       headerName: 'Nombre',
       headerClassName: classes.headerCell,
-      width: 300
+      flex: 0.33
     },
     {
       field: 'apiKey',
       headerName: 'API-KEY',
       headerClassName: classes.headerCell,
-      width: 700
+      flex: 1
     },
     {
       field: 'creationDate',
       headerName: 'Fecha de creación',
       headerClassName: classes.headerCell,
-      width: 350
+      flex: 0.30,
     },
     {
       field: 'description',
       headerName: 'Host',
       headerClassName: classes.headerCell,
-      width: 300
+      flex: 0.6
     },
     {
       field: 'active',
       headerName: 'Estado',
       headerClassName: classes.headerCell,
-      width: 260,
-      renderCell: renderDisableButton
+      renderCell: renderDisableButton,
+      flex: 0.18
     }
   ];
 
   return (
     <div>
-      <div>
-        <br/>
-      </div>
-
       <div>
         <Table>
           <TableBody>
@@ -166,7 +162,7 @@ const Services = (props) => {
                            value={searchText}
                            margin="normal"
                            label="🔍"
-                           style={{width: 500,backgroundColor: '#f5fcff', borderRadius: 5}}
+                           style={{width: 500, backgroundColor: '#f5fcff', borderRadius: 5}}
                            size={"small"}
                            autoFocus>
                 </TextField>
@@ -224,9 +220,10 @@ const Services = (props) => {
         </Table>
       </div>
 
-      <div style={{height: 1800, width: '100%'}}>
+      <div style={{width: '100%', minHeight: window.innerHeight}}>
         <DataGrid
           rows={filteredRows}
+          autoHeight={true}
           classes={{headerCell: classes.headerCell, row: classes.row}}
           columns={columns}/>
       </div>

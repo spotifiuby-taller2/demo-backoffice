@@ -1,14 +1,15 @@
 import React from "react";
-import { DATADOG_DASHBOARD_URL } from "../others/constants";
+import {DATADOG_DASHBOARD_URL} from "../others/constants";
 
 const Metrics = () => {
     return (
-        <div>
-            <iframe width={1900}
-                    height={1200}
-                    src={DATADOG_DASHBOARD_URL}>
-            </iframe>
-        </div>
+      <div>
+          {/* eslint-disable-next-line jsx-a11y/iframe-has-title */}
+          <iframe width="100%"
+                  height={window.outerHeight}
+                  src={DATADOG_DASHBOARD_URL}>
+          </iframe>
+      </div>
     );
 }
 
