@@ -41,8 +41,8 @@ const UsersList = (props) => {
   const renderBlockedSwitch = (params) => {
     return (
       <Switch
-        checked={! params.row
-                         .isBlocked}
+        checked={!params.row
+          .isBlocked}
         onChange={async (e) => handleBlockedSwitch(e, params.row.id)}
         inputProps={{'aria-label': 'controlled'}}
       />
@@ -52,7 +52,7 @@ const UsersList = (props) => {
   async function handleBlockedSwitch(event, userId) {
     let url = constants.USERS_HOST + constants.USERS_UNLOCK_URL;
 
-    if (! event.target.checked) url = constants.USERS_HOST + constants.USERS_BLOCK_URL;
+    if (!event.target.checked) url = constants.USERS_HOST + constants.USERS_BLOCK_URL;
 
     const requestBody = {
       userId,
@@ -117,7 +117,7 @@ const UsersList = (props) => {
       + constants.MY_API_KEY);
 
     if (response.error !== undefined) {
-      return [ ]
+      return []
     }
     return response.list;
   }
@@ -135,8 +135,8 @@ const UsersList = (props) => {
     getServicesWrapper().then(r => r);
   }, []);
 
-  const parseIsAdmin = async (response)  =>  {
-    response.forEach( (x, i)  => {
+  const parseIsAdmin = async (response) => {
+    response.forEach((x, i) => {
       let text = '';
 
       if (x.isAdmin) {
@@ -152,7 +152,7 @@ const UsersList = (props) => {
       }
 
       x.isAdmin = text;
-    } );
+    });
 
     return response;
   }
@@ -166,21 +166,21 @@ const UsersList = (props) => {
   }
 
   const handleSearchText = (event) => {
-      const textInTextBox = event.target.value;
+    const textInTextBox = event.target.value;
 
-      setSearchText(textInTextBox);
+    setSearchText(textInTextBox);
 
-      const lowerText = textInTextBox;
+    const lowerText = textInTextBox;
 
-      const newRows = rows.filter(row => {
-        return Object.keys(row)
-            .filter(field => field.toString() !== "photoUrl")
-            .some(field => {
-              return row[field].toString()
-                                .toLowerCase()
-                                .includes(lowerText);
-            });
-      } );
+    const newRows = rows.filter(row => {
+      return Object.keys(row)
+        .filter(field => field.toString() !== "photoUrl")
+        .some(field => {
+          return row[field].toString()
+            .toLowerCase()
+            .includes(lowerText);
+        });
+    });
 
     setFilteredRows(newRows);
   }
@@ -193,24 +193,24 @@ const UsersList = (props) => {
       field: 'id',
       headerName: 'ID',
       headerClassName: classes.headerCell,
-      width: 350
+      flex: 1,
     },
     {
       field: 'email',
       headerName: 'Correo',
       headerClassName: classes.headerCell,
-      width: 300
+      flex: 0.85,
     },
     {
       field: 'isAdmin',
       headerName: 'Rol',
       headerClassName: classes.headerCell,
-      width: 250,
+      flex: 0.7,
     },
     {
       field: 'isBlocked',
       headerName: 'Estado',
-      width: 175,
+      flex: 0.5,
       headerClassName: classes.headerCell,
       renderCell: renderBlockedSwitch
     },
@@ -218,13 +218,13 @@ const UsersList = (props) => {
       field: 'isVerified',
       headerName: 'Verificado',
       headerClassName: classes.headerCell,
-      width: 175,
+      flex: 0.5,
       renderCell: renderVerifiedSwitch
     },
     {
       field: 'profile button',
-      headerName: '',
-      width: 200,
+      headerName: 'Perfil',
+      flex: 0.5,
       headerClassName: classes.headerCell,
       renderCell: renderGetProfile
     }
@@ -232,10 +232,6 @@ const UsersList = (props) => {
 
   return (
     <div>
-      <div>
-        <br/>
-      </div>
-
       <div>
         <Table>
           <TableBody>
@@ -307,17 +303,12 @@ const UsersList = (props) => {
         </Table>
       </div>
 
-      <div>
-        <br/>
-        <br/>
-        <br/>
-      </div>
-
-      <div style={{height: 1800, width: '100%'}}>
+      <div style={{width: '100%', minHeight: window.innerHeight}}>
         <DataGrid
           rowClick="show"
           classes={{headerCell: classes.headerCell, row: classes.row}}
           rows={filteredRows}
+          autoHeight={true}
           columns={columns}
           EnableHeadersVisualStyles={false}/>
       </div>

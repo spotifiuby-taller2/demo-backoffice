@@ -10,8 +10,8 @@ import {Contents} from "./home/Contents";
 import "./style/HomePageRoutes.css";
 import {AuthContext, useContext} from "./services/AuthContext";
 import {getFormatedDate} from "./others/utils";
-import {RedirectToMetrics} from "./home/RedirectToMetrics";
 import {UserProfile} from "./home/UserProfile";
+import {Metrics} from "./home/Metrics";
 
 const constants = require("./others/constants");
 const {RecoverPassword} = require('./login/RecoverPassword');
@@ -21,13 +21,15 @@ const {SignUp} = require('./login/SignUp');
 function NavBar(props) {
   const navigate = useNavigate();
 
-  const {focus1, isFocus1,
+  const {
+    focus1, isFocus1,
     focus2, isFocus2,
     focus3, isFocus3,
     focus4, isFocus4,
     focus5, isFocus5,
     focus6, isFocus6,
-    removeToken} = useContext();
+    removeToken
+  } = useContext();
 
   const redirectUsersLists = () => navigate(constants.USERS_URL);
 
@@ -45,44 +47,44 @@ function NavBar(props) {
         <Button className="homepage"
                 onClick={redirectUsersLists}
                 variant="themed"
-                style={{color: isFocus1() ? 'black' : '', verticalAlign:'top'}}
+                style={{color: isFocus1() ? 'black' : '', verticalAlign: 'top'}}
                 onFocus={() => focus1()}
         >Usuarios</Button>
 
         <Button className="homepage"
                 onClick={redirectServices}
                 variant="themed"
-                style={{color: isFocus2() ? 'black' : '', verticalAlign:'top'}}
+                style={{color: isFocus2() ? 'black' : '', verticalAlign: 'top'}}
                 onFocus={() => focus2()}
         >Servicios</Button>
 
         <Button className="homepage"
                 variant="themed"
-                style={{color: isFocus3() ? 'black' : '', verticalAlign:'top'}}
+                style={{color: isFocus3() ? 'black' : '', verticalAlign: 'top'}}
                 onFocus={() => focus3()}
         >Transacciones</Button>
 
         <Button className="homepage"
                 variant="themed"
                 onClick={redirectContent}
-                style={{color: isFocus4() ? 'black' : '', verticalAlign:'top'}}
+                style={{color: isFocus4() ? 'black' : '', verticalAlign: 'top'}}
                 onFocus={() => focus4()}
         >Contenidos</Button>
 
         <Button className="homepage"
                 variant="themed"
-                style={{color: isFocus5() ? 'black' : '', verticalAlign:'top'}}
+                style={{color: isFocus5() ? 'black' : '', verticalAlign: 'top'}}
                 onFocus={() => focus5()}
                 onClick={redirectMetrics}
         >Métricas</Button>
 
         <Typography className="homepage"
                     style={{color: '#607D8B'}}
-        >........................................................</Typography>
+        ></Typography>
 
         <IconButton component="span"
                     className="homepage"
-                    style={{color: isFocus6() ? 'black' : 'white', verticalAlign:'top', marginLeft:250}}
+                    style={{color: isFocus6() ? 'black' : 'white', verticalAlign: 'top', marginLeft: 250}}
                     onFocus={() => focus6()}
                     onClick={closeSession}>
           <LogoutIcon/>
@@ -119,6 +121,15 @@ function NotLoggedRouter(props) {
 
         <Route exact path={constants.SERVICES_URL}
                element={<SignIn/>}> </Route>
+
+        <Route exact path={constants.METRICS_URL}
+               element={<SignIn/>}> </Route>
+
+        <Route exact path={constants.CONTENT_URL}
+               element={<SignIn/>}> </Route>
+
+        <Route exact path={constants.PROFILE_URL + "/:userId"}
+               element={<SignIn/>}> </Route>
       </Routes>
     </div>
   );
@@ -126,12 +137,12 @@ function NotLoggedRouter(props) {
 
 function LoggedRouter(props) {
   return (
-    <div style={{backgroundColor: '#607D8B'}}>
+    <div style={{backgroundColor: '#E1F5FE'}}>
       <Routes>
         <Route path="/" element={<UsersList/>}> </Route>
         <Route exact path={constants.USERS_URL} element={<UsersList/>}> </Route>
         <Route exact path={constants.SERVICES_URL} element={<Services/>}> </Route>
-        <Route exact path={constants.METRICS_URL} element={<RedirectToMetrics/>}/>
+        <Route exact path={constants.METRICS_URL} element={<Metrics/>}/>
         <Route exact path={constants.CONTENT_URL} element={<Contents/>}> </Route>
         <Route exact path={constants.PROFILE_URL + "/:userId"} element={<UserProfile/>}/>
       </Routes>
@@ -152,7 +163,6 @@ function DisplayApp() {
           <BrowserRouter>
             <NavBar>
             </NavBar>
-
             <LoggedRouter>
             </LoggedRouter>
           </BrowserRouter>
@@ -295,10 +305,10 @@ function App() {
       }
     });
   }, [isValidToken,
-      setIsValidToken]);
+    setIsValidToken]);
 
-  useEffect( () => {
-  }, [] );
+  useEffect(() => {
+  }, []);
 
   return (
     <AuthContext.Provider value={context}>

@@ -1,9 +1,5 @@
 import "../style/HomePageRoutes.css";
-import {Table,
-        TableBody,
-        TableCell,
-        TableRow,
-        TextField} from '@mui/material';
+import {Table, TableBody, TableCell, TableRow, TextField} from '@mui/material';
 import {DataGrid} from '@mui/x-data-grid';
 import React, {useEffect, useState} from "react";
 import {matrixStyles} from "../style/matrixStyles";
@@ -48,7 +44,7 @@ const Contents = (props) => {
                                       id) {
     let url = constants.MEDIA_HOST + constants.ENABLE_CONTENT_URL;
 
-    if (! event.target.checked) {
+    if (!event.target.checked) {
       url = constants.MEDIA_HOST + constants.DISABLE_CONTENT_URL;
     }
 
@@ -69,21 +65,21 @@ const Contents = (props) => {
 
   const renderDisableButton = (params) => {
     const contentType = params.row
-                              .id
-                              .split('_')[0];
+      .id
+      .split('_')[0];
 
     const contentId = params.row
-                            .id
-                            .split('_')[1];
+      .id
+      .split('_')[1];
 
     return (
       <Switch
-        checked={! params.row
-                         .blocked}
+        checked={!params.row
+          .blocked}
 
         onChange={async (e) => handleDisabledSwitch(e,
-                                                    contentType,
-                                                    contentId)}
+          contentType,
+          contentId)}
         inputProps={{'aria-label': 'controlled'}}
       />
     );
@@ -99,8 +95,8 @@ const Contents = (props) => {
     const newRows = rows.filter(row => {
       return Object.keys(row).some((field) => {
         return row[field].toString()
-                         .toLowerCase()
-                         .includes(lowerText);
+          .toLowerCase()
+          .includes(lowerText);
       });
     });
 
@@ -112,35 +108,31 @@ const Contents = (props) => {
       field: 'name',
       headerName: 'Nombre',
       headerClassName: classes.headerCell,
-      width: 600,
+      flex: 1,
     },
     {
       field: 'genre',
       headerName: 'Género',
       headerClassName: classes.headerCell,
-      width: 300,
+      flex: 0.4,
     },
     {
       field: 'type',
       headerName: 'Tipo',
       headerClassName: classes.headerCell,
-      width: 300,
+      flex: 0.4
     },
     {
       field: 'blocked',
       headerName: 'Estado',
       headerClassName: classes.headerCell,
-      width: 200,
       renderCell: renderDisableButton,
+      flex: 0.15
     }
   ];
 
   return (
     <div>
-      <div>
-        <br/>
-      </div>
-
       <div>
         <Table>
           <TableBody>
@@ -150,7 +142,7 @@ const Contents = (props) => {
                            value={searchText}
                            margin="normal"
                            label="🔍"
-                           style={{width: 500,backgroundColor: '#f5fcff', borderRadius: 5}}
+                           style={{width: 500, backgroundColor: '#f5fcff', borderRadius: 5}}
                            size={"small"}
                            autoFocus>
                 </TextField>
@@ -160,9 +152,10 @@ const Contents = (props) => {
         </Table>
       </div>
 
-      <div style={{height: 1800, width: '100%', }}>
+      <div style={{width: '100%', minHeight: window.innerHeight}}>
         <DataGrid
           rows={filteredRows}
+          autoHeight={true}
           classes={{headerCell: classes.headerCell, row: classes.row}}
           columns={columns}/>
       </div>
