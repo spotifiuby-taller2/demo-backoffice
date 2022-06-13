@@ -148,7 +148,7 @@ const UsersList = (props) => {
       }
 
       if (x.isArtist && x.isBand) {
-        text += 'Banda ';
+        text += 'Banda  ';
       }
 
       if (x.isListener) {
