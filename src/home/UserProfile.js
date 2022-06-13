@@ -56,7 +56,7 @@ const UserProfile = (props) => {
                     alt="Sin Imagen">
                   </img>
                 </div>
-                <TextRow text={user.name + " " + user.surname} variant={"h3"}/>
+                <TextRow text={user.username} variant={"h3"}/>
                 <TextRow text={"Email: " + user.email}/>
                 <TextRow text={"Teléfono: " + user.phoneNumber}/>
                 <div>
