@@ -143,8 +143,12 @@ const UsersList = (props) => {
         text += 'Administrador ';
       }
 
-      if (x.isArtist) {
+      if (x.isArtist && !x.isBand) {
         text += 'Artista ';
+      }
+
+      if (x.isArtist && x.isBand) {
+        text += 'Banda  ';
       }
 
       if (x.isListener) {
