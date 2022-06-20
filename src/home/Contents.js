@@ -111,16 +111,34 @@ const Contents = (props) => {
       flex: 1,
     },
     {
-      field: 'genre',
-      headerName: 'Género',
+      field: 'description',
+      headerName: 'Descripción',
       headerClassName: classes.headerCell,
-      flex: 0.4,
+      flex: 0.4
     },
     {
       field: 'type',
       headerName: 'Tipo',
       headerClassName: classes.headerCell,
       flex: 0.4
+    },
+    {
+      field: 'genre',
+      headerName: 'Género',
+      headerClassName: classes.headerCell,
+      flex: 0.4,
+    },
+    {
+      field: 'subscription',
+      headerName: 'Suscripción',
+      headerClassName: classes.headerCell,
+      flex: 0.4,
+    },
+    {
+      field: 'creationDate',
+      headerName: 'Fecha de creación',
+      headerClassName: classes.headerCell,
+      flex: 0.4,
     },
     {
       field: 'blocked',
