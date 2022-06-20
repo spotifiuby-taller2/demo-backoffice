@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import * as constants from "../others/constants";
 import {getToGateway} from "../others/utils";
 import {Box, Container, createTheme, CssBaseline, Link} from "@mui/material";
+import CircularProgress from '@mui/material/CircularProgress';
 import {ThemeProvider} from "@emotion/react";
 import {loginStyles} from "../style/signin/SignIn";
 import {TextRow} from "./components/TextRow";
@@ -28,6 +29,7 @@ const UserProfile = (props) => {
     .split(constants.PROFILE_URL + "/")[1];
 
   const [user, setUser] = useState({});
+  const [loading, setLoading] = useState(true);
 
   const [theme] = useState(createTheme());
 
@@ -35,11 +37,23 @@ const UserProfile = (props) => {
     (async () => {
       const response = await getProfileOf(userId)
       setUser(response);
+      setLoading(false);
     })();
 
     return () => {
     };
   }, [userId]);
+
+  if ( loading ){
+    return ( 
+      <Box sx={{ display: 'flex', height: 640, backgroundColor: '#E1F5FE',justifyContent: 'center' }}>
+          <div style={{margin: 250}}>
+            <CircularProgress size={100}/>
+          </div>
+          
+      </Box>    
+     );
+  }
 
   return (
     <div style={{backgroundColor: '#E1F5FE', height: '91vh'}}>
@@ -56,7 +70,7 @@ const UserProfile = (props) => {
                     alt="Sin Imagen">
                   </img>
                 </div>
-                <TextRow text={user.name + " " + user.surname} variant={"h3"}/>
+                <TextRow text={user.username} variant={"h3"}/>
                 <TextRow text={"Email: " + user.email}/>
                 <TextRow text={"Teléfono: " + user.phoneNumber}/>
                 <div>

@@ -3,7 +3,7 @@ import {Box, Button, Modal, Table, TableBody, TableCell, TableRow, TextField} fr
 import {DataGrid} from '@mui/x-data-grid';
 import React, {useEffect, useState} from "react";
 import {matrixStyles} from "../style/matrixStyles";
-import Switch from "@mui/material/Switch";
+import { AdminSwitch } from "../components/AdminSwitch";
 
 const constants = require("../others/constants");
 const {postToGateway, getToGateway} = require("../others/utils");
@@ -58,14 +58,12 @@ const Services = (props) => {
 
     if (response.error !== undefined) {
       alert(response.error);
-    } else {
-      window.location.reload();
     }
   }
 
-  async function handleDisabledSwitch(event, apiKey) {
+  async function handleDisabledSwitch(checked, apiKey) {
     let url = constants.SERVICES_HOST + constants.API_KEY_DOWN_URL;
-    if (event.target.checked) url = constants.SERVICES_HOST + constants.API_KEY_UP_URL;
+    if (checked) url = constants.SERVICES_HOST + constants.API_KEY_UP_URL;
     const requestBody = {
       apiKeyToChange: apiKey,
       redirectTo: url
@@ -73,17 +71,17 @@ const Services = (props) => {
     const response = await postToGateway(requestBody);
     if (response.error !== undefined) {
       alert(response.error);
-    } else {
-      window.location.reload();
     }
   }
 
   const renderDisableButton = (params) => {
     return (
-      <Switch
-        checked={params.row.active}
-        onChange={async (e) => handleDisabledSwitch(e, params.row.apiKey)}
-        inputProps={{'aria-label': 'controlled'}}
+      <AdminSwitch
+        initialState={params.row.active}
+        itemId={params.row.apiKey}
+        executeOnChange={handleDisabledSwitch}
+        input={{'aria-label': 'controlled'}}
+        defaultOn={false}
       />
     );
   }

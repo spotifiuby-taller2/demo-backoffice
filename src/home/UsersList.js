@@ -5,7 +5,7 @@ import {getSHAOf, getToGateway, postToGateway} from "../others/utils";
 import * as constants from "../others/constants";
 import {useNavigate} from "react-router-dom";
 import {matrixStyles} from "../style/matrixStyles";
-import Switch from '@mui/material/Switch';
+import { AdminSwitch } from "../components/AdminSwitch";
 
 
 const UsersList = (props) => {
@@ -40,19 +40,20 @@ const UsersList = (props) => {
 
   const renderBlockedSwitch = (params) => {
     return (
-      <Switch
-        checked={!params.row
-          .isBlocked}
-        onChange={async (e) => handleBlockedSwitch(e, params.row.id)}
-        inputProps={{'aria-label': 'controlled'}}
+      <AdminSwitch
+        itemId={params.row.id}
+        initialState={params.row.isBlocked}
+        executeOnChange={handleBlockedSwitch}
+        input={{'aria-label': 'controlled'}}
+        defaultOn={true}
       />
     );
   }
 
-  async function handleBlockedSwitch(event, userId) {
+  async function handleBlockedSwitch(checked, userId) {
     let url = constants.USERS_HOST + constants.USERS_UNLOCK_URL;
 
-    if (!event.target.checked) url = constants.USERS_HOST + constants.USERS_BLOCK_URL;
+    if (! checked) url = constants.USERS_HOST + constants.USERS_BLOCK_URL;
 
     const requestBody = {
       userId,
@@ -63,15 +64,13 @@ const UsersList = (props) => {
 
     if (response.error !== undefined) {
       alert(response.error);
-    } else {
-      window.location.reload();
     }
   }
 
-  async function handleVerifiedSwitch(event, userId) {
+  async function handleVerifiedSwitch(checked, userId) {
     let url = constants.USERS_HOST + constants.USERS_UNVERIFIED_URL;
 
-    if (event.target.checked) url = constants.USERS_HOST + constants.USERS_VERIFIED_URL;
+    if (checked) url = constants.USERS_HOST + constants.USERS_VERIFIED_URL;
 
     const requestBody = {
       userId,
@@ -82,8 +81,6 @@ const UsersList = (props) => {
 
     if (response.error !== undefined) {
       alert(response.error);
-    } else {
-      window.location.reload();
     }
   }
 
@@ -91,10 +88,12 @@ const UsersList = (props) => {
     return (
       <>
         {(params.row.isArtist) ?
-          (<Switch
-            checked={params.row.isVerified}
-            onChange={async (e) => handleVerifiedSwitch(e, params.row.id)}
-            inputProps={{'aria-label': 'controlled'}}
+          (<AdminSwitch
+            itemId={params.row.id}
+            initialState={params.row.isVerified}
+            executeOnChange={handleVerifiedSwitch}
+            input={{'aria-label': 'controlled'}}
+            defaultOn={false}
           />) :
           <></>
         }
@@ -143,8 +142,12 @@ const UsersList = (props) => {
         text += 'Administrador ';
       }
 
-      if (x.isArtist) {
+      if (x.isArtist && !x.isBand) {
         text += 'Artista ';
+      }
+
+      if (x.isArtist && x.isBand) {
+        text += 'Banda  ';
       }
 
       if (x.isListener) {

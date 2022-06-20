@@ -3,7 +3,7 @@ import {Button, Table, TableBody, TableCell, TableRow, TextField} from '@mui/mat
 import {DataGrid} from '@mui/x-data-grid';
 import React, {useEffect, useState} from "react";
 import {matrixStyles} from "../style/matrixStyles";
-import Switch from "@mui/material/Switch";
+import { AdminSwitch } from "../components/AdminSwitch";
 import {useNavigate} from "react-router-dom";
 
 const constants = require("../others/constants");
@@ -44,12 +44,12 @@ const Contents = (props) => {
     getServicesWrapper().then(r => r);
   }, []);
 
-  async function handleDisabledSwitch(event,
-                                      type,
-                                      id) {
+  async function handleDisabledSwitch(checked,
+                                      id,
+                                      type) {
     let url = constants.MEDIA_HOST + constants.ENABLE_CONTENT_URL;
 
-    if (!event.target.checked) {
+    if (! checked) {
       url = constants.MEDIA_HOST + constants.DISABLE_CONTENT_URL;
     }
 
@@ -63,8 +63,6 @@ const Contents = (props) => {
 
     if (response.error !== undefined) {
       alert(response.error);
-    } else {
-      window.location.reload();
     }
   }
 
@@ -78,14 +76,13 @@ const Contents = (props) => {
       .split('_')[1];
 
     return (
-      <Switch
-        checked={!params.row
-          .blocked}
-
-        onChange={async (e) => handleDisabledSwitch(e,
-          contentType,
-          contentId)}
-        inputProps={{'aria-label': 'controlled'}}
+      <AdminSwitch
+        initialState={! params.row.blocked}
+        itemId={contentId}
+        itemType={contentType}
+        executeOnChange={handleDisabledSwitch}
+        input={{'aria-label': 'controlled'}}
+        defaultOn={false}
       />
     );
   }
