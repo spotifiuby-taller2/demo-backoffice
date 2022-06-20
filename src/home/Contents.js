@@ -1,9 +1,10 @@
 import "../style/HomePageRoutes.css";
-import {Table, TableBody, TableCell, TableRow, TextField} from '@mui/material';
+import {Button, Table, TableBody, TableCell, TableRow, TextField} from '@mui/material';
 import {DataGrid} from '@mui/x-data-grid';
 import React, {useEffect, useState} from "react";
 import {matrixStyles} from "../style/matrixStyles";
 import Switch from "@mui/material/Switch";
+import {useNavigate} from "react-router-dom";
 
 const constants = require("../others/constants");
 const {postToGateway, getToGateway} = require("../others/utils");
@@ -11,7 +12,11 @@ const {postToGateway, getToGateway} = require("../others/utils");
 
 const Contents = (props) => {
   const [rows, setRows] = useState([]);
+
+  const navigate = useNavigate();
+
   const [filteredRows, setFilteredRows] = useState([]);
+
   const [searchText, setSearchText] = useState("");
 
   const classes = matrixStyles();
@@ -103,6 +108,19 @@ const Contents = (props) => {
     setFilteredRows(newRows);
   }
 
+  const renderButtonGetDetail = (params) => {
+    const row = params.row;
+
+    if (row.type === "canción") {
+      return (
+          <Button style={{float: 'right'}} onClick={async () => {
+            navigate(constants.SONG_DETAIL_URL + "/" + row.id)
+          }}> Ver detalle
+          </Button>
+      );
+    }
+  }
+
   const columns = [
     {
       field: 'name',
@@ -141,8 +159,15 @@ const Contents = (props) => {
       flex: 0.4,
     },
     {
+      field: 'details',
+      headerName: 'Ver detalle',
+      headerClassName: classes.headerCell,
+      renderCell: renderButtonGetDetail,
+      flex: 0.4,
+    },
+    {
       field: 'blocked',
-      headerName: 'Estado',
+      headerName: 'Activado',
       headerClassName: classes.headerCell,
       renderCell: renderDisableButton,
       flex: 0.15
