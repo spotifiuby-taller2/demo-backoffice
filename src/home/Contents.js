@@ -114,7 +114,14 @@ const Contents = (props) => {
             navigate(constants.SONG_DETAIL_URL + "/" + row.id)
           }}> Ver detalle
           </Button>
-      );
+      )
+    } else if (row.type === "album") {
+      return (
+          <Button style={{float: 'right'}} onClick={async () => {
+            navigate(constants.ALBUM_DETAIL_URL + "/" + row.id)
+          }}> Ver detalle
+          </Button>
+      )
     }
   }
 

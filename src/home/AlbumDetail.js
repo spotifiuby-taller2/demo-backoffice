@@ -7,14 +7,12 @@ import {TextRow} from "./components/TextRow";
 import defaultImage from '../media/default_content_image.png'
 import {boxStyle} from "../style/profileStyles";
 
-const getSongDetail = async (rawId) => {
-  const songId = rawId.split("song_")[1];
+const getAlbumDetail = async (rawId) => {
+  const albumId = rawId.split("album_")[1];
 
-  const response = await getToGateway( constants.MEDIA_HOST + constants.SONGS_URL
+  const response = await getToGateway( constants.MEDIA_HOST + constants.ALBUM_URL
                                        + "/"
-                                       + songId
-                                       + "?"
-                                       + constants.CONTENT_ADM_REQUEST_PARAM );
+                                       + albumId );
 
   if (response.error !== undefined) {
     alert(response.error);
@@ -23,7 +21,7 @@ const getSongDetail = async (rawId) => {
   return response;
 }
 
-const SongDetail = (props) => {
+const AlbumDetail = (props) => {
   const contentId = window.location
                           .href
                           .split("/")[5];
@@ -32,9 +30,9 @@ const SongDetail = (props) => {
 
   const [theme] = useState(createTheme());
 
-  useEffect(() => {
+  useEffect( () => {
     ( async () => {
-      const response = await getSongDetail(contentId)
+      const response = await getAlbumDetail(contentId)
       setContent(response);
      } )();
 
@@ -55,7 +53,7 @@ const SongDetail = (props) => {
                 } } >
 
                   <img
-                    src = {content.artwork ? content.artwork : defaultImage}
+                    src = {content.link ? content.link : defaultImage}
                     style = { {
                             height: 250,
                             width: 250,
@@ -76,17 +74,17 @@ const SongDetail = (props) => {
                 </div>
               </Box>
 
-              <TextRow text={"Artistas:"}/>
+              <TextRow text={"Canciones:"}/>
 
           <div>
               {
-                (content.artists !== undefined) && (
-                  content.artists
-                      .map( (artist, idx) =>
+                (content.songs !== undefined) && (
+                  content.songs
+                      .map( (song, idx) =>
                           <a  key={idx}
-                              href={constants.PROFILE_URL + "/"
-                          + artist.id}>
-                            <TextRow text={artist.username}/>
+                              href={constants.SONG_DETAIL_URL + "/"
+                          + "song_" + song.id}>
+                            <TextRow text={song.title}/>
                            </a> )
                 )
               }
@@ -101,5 +99,5 @@ const SongDetail = (props) => {
 }
 
 export {
-  SongDetail
+  AlbumDetail
 }
