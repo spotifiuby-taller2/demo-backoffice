@@ -12,6 +12,13 @@ const profileStyles = makeStyles({
     }
 });
 
+const boxStyle = {
+        marginTop: 8,
+        display: "flex",
+        alignItems: "center"
+}
+
 export {
-    profileStyles
+    profileStyles,
+    boxStyle
 }

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "react-scripts start",
-    "startdocker": "PORT=4480 react-scripts start",
+    "startdocker": "PORT=4480 react-scripts build",
     "startdev": "PORT=4480 react-scripts start",
     "test": "react-scripts test"
   },

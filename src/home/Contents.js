@@ -1,9 +1,10 @@
 import "../style/HomePageRoutes.css";
-import {Table, TableBody, TableCell, TableRow, TextField} from '@mui/material';
+import {Button, Table, TableBody, TableCell, TableRow, TextField} from '@mui/material';
 import {DataGrid} from '@mui/x-data-grid';
 import React, {useEffect, useState} from "react";
 import {matrixStyles} from "../style/matrixStyles";
 import { AdminSwitch } from "../components/AdminSwitch";
+import {useNavigate} from "react-router-dom";
 
 const constants = require("../others/constants");
 const {postToGateway, getToGateway} = require("../others/utils");
@@ -11,7 +12,11 @@ const {postToGateway, getToGateway} = require("../others/utils");
 
 const Contents = (props) => {
   const [rows, setRows] = useState([]);
+
+  const navigate = useNavigate();
+
   const [filteredRows, setFilteredRows] = useState([]);
+
   const [searchText, setSearchText] = useState("");
 
   const classes = matrixStyles();
@@ -48,8 +53,6 @@ const Contents = (props) => {
       url = constants.MEDIA_HOST + constants.DISABLE_CONTENT_URL;
     }
 
-
-
     const requestBody = {
       contentType: type,
       contentId: id,
@@ -60,7 +63,7 @@ const Contents = (props) => {
 
     if (response.error !== undefined) {
       alert(response.error);
-    } 
+    }
   }
 
   const renderDisableButton = (params) => {
@@ -102,6 +105,33 @@ const Contents = (props) => {
     setFilteredRows(newRows);
   }
 
+  const renderButtonGetDetail = (params) => {
+    const row = params.row;
+
+    if (row.type === "canción") {
+      return (
+          <Button style={{float: 'right'}} onClick={async () => {
+            navigate(constants.SONG_DETAIL_URL + "/" + row.id)
+          }}> Ver detalle
+          </Button>
+      )
+    } else if (row.type === "album") {
+      return (
+          <Button style={{float: 'right'}} onClick={async () => {
+            navigate(constants.ALBUM_DETAIL_URL + "/" + row.id)
+          }}> Ver detalle
+          </Button>
+      )
+    } else if (row.type === "playlist") {
+      return (
+          <Button style={{float: 'right'}} onClick={async () => {
+            navigate(constants.PLAYLIST_DETAIL_URL + "/" + row.id)
+          }}> Ver detalle
+          </Button>
+      )
+    }
+  }
+
   const columns = [
     {
       field: 'name',
@@ -110,10 +140,10 @@ const Contents = (props) => {
       flex: 1,
     },
     {
-      field: 'genre',
-      headerName: 'Género',
+      field: 'description',
+      headerName: 'Descripción',
       headerClassName: classes.headerCell,
-      flex: 0.4,
+      flex: 0.4
     },
     {
       field: 'type',
@@ -122,8 +152,33 @@ const Contents = (props) => {
       flex: 0.4
     },
     {
+      field: 'genre',
+      headerName: 'Género',
+      headerClassName: classes.headerCell,
+      flex: 0.4,
+    },
+    {
+      field: 'subscription',
+      headerName: 'Suscripción',
+      headerClassName: classes.headerCell,
+      flex: 0.4,
+    },
+    {
+      field: 'creationDate',
+      headerName: 'Fecha de creación',
+      headerClassName: classes.headerCell,
+      flex: 0.4,
+    },
+    {
+      field: 'details',
+      headerName: 'Ver detalle',
+      headerClassName: classes.headerCell,
+      renderCell: renderButtonGetDetail,
+      flex: 0.4,
+    },
+    {
       field: 'blocked',
-      headerName: 'Estado',
+      headerName: 'Activado',
       headerClassName: classes.headerCell,
       renderCell: renderDisableButton,
       flex: 0.15
