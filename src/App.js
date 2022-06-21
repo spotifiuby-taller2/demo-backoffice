@@ -14,6 +14,7 @@ import {UserProfile} from "./home/UserProfile";
 import {Metrics} from "./home/Metrics";
 import {SongDetail} from "./home/SongDetail";
 import {AlbumDetail} from "./home/AlbumDetail";
+import {PlayListDetail} from "./home/PlaylistDetail";
 
 const constants = require("./others/constants");
 const {RecoverPassword} = require('./login/RecoverPassword');
@@ -149,6 +150,7 @@ function LoggedRouter(props) {
         <Route exact path={constants.PROFILE_URL + "/:userId"} element={<UserProfile/>}/>
         <Route exact path={constants.SONG_DETAIL_URL + "/:id"} element={<SongDetail/>}> </Route>
         <Route exact path={constants.ALBUM_DETAIL_URL + "/:id"} element={<AlbumDetail/>}> </Route>
+        <Route exact path={constants.PLAYLIST_DETAIL_URL + "/:id"} element={<PlayListDetail/>}> </Route>
       </Routes>
     </div>
   );

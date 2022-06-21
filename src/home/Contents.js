@@ -122,6 +122,13 @@ const Contents = (props) => {
           }}> Ver detalle
           </Button>
       )
+    } else if (row.type === "playlist") {
+      return (
+          <Button style={{float: 'right'}} onClick={async () => {
+            navigate(constants.PLAYLIST_DETAIL_URL + "/" + row.id)
+          }}> Ver detalle
+          </Button>
+      )
     }
   }
 
