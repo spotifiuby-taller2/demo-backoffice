@@ -69,10 +69,6 @@ const PlayListDetail = (props) => {
                   <TextRow text={"Nombre: " + content.title}/>
 
                   <TextRow text={"Descripción: " + content.description}/>
-
-                  <TextRow text={"Género: " + content.genre}/>
-
-                  <TextRow text={"Suscripción: " + content.subscription}/>
                 </div>
               </Box>
 
