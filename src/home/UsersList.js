@@ -193,8 +193,8 @@ const UsersList = (props) => {
 
   const columns = [
     {
-      field: 'id',
-      headerName: 'ID',
+      field: 'username',
+      headerName: 'Usuario',
       headerClassName: classes.headerCell,
       flex: 1,
     },
@@ -212,7 +212,7 @@ const UsersList = (props) => {
     },
     {
       field: 'isBlocked',
-      headerName: 'Estado',
+      headerName: 'Activado',
       flex: 0.5,
       headerClassName: classes.headerCell,
       renderCell: renderBlockedSwitch

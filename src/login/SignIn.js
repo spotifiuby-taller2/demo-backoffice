@@ -56,7 +56,7 @@ const SignIn = (props) => {
       .catch((error) => {
         return error.toString();
       });
-    console.log("response" + response);
+
     if (response.user === undefined) {
       alert("No se encontro ningun usuario con ese mail y/ o contraseña");
 

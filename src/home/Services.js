@@ -142,7 +142,7 @@ const Services = (props) => {
     },
     {
       field: 'active',
-      headerName: 'Estado',
+      headerName: 'Activado',
       headerClassName: classes.headerCell,
       renderCell: renderDisableButton,
       flex: 0.18
