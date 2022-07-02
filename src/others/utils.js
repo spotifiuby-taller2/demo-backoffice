@@ -54,6 +54,17 @@ function getFormatedDate(dateNow) {
         + dateNow.getFullYear();
 }
 
+function getUTCMinus3Time(aDate) {
+    return (aDate.getHours()) + ":" +
+           aDate.getMinutes() + ":" +
+           aDate.getSeconds();
+}
+
+function getUTCMinus3TimeStamp(date) {
+    return getFormatedDate(date) + " "
+                                 + getUTCMinus3Time(date);
+}
+
 function areAnyUndefined(list) {
     return list.filter( (element) => {
         return element === undefined
@@ -63,5 +74,5 @@ function areAnyUndefined(list) {
 
 export {
   getSHAOf, areAnyUndefined, postToGateway, getFormatedDate,
-  getToGateway
+  getToGateway, getUTCMinus3Time, getUTCMinus3TimeStamp
 }

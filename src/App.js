@@ -15,6 +15,7 @@ import {Metrics} from "./home/Metrics";
 import {SongDetail} from "./home/SongDetail";
 import {AlbumDetail} from "./home/AlbumDetail";
 import {PlayListDetail} from "./home/PlaylistDetail";
+import {Transactions} from "./home/Transactions";
 
 const constants = require("./others/constants");
 const {RecoverPassword} = require('./login/RecoverPassword');
@@ -33,6 +34,8 @@ function NavBar(props) {
     focus6, isFocus6,
     removeToken
   } = useContext();
+
+  const redirectTransactions = () => navigate(constants.TRANSACTIONS_URL);
 
   const redirectUsersLists = () => navigate(constants.USERS_URL);
 
@@ -63,6 +66,7 @@ function NavBar(props) {
 
         <Button className="homepage"
                 variant="themed"
+                onClick={redirectTransactions}
                 style={{color: isFocus3() ? 'black' : '', verticalAlign: 'top'}}
                 onFocus={() => focus3()}
         >Transacciones</Button>
@@ -145,8 +149,9 @@ function LoggedRouter(props) {
         <Route path="/" element={<UsersList/>}> </Route>
         <Route exact path={constants.USERS_URL} element={<UsersList/>}> </Route>
         <Route exact path={constants.SERVICES_URL} element={<Services/>}> </Route>
-        <Route exact path={constants.METRICS_URL} element={<Metrics/>}/>
         <Route exact path={constants.CONTENT_URL} element={<Contents/>}> </Route>
+        <Route exact path={constants.METRICS_URL} element={<Metrics/>} />
+        <Route exact path={constants.TRANSACTIONS_URL} element={<Transactions/>} />
         <Route exact path={constants.PROFILE_URL + "/:userId"} element={<UserProfile/>}/>
         <Route exact path={constants.SONG_DETAIL_URL + "/:id"} element={<SongDetail/>}> </Route>
         <Route exact path={constants.ALBUM_DETAIL_URL + "/:id"} element={<AlbumDetail/>}> </Route>

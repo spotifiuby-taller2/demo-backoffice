@@ -12,6 +12,9 @@ const SERVICES_HOST = process.env
 const MEDIA_HOST = process.env
                           .REACT_APP_MEDIA_HOST;
 
+const PAYMENTS_HOST = process.env
+                             .REACT_APP_PAYMENT_HOST;
+
 /* Paths */
 const DATADOG_DASHBOARD_URL = "https://p.datadoghq.com/sb/463d20a2-daba-11eb-acf2-da7ad0900002-" +
                               "6134ee8888fd07dd3f05a1499b83adec?from_ts=1650918160437&to_ts=" +
@@ -22,6 +25,7 @@ const USER_PROFILE_ADM_REQUEST = "adminRequest=";
 const CONTENT_URL = "/content";
 const ENABLE_CONTENT_URL = "/enablecontent";
 const DISABLE_CONTENT_URL = "/disablecontent";
+const DEPOSITS_URL = "/deposit";
 
 const CHECK_URL = "/check";
 const REDIRECT_URL = "/redirect";
@@ -32,6 +36,7 @@ const API_KEY_CREATE_SERVICE_URL = API_KEY_URL + "/createservice";
 const API_KEY_QUERY_PARAM = "apiKey=";
 const USER_ID_QUERY_PARAM = "userId=";
 const CONTENT_ADM_REQUEST_PARAM = "adminRequest=true";
+const WALLET_ID_PARAM = "walletId=";
 
 const SONGS_URL = "/songs";
 const ALBUMS_URL = "/albums";
@@ -54,9 +59,11 @@ const USERS_VERIFIED_URL = USERS_URL + "/verified";
 const USERS_UNVERIFIED_URL = USERS_URL + "/unverified";
 const PROFILE_URL = USERS_URL + "/profile";
 const METRICS_URL = "/metrics";
+const TRANSACTIONS_URL = "/transactions";
 const SONG_DETAIL_URL = CONTENT_URL + "/song";
 const ALBUM_DETAIL_URL = CONTENT_URL + "/album";
 const PLAYLIST_DETAIL_URL = CONTENT_URL + "/playlist";
+const USER_WITH_WALLET_URL = "/userwithwallet";
 
 const JSON_HEADER = {
   'Content-Type': 'application/json',
@@ -107,5 +114,6 @@ module.exports = {
   MEDIA_HOST, ENABLE_CONTENT_URL, DISABLE_CONTENT_URL, CHECK_URL,
   SONGS_URL, ALBUMS_URL, PLAYLISTS_URL, SONG_DETAIL_URL,
   ALBUM_DETAIL_URL, PLAYLIST_DETAIL_URL, CONTENT_ADM_REQUEST_PARAM, ALBUM_URL,
-  PLAYLIST_URL, REDIRECT_URL
+  PLAYLIST_URL, REDIRECT_URL, TRANSACTIONS_URL, PAYMENTS_HOST,
+  DEPOSITS_URL, USER_WITH_WALLET_URL, WALLET_ID_PARAM
 }
