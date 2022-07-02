@@ -57,7 +57,7 @@ const Transactions = (props) => {
     };
 
     getTransactionsWrapper().then(r => r);
-  } );
+  }, [] );
 
   const renderGoToProfileButton = (params) => {
     return (
