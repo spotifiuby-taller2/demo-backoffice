@@ -63,7 +63,7 @@ const Transactions = (props) => {
     return (
         <Button style={{float: 'right'}} onClick={async () => {
           navigate(constants.PROFILE_URL + "/" + params.row.userId)
-        }}> Ver perfil
+        }}> Ver usuario
         </Button>
       );
   }
